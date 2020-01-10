@@ -13,6 +13,9 @@ import edu.wpi.first.wpilibj.Joystick;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import frc.robot.Camera.Camera;
+import edu.wpi.first.wpilibj.PWMVictorSPX;
+import com.revrobotics.CANSparkMax;
+import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 /**
  * The VM is configured to automatically run this class, and to call the
  * functions corresponding to each mode, as described in the TimedRobot
@@ -27,19 +30,19 @@ public class Robot extends TimedRobot {
    */
   private Camera camera;
   private Joystick joy;
-  private TalonSRX leftMotor;
-  private TalonSRX rightMotor;
+  private CANSparkMax leftMotor;
+  private CANSparkMax rightMotor;
   private double joyright = 0;
   private double joyleft = 0;
   @Override
   public void robotInit() {
     joy = new Joystick(0);
-    leftMotor = new TalonSRX(0);
-    rightMotor = new TalonSRX(1);
+    leftMotor = new CANSparkMax(2, MotorType.kBrushless);
+    rightMotor = new CANSparkMax(1, MotorType.kBrushless);
   }
   public void move(double right, double left){
-    leftMotor.set(ControlMode.PercentOutput, 1 * left);
-    rightMotor.set(ControlMode.PercentOutput, -1 * right);
+    leftMotor.set( 1 * left);
+    rightMotor.set( -1 * right);
   }
   @Override
   public void autonomousInit() {
@@ -58,7 +61,7 @@ public class Robot extends TimedRobot {
   public void teleopPeriodic() {
     joyleft = joy.getRawAxis(1);
     joyright = joy.getRawAxis(5);
-    move(joyleft, -joyleft);
+    move(joyleft, joyleft);
   }
 
   @Override
