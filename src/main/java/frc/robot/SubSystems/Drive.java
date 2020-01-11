@@ -10,10 +10,16 @@ package frc.robot.SubSystems;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class Drive extends SubsystemBase {
-  /**
-   * Creates a new Climb.
-   */
-  public Drive() {
+  static Drive drive;
+
+  static Drive get_Instance(){
+    if(drive == null){
+      drive = new Drive();
+    } 
+    return drive;
+  }
+
+  private Drive() {
 
   }
 

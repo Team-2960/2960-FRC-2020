@@ -16,14 +16,9 @@ public class Climb extends SubsystemBase {
     if(climb == null){
       climb = new Climb();
     } 
-
     return climb;
   }
 
-
-  /**
-   * Creates a new Climb.
-   */
   private Climb() {
 
   }

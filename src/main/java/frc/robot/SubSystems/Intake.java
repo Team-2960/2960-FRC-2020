@@ -10,10 +10,15 @@ package frc.robot.SubSystems;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class Intake extends SubsystemBase {
-  /**
-   * Creates a new Climb.
-   */
-  public Intake() {
+  static Intake intake;
+
+  static Intake get_Instance(){
+    if(intake == null){
+      intake = new Intake();
+    } 
+    return intake;
+  }
+  private Intake() {
 
   }
 
