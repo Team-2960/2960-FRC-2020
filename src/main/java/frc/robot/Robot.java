@@ -4,6 +4,8 @@ import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.Joystick;
 import frc.robot.Camera.Camera;
 import frc.robot.OI;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class Robot extends TimedRobot {
  
@@ -37,6 +39,8 @@ public class Robot extends TimedRobot {
   public void teleopPeriodic() {
     oi.driver_Control(driver_Control);
     oi.operator_Control(operator_Control);
+    SmartDashboard.putNumber("CenterX", camera.getImageResultsX());
+    SmartDashboard.putNumber("CenterY", camera.getImageResultsY());
   }
 
   @Override
