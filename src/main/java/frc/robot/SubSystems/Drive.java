@@ -16,7 +16,7 @@ public class Drive extends SubsystemBase {
 
   private CANSparkMax leftMotor;
   private CANSparkMax rightMotor;
-  static Drive get_Instance(){
+  public static Drive get_Instance(){
     if(drive == null){
       drive = new Drive();
     } 
@@ -29,7 +29,7 @@ public class Drive extends SubsystemBase {
   }
   public void move(double right, double left){
     leftMotor.set( 1 * left);
-    rightMotor.set( -1 * right);
+    rightMotor.set( -1 * left);
   }
   @Override
   public void periodic() {
