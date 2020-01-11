@@ -8,10 +8,14 @@
 package frc.robot.SubSystems;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import com.revrobotics.CANSparkMax;
+import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 public class Drive extends SubsystemBase {
   static Drive drive;
 
+  private CANSparkMax leftMotor;
+  private CANSparkMax rightMotor;
   static Drive get_Instance(){
     if(drive == null){
       drive = new Drive();
@@ -20,9 +24,13 @@ public class Drive extends SubsystemBase {
   }
 
   private Drive() {
-
+    leftMotor = new CANSparkMax(2, MotorType.kBrushless);
+    rightMotor = new CANSparkMax(1, MotorType.kBrushless);
   }
-
+  public void move(double right, double left){
+    leftMotor.set( 1 * left);
+    rightMotor.set( -1 * right);
+  }
   @Override
   public void periodic() {
     // This method will be called once per scheduler run

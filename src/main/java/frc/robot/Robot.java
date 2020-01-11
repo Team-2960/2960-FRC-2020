@@ -8,14 +8,9 @@
 package frc.robot;
 
 import edu.wpi.first.wpilibj.TimedRobot;
-
 import edu.wpi.first.wpilibj.Joystick;
-import com.ctre.phoenix.motorcontrol.ControlMode;
-import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import frc.robot.Camera.Camera;
-import edu.wpi.first.wpilibj.PWMVictorSPX;
-import com.revrobotics.CANSparkMax;
-import com.revrobotics.CANSparkMaxLowLevel.MotorType;
+import frc.robot.OI;
 /**
  * The VM is configured to automatically run this class, and to call the
  * functions corresponding to each mode, as described in the TimedRobot
@@ -29,21 +24,13 @@ public class Robot extends TimedRobot {
    * for any initialization code.
    */
   private Camera camera;
-  private Joystick joy;
-  private CANSparkMax leftMotor;
-  private CANSparkMax rightMotor;
-  private double joyright = 0;
-  private double joyleft = 0;
+  private Joystick driver_Control;
+  private Joystick operator_Control;
+  private OI oi;
   @Override
   public void robotInit() {
-    joy = new Joystick(0);
-    leftMotor = new CANSparkMax(2, MotorType.kBrushless);
-    rightMotor = new CANSparkMax(1, MotorType.kBrushless);
   }
-  public void move(double right, double left){
-    leftMotor.set( 1 * left);
-    rightMotor.set( -1 * right);
-  }
+  
   @Override
   public void autonomousInit() {
   }
@@ -54,14 +41,16 @@ public class Robot extends TimedRobot {
 
   @Override
   public void teleopInit() {
+    oi = new OI();
+    driver_Control = new Joystick(0);
+    operator_Control = new Joystick(1);
     camera = new Camera(0);
   }
 
   @Override
   public void teleopPeriodic() {
-    joyleft = joy.getRawAxis(1);
-    joyright = joy.getRawAxis(5);
-    move(joyleft, joyleft);
+    oi.driver_Control(driver_Control);
+    oi.operator_Control(operator_Control);
   }
 
   @Override
