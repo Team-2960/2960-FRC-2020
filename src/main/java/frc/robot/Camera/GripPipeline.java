@@ -1,4 +1,5 @@
 package frc.robot.Camera;
+
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -29,8 +30,10 @@ public class GripPipeline implements VisionPipeline {
 	//Outputs
 	private Mat hsvThresholdOutput = new Mat();
 	private Mat cvErodeOutput = new Mat();
+	private Mat cvDilateOutput = new Mat();
 	private ArrayList<MatOfPoint> findContoursOutput = new ArrayList<MatOfPoint>();
 	private ArrayList<MatOfPoint> filterContoursOutput = new ArrayList<MatOfPoint>();
+	private ArrayList<MatOfPoint> convexHullsOutput = new ArrayList<MatOfPoint>();
 
 	static {
 		System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
@@ -42,28 +45,37 @@ public class GripPipeline implements VisionPipeline {
 	@Override	public void process(Mat source0) {
 		// Step HSV_Threshold0:
 		Mat hsvThresholdInput = source0;
-		double[] hsvThresholdHue = {56.6546762589928, 99.69696969696972};
-		double[] hsvThresholdSaturation = {91.72661870503596, 207.77777777777777};
-		double[] hsvThresholdValue = {146.76258992805754, 255.0};
+		double[] hsvThresholdHue = {55.03597122302158, 98.18181818181817};
+		double[] hsvThresholdSaturation = {34.39748201438849, 98.30808080808082};
+		double[] hsvThresholdValue = {192.62589928057554, 255.0};
 		hsvThreshold(hsvThresholdInput, hsvThresholdHue, hsvThresholdSaturation, hsvThresholdValue, hsvThresholdOutput);
 
 		// Step CV_erode0:
 		Mat cvErodeSrc = hsvThresholdOutput;
 		Mat cvErodeKernel = new Mat();
 		Point cvErodeAnchor = new Point(-1, -1);
-		double cvErodeIterations = 1.0;
+		double cvErodeIterations = 0.0;
 		int cvErodeBordertype = Core.BORDER_CONSTANT;
 		Scalar cvErodeBordervalue = new Scalar(-1);
 		cvErode(cvErodeSrc, cvErodeKernel, cvErodeAnchor, cvErodeIterations, cvErodeBordertype, cvErodeBordervalue, cvErodeOutput);
 
+		// Step CV_dilate0:
+		Mat cvDilateSrc = cvErodeOutput;
+		Mat cvDilateKernel = new Mat();
+		Point cvDilateAnchor = new Point(-1, -1);
+		double cvDilateIterations = 0.0;
+		int cvDilateBordertype = Core.BORDER_CONSTANT;
+		Scalar cvDilateBordervalue = new Scalar(-1);
+		cvDilate(cvDilateSrc, cvDilateKernel, cvDilateAnchor, cvDilateIterations, cvDilateBordertype, cvDilateBordervalue, cvDilateOutput);
+
 		// Step Find_Contours0:
-		Mat findContoursInput = cvErodeOutput;
+		Mat findContoursInput = cvDilateOutput;
 		boolean findContoursExternalOnly = false;
 		findContours(findContoursInput, findContoursExternalOnly, findContoursOutput);
 
 		// Step Filter_Contours0:
 		ArrayList<MatOfPoint> filterContoursContours = findContoursOutput;
-		double filterContoursMinArea = 0;
+		double filterContoursMinArea = 150.0;
 		double filterContoursMinPerimeter = 0;
 		double filterContoursMinWidth = 0;
 		double filterContoursMaxWidth = 1000;
@@ -75,6 +87,10 @@ public class GripPipeline implements VisionPipeline {
 		double filterContoursMinRatio = 0;
 		double filterContoursMaxRatio = 1000;
 		filterContours(filterContoursContours, filterContoursMinArea, filterContoursMinPerimeter, filterContoursMinWidth, filterContoursMaxWidth, filterContoursMinHeight, filterContoursMaxHeight, filterContoursSolidity, filterContoursMaxVertices, filterContoursMinVertices, filterContoursMinRatio, filterContoursMaxRatio, filterContoursOutput);
+
+		// Step Convex_Hulls0:
+		ArrayList<MatOfPoint> convexHullsContours = filterContoursOutput;
+		convexHulls(convexHullsContours, convexHullsOutput);
 
 	}
 
@@ -95,6 +111,14 @@ public class GripPipeline implements VisionPipeline {
 	}
 
 	/**
+	 * This method is a generated getter for the output of a CV_dilate.
+	 * @return Mat output from CV_dilate.
+	 */
+	public Mat cvDilateOutput() {
+		return cvDilateOutput;
+	}
+
+	/**
 	 * This method is a generated getter for the output of a Find_Contours.
 	 * @return ArrayList<MatOfPoint> output from Find_Contours.
 	 */
@@ -108,6 +132,14 @@ public class GripPipeline implements VisionPipeline {
 	 */
 	public ArrayList<MatOfPoint> filterContoursOutput() {
 		return filterContoursOutput;
+	}
+
+	/**
+	 * This method is a generated getter for the output of a Convex_Hulls.
+	 * @return ArrayList<MatOfPoint> output from Convex_Hulls.
+	 */
+	public ArrayList<MatOfPoint> convexHullsOutput() {
+		return convexHullsOutput;
 	}
 
 
@@ -149,6 +181,30 @@ public class GripPipeline implements VisionPipeline {
 			borderValue = new Scalar(-1);
 		}
 		Imgproc.erode(src, dst, kernel, anchor, (int)iterations, borderType, borderValue);
+	}
+
+	/**
+	 * Expands area of higher value in an image.
+	 * @param src the Image to dilate.
+	 * @param kernel the kernel for dilation.
+	 * @param anchor the center of the kernel.
+	 * @param iterations the number of times to perform the dilation.
+	 * @param borderType pixel extrapolation method.
+	 * @param borderValue value to be used for a constant border.
+	 * @param dst Output Image.
+	 */
+	private void cvDilate(Mat src, Mat kernel, Point anchor, double iterations,
+	int borderType, Scalar borderValue, Mat dst) {
+		if (kernel == null) {
+			kernel = new Mat();
+		}
+		if (anchor == null) {
+			anchor = new Point(-1,-1);
+		}
+		if (borderValue == null){
+			borderValue = new Scalar(-1);
+		}
+		Imgproc.dilate(src, dst, kernel, anchor, (int)iterations, borderType, borderValue);
 	}
 
 	/**
@@ -219,6 +275,29 @@ public class GripPipeline implements VisionPipeline {
 			final double ratio = bb.width / (double)bb.height;
 			if (ratio < minRatio || ratio > maxRatio) continue;
 			output.add(contour);
+		}
+	}
+
+	/**
+	 * Compute the convex hulls of contours.
+	 * @param inputContours The contours on which to perform the operation.
+	 * @param outputContours The contours where the output will be stored.
+	 */
+	private void convexHulls(List<MatOfPoint> inputContours,
+		ArrayList<MatOfPoint> outputContours) {
+		final MatOfInt hull = new MatOfInt();
+		outputContours.clear();
+		for (int i = 0; i < inputContours.size(); i++) {
+			final MatOfPoint contour = inputContours.get(i);
+			final MatOfPoint mopHull = new MatOfPoint();
+			Imgproc.convexHull(contour, hull);
+			mopHull.create((int) hull.size().height, 1, CvType.CV_32SC2);
+			for (int j = 0; j < hull.size().height; j++) {
+				int index = (int) hull.get(j, 0)[0];
+				double[] point = new double[] {contour.get(index, 0)[0], contour.get(index, 0)[1]};
+				mopHull.put(j, 0, point);
+			}
+			outputContours.add(mopHull);
 		}
 	}
 
