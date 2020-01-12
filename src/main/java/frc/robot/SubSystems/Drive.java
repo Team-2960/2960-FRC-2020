@@ -8,11 +8,12 @@
 package frc.robot.SubSystems;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 public class Drive extends SubsystemBase {
-  static Drive drive;
+  private static Drive drive;
 
   private CANSparkMax leftMotor;
   private CANSparkMax rightMotor;

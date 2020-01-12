@@ -8,11 +8,12 @@
 package frc.robot.SubSystems;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants;
 
 public class Intake extends SubsystemBase {
-  static Intake intake;
+  private static Intake intake;
 
-  static Intake get_Instance(){
+  public static Intake get_Instance(){
     if(intake == null){
       intake = new Intake();
     } 
