@@ -29,12 +29,12 @@ public class Drive extends SubsystemBase {
   }
 
   private Drive() {
-    leftMotor = new CANSparkMax(2, MotorType.kBrushless);
+    //leftMotor = new CANSparkMax(2, MotorType.kBrushless);
     rightMotor = new CANSparkMax(1, MotorType.kBrushless);
     lEncoder = new CANEncoder(rightMotor);
   }
   public void move(double right, double left){
-    leftMotor.set( 1 * left);
+    //leftMotor.set( 1 * left);
     rightMotor.set( -1 * left);
     System.out.println(lEncoder.getVelocity());
   }
