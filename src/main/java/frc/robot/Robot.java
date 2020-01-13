@@ -4,6 +4,7 @@ import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.Joystick;
 import frc.robot.Camera.Camera;
 import frc.robot.OI;
+import frc.robot.Constants;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
@@ -29,8 +30,8 @@ public class Robot extends TimedRobot {
   public void teleopInit() {
     oi = new OI();
     //init Driver and Oerator Joystick
-    driver_Control = new Joystick(0);
-    operator_Control = new Joystick(1);
+    driver_Control = new Joystick(Constants.driver_Control);
+    operator_Control = new Joystick(Constants.operator_Control);
 
     camera = new Camera(0);
   }

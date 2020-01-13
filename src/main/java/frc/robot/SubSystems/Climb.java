@@ -8,11 +8,12 @@
 package frc.robot.SubSystems;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants;
 
 public class Climb extends SubsystemBase {
-  static Climb climb;
+  private static Climb climb;
 
-  static Climb get_Instance(){
+  public static Climb get_Instance(){
     if(climb == null){
       climb = new Climb();
     } 
