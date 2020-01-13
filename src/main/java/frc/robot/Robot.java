@@ -49,8 +49,6 @@ public class Robot extends TimedRobot {
   public void teleopPeriodic() {
     oi.driver_Control(driver_Control);
     oi.operator_Control(operator_Control);
-    
-    System.out.println();
   }
   public void cameraSetting(){
     Constants.hsvThresholdHue[0] = SmartDashboard.getNumber("HueMin", Constants.hsvThresholdHue[0]);

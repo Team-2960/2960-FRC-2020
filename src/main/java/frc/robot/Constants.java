@@ -16,7 +16,7 @@ public class Constants{
     //camera
     public final static int cWidth = 480;
     public final static int cHeight = 640;
-    // values for grippipelines
+    //values for grippipelines
     public static double[] hsvThresholdHue = {98, 40};
     public static double[] hsvThresholdSaturation = {220, 99};
     public static double[] hsvThresholdValue = {255, 140};
