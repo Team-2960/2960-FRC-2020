@@ -32,6 +32,15 @@ public class Robot extends TimedRobot {
     //init Driver and Oerator Joystick
     driver_Control = new Joystick(Constants.driver_Control);
     operator_Control = new Joystick(Constants.operator_Control);
+    //SmartDashboard.putNumber("CenterX", camera.getImageResultsX());
+    //SmartDashboard.putNumber("CenterY", camera.getImageResultsY());
+    SmartDashboard.putNumber("Constants.hsvThresholdHueMin", Constants.hsvThresholdHue[0]);
+    SmartDashboard.putNumber("Constants.hsvThresholdHueMax", Constants.hsvThresholdHue[1]);
+    SmartDashboard.putNumber("Constants.hsvThresholdSaturationMin", Constants.hsvThresholdSaturation[0]);
+    SmartDashboard.putNumber("Constants.hsvThresholdSaturationMax", Constants.hsvThresholdSaturation[1]);
+    SmartDashboard.putNumber("Constants.hsvThresholdValueMin", Constants.hsvThresholdValue[0]);
+    SmartDashboard.putNumber("Constants.hsvThresholdValueMax", Constants.hsvThresholdValue[1]);
+    
 
     camera = new Camera(0);
   }
@@ -40,8 +49,13 @@ public class Robot extends TimedRobot {
   public void teleopPeriodic() {
     oi.driver_Control(driver_Control);
     oi.operator_Control(operator_Control);
-    SmartDashboard.putNumber("CenterX", camera.getImageResultsX());
-    SmartDashboard.putNumber("CenterY", camera.getImageResultsY());
+    Constants.hsvThresholdHue[0] = SmartDashboard.getNumber("Constants.hsvThresholdHueMin", Constants.hsvThresholdHue[0]);
+    Constants.hsvThresholdHue[1] = SmartDashboard.getNumber("Constants.hsvThresholdHueMax", Constants.hsvThresholdHue[1]);
+    Constants.hsvThresholdSaturation[0] = SmartDashboard.getNumber("Constants.hsvThresholdSaturationMin", Constants.hsvThresholdSaturation[0]);
+    Constants.hsvThresholdSaturation[1] = SmartDashboard.getNumber("Constants.hsvThresholdSaturationMax", Constants.hsvThresholdSaturation[1]);
+    Constants.hsvThresholdValue[0] = SmartDashboard.getNumber("Constants.hsvThresholdValueMin", Constants.hsvThresholdValue[0]);
+    Constants.hsvThresholdValue[1] = SmartDashboard.getNumber("Constants.hsvThresholdValueMax", Constants.hsvThresholdValue[1]);
+    System.out.println();
   }
 
   @Override
