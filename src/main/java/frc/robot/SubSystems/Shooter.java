@@ -9,17 +9,17 @@ import com.ctre.phoenix.motorcontrol.can.TalonFX;
 import com.ctre.phoenix.sensors.CANCoder;
 public class Shooter extends SubsystemBase{
     private static Shooter shooter;
-    private TalonFX lshootMotor;
-    private TalonFX rshootMotor;
-    private CANCoder canCoderl;
-    private CANCoder canCoderr;
-    public void shoot(double right, double left){
-      lshootMotor.set(ControlMode.PercentOutput, left);
-      rshootMotor.set(ControlMode.PercentOutput, left);
+    private TalonFX mLeftShooter;
+    private TalonFX mRightShooter;
+    private CANCoder LeftEncoder;
+    private CANCoder RightEncoder;
+    public void setShooterSpeed(double speed){
+      mLeftShooter.set(ControlMode.PercentOutput, speed);
+      mRightShooter.set(ControlMode.PercentOutput, speed);
     }
     public void shooterEncoder(){
-      System.out.println(canCoderl.getVelocity());
-      System.out.println(canCoderr.getVelocity());
+      System.out.println(LeftEncoder.getVelocity());
+      System.out.println(RightEncoder.getVelocity());
     }
     public static Shooter get_Instance(){
       if(shooter == null){
@@ -29,10 +29,10 @@ public class Shooter extends SubsystemBase{
     }
     
     private Shooter(){
-      lshootMotor = new TalonFX(3);
-      rshootMotor = new TalonFX(4);
-      canCoderl = new CANCoder(3);
-      canCoderr = new CANCoder(4);
+      mLeftShooter = new TalonFX(Constants.mLeftShooter);
+      mRightShooter = new TalonFX(Constants.mLeftShooter);
+      LeftEncoder = new CANCoder(Constants.mRightShooter);
+      RightEncoder = new CANCoder(Constants.mRightShooter);
     }
     @Override
   public void periodic() {

@@ -16,7 +16,7 @@ public class OI{
     //Driver control
     public void driver_Control(Joystick driver_Control){
         //drive.move(driver_Control.getRawAxis(1), driver_Control.getRawAxis(5));
-        shooter.shoot(driver_Control.getRawAxis(1), driver_Control.getRawAxis(5));
+        shooter.setShooterSpeed(driver_Control.getRawAxis(1));
         shooter.shooterEncoder();
     }
     //Operator control
