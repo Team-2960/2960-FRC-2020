@@ -20,9 +20,6 @@ public class Drive extends SubsystemBase {
 
   private CANSparkMax leftMotor;
   private CANSparkMax rightMotor;
-  private CANEncoder lEncoder;
-  private TalonSRX lMotor;
-  private TalonSRX rMotor;
   public static Drive get_Instance(){
     
     if(drive == null){
@@ -34,7 +31,6 @@ public class Drive extends SubsystemBase {
   private Drive() {
     leftMotor = new CANSparkMax(2, MotorType.kBrushless);
     rightMotor = new CANSparkMax(1, MotorType.kBrushless);
-    lEncoder = new CANEncoder(rightMotor);
   }
   public void move(double right, double left){
     leftMotor.set( 1 * left);

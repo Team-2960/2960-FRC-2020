@@ -11,15 +11,13 @@ public class Shooter extends SubsystemBase{
     private static Shooter shooter;
     private TalonFX mLeftShooter;
     private TalonFX mRightShooter;
-    private CANCoder LeftEncoder;
-    private CANCoder RightEncoder;
     public void setShooterSpeed(double speed){
       mLeftShooter.set(ControlMode.PercentOutput, speed);
-      mRightShooter.set(ControlMode.PercentOutput, speed);
+      //mRightShooter.set(ControlMode.PercentOutput, speed);
     }
     public void shooterEncoder(){
-      System.out.println(LeftEncoder.getVelocity());
-      System.out.println(RightEncoder.getVelocity());
+      System.out.println(mLeftShooter.getSelectedSensorVelocity()/3.60501567398119122257);
+      //System.out.println(RightEncoder.getVelocity());
     }
     public static Shooter get_Instance(){
       if(shooter == null){
@@ -30,9 +28,8 @@ public class Shooter extends SubsystemBase{
     
     private Shooter(){
       mLeftShooter = new TalonFX(Constants.mLeftShooter);
-      mRightShooter = new TalonFX(Constants.mLeftShooter);
-      LeftEncoder = new CANCoder(Constants.mRightShooter);
-      RightEncoder = new CANCoder(Constants.mRightShooter);
+      //mRightShooter = new TalonFX(Constants.mLeftShooter);
+      //RightEncoder = new CANCoder(Constants.mRightShooter);
     }
     @Override
   public void periodic() {

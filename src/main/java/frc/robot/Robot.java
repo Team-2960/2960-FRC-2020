@@ -7,6 +7,7 @@ import frc.robot.OI;
 import frc.robot.Constants;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import frc.robot.LEDs;
 
 public class Robot extends TimedRobot {
  
@@ -14,6 +15,7 @@ public class Robot extends TimedRobot {
   private Joystick driver_Control;
   private Joystick operator_Control;
   private OI oi;
+  private LEDs leds;
   @Override
   public void robotInit() {
   }
@@ -29,6 +31,7 @@ public class Robot extends TimedRobot {
   @Override
   public void teleopInit() {
     oi = new OI();
+    leds = new LEDs();
     //init Driver and Oerator Joystick
     driver_Control = new Joystick(Constants.driver_Control);
     operator_Control = new Joystick(Constants.operator_Control);
