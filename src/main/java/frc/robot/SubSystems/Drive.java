@@ -12,6 +12,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
+import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.revrobotics.CANEncoder;
 
 public class Drive extends SubsystemBase {
@@ -20,6 +21,8 @@ public class Drive extends SubsystemBase {
   private CANSparkMax leftMotor;
   private CANSparkMax rightMotor;
   private CANEncoder lEncoder;
+  private TalonSRX lMotor;
+  private TalonSRX rMotor;
   public static Drive get_Instance(){
     
     if(drive == null){
@@ -29,14 +32,16 @@ public class Drive extends SubsystemBase {
   }
 
   private Drive() {
-    //leftMotor = new CANSparkMax(2, MotorType.kBrushless);
+    leftMotor = new CANSparkMax(2, MotorType.kBrushless);
     rightMotor = new CANSparkMax(1, MotorType.kBrushless);
     lEncoder = new CANEncoder(rightMotor);
   }
   public void move(double right, double left){
-    //leftMotor.set( 1 * left);
+    leftMotor.set( 1 * left);
     rightMotor.set( -1 * left);
-    System.out.println(lEncoder.getVelocity());
+  }
+  public void encoderValue(){
+    //System.out.println(lEncoder.getVelocity());
   }
   @Override
   public void periodic() {
