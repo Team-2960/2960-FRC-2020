@@ -49,15 +49,17 @@ public class Robot extends TimedRobot {
   public void teleopPeriodic() {
     oi.driver_Control(driver_Control);
     oi.operator_Control(operator_Control);
-    Constants.hsvThresholdHue[0] = SmartDashboard.getNumber("Constants.hsvThresholdHueMin", Constants.hsvThresholdHue[0]);
-    Constants.hsvThresholdHue[1] = SmartDashboard.getNumber("Constants.hsvThresholdHueMax", Constants.hsvThresholdHue[1]);
-    Constants.hsvThresholdSaturation[0] = SmartDashboard.getNumber("Constants.hsvThresholdSaturationMin", Constants.hsvThresholdSaturation[0]);
-    Constants.hsvThresholdSaturation[1] = SmartDashboard.getNumber("Constants.hsvThresholdSaturationMax", Constants.hsvThresholdSaturation[1]);
-    Constants.hsvThresholdValue[0] = SmartDashboard.getNumber("Constants.hsvThresholdValueMin", Constants.hsvThresholdValue[0]);
-    Constants.hsvThresholdValue[1] = SmartDashboard.getNumber("Constants.hsvThresholdValueMax", Constants.hsvThresholdValue[1]);
+    
     System.out.println();
   }
-
+  public void cameraSetting(){
+    Constants.hsvThresholdHue[0] = SmartDashboard.getNumber("HueMin", Constants.hsvThresholdHue[0]);
+    Constants.hsvThresholdHue[1] = SmartDashboard.getNumber("HueMax", Constants.hsvThresholdHue[1]);
+    Constants.hsvThresholdSaturation[0] = SmartDashboard.getNumber("SaturationMin", Constants.hsvThresholdSaturation[0]);
+    Constants.hsvThresholdSaturation[1] = SmartDashboard.getNumber("SaturationMax", Constants.hsvThresholdSaturation[1]);
+    Constants.hsvThresholdValue[0] = SmartDashboard.getNumber("ValueMin", Constants.hsvThresholdValue[0]);
+    Constants.hsvThresholdValue[1] = SmartDashboard.getNumber("ValueMax", Constants.hsvThresholdValue[1]);
+  }
   @Override
   public void testInit() {
   }
