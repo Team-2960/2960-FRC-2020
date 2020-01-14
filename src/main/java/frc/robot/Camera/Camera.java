@@ -95,7 +95,6 @@ public class Camera{
 						targetFound = lTargetFound;
 						centerX = LcenterX;
 						centerY = LcenterY;
-
 					}
 					//Output to smartdash board - It may not like having this inside the thread
 					hsv_threashold_source.putFrame(pipeline.hsvThresholdOutput());

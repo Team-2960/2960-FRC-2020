@@ -20,9 +20,10 @@ public class Constants{
     public final static int cWidth = 480;
     public final static int cHeight = 640;
     //values for grippipelines
-    public static double[] hsvThresholdHue = {98, 55};
-    public static double[] hsvThresholdSaturation = {220, 99};
-    public static double[] hsvThresholdValue = {255, 140};
+    public static double[] hsvThresholdHue = {97, 55};
+    public static double[] hsvThresholdSaturation = {79, 23};
+    public static double[] hsvThresholdValue = {255, 216};
+    public static double filterContoursMinArea = 70;
     
     
     
