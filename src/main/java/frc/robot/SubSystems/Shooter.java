@@ -7,16 +7,19 @@ import com.ctre.phoenix.motorcontrol.SensorCollection;
 import com.ctre.phoenix.motorcontrol.TalonFXControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
 import com.ctre.phoenix.sensors.CANCoder;
+import com.revrobotics.CANSparkMax;
+import com.revrobotics.SparkMax;
+import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 public class Shooter extends SubsystemBase{
     private static Shooter shooter;
-    private TalonFX mLeftShooter;
-    private TalonFX mRightShooter;
+    private CANSparkMax mLeftShooter;
+    private CANSparkMax mRightShooter;
     public void setShooterSpeed(double speed){
-      mLeftShooter.set(ControlMode.PercentOutput, speed);
-      //mRightShooter.set(ControlMode.PercentOutput, speed);
+      mLeftShooter.set(speed);
+      mRightShooter.set(speed);
     }
     public void shooterEncoder(){
-      System.out.println(mLeftShooter.getSelectedSensorVelocity()/3.60501567398119122257);
+      //System.out.println(mLeftShooter.getSelectedSensorVelocity()/3.60501567398119122257);
       //System.out.println(RightEncoder.getVelocity());
     }
     public static Shooter get_Instance(){
@@ -27,8 +30,8 @@ public class Shooter extends SubsystemBase{
     }
     
     private Shooter(){
-      mLeftShooter = new TalonFX(Constants.mLeftShooter);
-      //mRightShooter = new TalonFX(Constants.mLeftShooter);
+      mLeftShooter = new CANSparkMax(Constants.mLeftShooter, MotorType.kBrushless);
+      mRightShooter = new CANSparkMax(Constants.mRightShooter, MotorType.kBrushless);
       //RightEncoder = new CANCoder(Constants.mRightShooter);
     }
     @Override

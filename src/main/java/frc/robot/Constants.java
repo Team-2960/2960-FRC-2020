@@ -11,10 +11,10 @@ public class Constants{
     public final static int mRightSlave1 = 5;
     public final static int mRightSlave2 = 6;
     //Shooter motor
-    public final static int mLeftShooter = 7;
-    public final static int mRightShooter = 8;
+    public final static int mLeftShooter = 7;//change to 7
+    public final static int mRightShooter = 8;//change to 8
     //Intake motor
-    public final static int mIntake = 9;
+    public final static int mIntake = 9;//change to 9
     //Climb motor
     //camera
     public final static int cWidth = 480;
