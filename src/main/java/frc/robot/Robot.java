@@ -35,8 +35,8 @@ public class Robot extends TimedRobot {
     //init Driver and Oerator Joystick
     driver_Control = new Joystick(Constants.driver_Control);
     operator_Control = new Joystick(Constants.operator_Control);
-    SmartDashboard.putNumber("CenterX", camera.getImageResultsX());
-    SmartDashboard.putNumber("CenterY", camera.getImageResultsY());
+    //SmartDashboard.putNumber("CenterX", camera.getImageResultsX());
+    //SmartDashboard.putNumber("CenterY", camera.getImageResultsY());
     SmartDashboard.putNumber("Constants.hsvThresholdHueMin", Constants.hsvThresholdHue[1]);
     SmartDashboard.putNumber("Constants.hsvThresholdHueMax", Constants.hsvThresholdHue[0]);
     SmartDashboard.putNumber("Constants.hsvThresholdSaturationMin", Constants.hsvThresholdSaturation[1]);
