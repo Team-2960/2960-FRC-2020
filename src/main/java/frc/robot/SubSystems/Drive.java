@@ -7,19 +7,16 @@
 
 package frc.robot.SubSystems;
 
-import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
-import com.ctre.phoenix.motorcontrol.can.TalonSRX;
-import com.revrobotics.CANEncoder;
 
 public class Drive extends SubsystemBase {
   private static Drive drive;
 
-  private CANSparkMax leftMotor;
-  private CANSparkMax rightMotor;
+  private CANSparkMax mLeftMaster;
+  private CANSparkMax mRightMaster;
   public static Drive get_Instance(){
     
     if(drive == null){
@@ -29,12 +26,12 @@ public class Drive extends SubsystemBase {
   }
 
   private Drive() {
-    leftMotor = new CANSparkMax(2, MotorType.kBrushless);
-    rightMotor = new CANSparkMax(1, MotorType.kBrushless);
+    mLeftMaster = new CANSparkMax(2, MotorType.kBrushless);
+    mRightMaster = new CANSparkMax(1, MotorType.kBrushless);
   }
   public void move(double right, double left){
-    leftMotor.set( 1 * left);
-    rightMotor.set( -1 * left);
+    mLeftMaster.set( 1 * left);
+    mRightMaster.set( -1 * left);
   }
   public void encoderValue(){
     //System.out.println(lEncoder.getVelocity());

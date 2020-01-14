@@ -14,9 +14,7 @@ import frc.robot.Constants;
 public class Intake extends SubsystemBase {
   private static Intake intake;
   private CANSparkMax mIntake;
-  public void setIntakeSpeed(double speed){
-    mIntake.set(speed);
-  }
+
   public static Intake get_Instance(){
     if(intake == null){
       intake = new Intake();
@@ -26,7 +24,9 @@ public class Intake extends SubsystemBase {
   private Intake() {
     mIntake = new CANSparkMax(Constants.mIntake, MotorType.kBrushless);
   }
-
+  public void setIntakeSpeed(double speed){
+    mIntake.set(speed);
+  }
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
