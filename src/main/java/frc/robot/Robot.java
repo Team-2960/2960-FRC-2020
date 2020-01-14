@@ -59,7 +59,7 @@ public class Robot extends TimedRobot {
   public void teleopPeriodic() {
     //oi.driver_Control(driver_Control);
     //oi.operator_Control(operator_Control);
-    cameraSetting();
+    //cameraSetting();
   }
   @Override
   public void testInit() {
