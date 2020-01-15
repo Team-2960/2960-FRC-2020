@@ -36,6 +36,7 @@ public class Robot extends TimedRobot {
     driver_Control = new Joystick(Constants.driver_Control);
     operator_Control = new Joystick(Constants.operator_Control);
 <<<<<<< HEAD
+<<<<<<< HEAD
     //SmartDashboard.putNumber("CenterX", camera.getImageResultsX());
     //SmartDashboard.putNumber("CenterY", camera.getImageResultsY());
     SmartDashboard.putNumber("Constants.hsvThresholdHueMin", Constants.hsvThresholdHue[1]);
@@ -45,6 +46,8 @@ public class Robot extends TimedRobot {
     SmartDashboard.putNumber("Constants.hsvThresholdValueMin", Constants.hsvThresholdValue[1]);
     SmartDashboard.putNumber("Constants.hsvThresholdValueMax", Constants.hsvThresholdValue[0]);
     
+=======
+>>>>>>> parent of 7e9221d... Camera Code
 =======
 >>>>>>> parent of 7e9221d... Camera Code
 
@@ -69,6 +72,9 @@ public class Robot extends TimedRobot {
     oi.operator_Control(operator_Control);
     SmartDashboard.putNumber("CenterX", camera.getImageResultsX());
     SmartDashboard.putNumber("CenterY", camera.getImageResultsY());
+<<<<<<< HEAD
+>>>>>>> parent of 7e9221d... Camera Code
+=======
 >>>>>>> parent of 7e9221d... Camera Code
   }
   @Override
