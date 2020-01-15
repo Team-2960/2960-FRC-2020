@@ -18,7 +18,6 @@ public class Drive extends SubsystemBase {
   private CANSparkMax mLeftMaster;
   private CANSparkMax mRightMaster;
   public static Drive get_Instance(){
-    
     if(drive == null){
       drive = new Drive();
     } 
@@ -30,11 +29,16 @@ public class Drive extends SubsystemBase {
     mRightMaster = new CANSparkMax(1, MotorType.kBrushless);
   }
   public void move(double right, double left){
+<<<<<<< HEAD
     mLeftMaster.set( 1 * left);
     mRightMaster.set( -1 * left);
   }
   public void encoderValue(){
     //System.out.println(lEncoder.getVelocity());
+=======
+    leftMotor.set( 1 * left);
+    rightMotor.set( -1 * left);
+>>>>>>> parent of 7e9221d... Camera Code
   }
   @Override
   public void periodic() {

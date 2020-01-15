@@ -17,7 +17,6 @@ import org.opencv.features2d.FeatureDetector;
 import org.opencv.imgcodecs.Imgcodecs;
 import org.opencv.imgproc.*;
 import org.opencv.objdetect.*;
-import frc.robot.Constants;
 
 /**
 * GripPipeline class.
@@ -46,7 +45,10 @@ public class GripPipeline implements VisionPipeline {
 	@Override	public void process(Mat source0) {
 		// Step HSV_Threshold0:
 		Mat hsvThresholdInput = source0;
-		hsvThreshold(hsvThresholdInput, Constants.hsvThresholdHue, Constants.hsvThresholdSaturation, Constants.hsvThresholdValue, hsvThresholdOutput);
+		double[] hsvThresholdHue = {55.03597122302158, 98.18181818181817};
+		double[] hsvThresholdSaturation = {34.39748201438849, 98.30808080808082};
+		double[] hsvThresholdValue = {192.62589928057554, 255.0};
+		hsvThreshold(hsvThresholdInput, hsvThresholdHue, hsvThresholdSaturation, hsvThresholdValue, hsvThresholdOutput);
 
 		// Step CV_erode0:
 		Mat cvErodeSrc = hsvThresholdOutput;
