@@ -13,6 +13,8 @@ public class Constants{
     //Intake motor
     //Climb motor
     //Shooter motor
+    public final static int mLeftShooter = 7;
+    public final static int mRightShooter = 8;
     //camera
     public final static int cWidth = 480;
     public final static int cHeight = 640;
