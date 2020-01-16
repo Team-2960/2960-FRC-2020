@@ -15,9 +15,10 @@ import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 public class Drive extends SubsystemBase {
   private static Drive drive;
 
-  private CANSparkMax mLeftMaster;
-  private CANSparkMax mRightMaster;
+  private CANSparkMax leftMotor;
+  private CANSparkMax rightMotor;
   public static Drive get_Instance(){
+    
     if(drive == null){
       drive = new Drive();
     } 
@@ -25,26 +26,14 @@ public class Drive extends SubsystemBase {
   }
 
   private Drive() {
-    mLeftMaster = new CANSparkMax(2, MotorType.kBrushless);
-    mRightMaster = new CANSparkMax(1, MotorType.kBrushless);
+    leftMotor = new CANSparkMax(2, MotorType.kBrushless);
+    rightMotor = new CANSparkMax(1, MotorType.kBrushless);
   }
   public void move(double right, double left){
-<<<<<<< HEAD
-    mLeftMaster.set( 1 * left);
-    mRightMaster.set( -1 * left);
-  }
-  public void encoderValue(){
-    //System.out.println(lEncoder.getVelocity());
-=======
     leftMotor.set( 1 * left);
     rightMotor.set( -1 * left);
-<<<<<<< HEAD
-<<<<<<< HEAD
->>>>>>> parent of 7e9221d... Camera Code
-=======
->>>>>>> parent of 7e9221d... Camera Code
-=======
->>>>>>> parent of 7e9221d... Camera Code
+    System.out.println(rightMotor.getEncoder());
+    System.out.println(leftMotor.getEncoder());
   }
   @Override
   public void periodic() {
