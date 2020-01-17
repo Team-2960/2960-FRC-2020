@@ -8,15 +8,19 @@ public class OI{
     private Intake intake;
     private Shooter shooter;
     public OI(){
-        drive = Drive.get_Instance();
-        climb = Climb.get_Instance();
-        intake = Intake.get_Instance();
+        //drive = Drive.get_Instance();
+        //climb = Climb.get_Instance();
+        //intake = Intake.get_Instance();
         shooter = Shooter.get_Instance();
     }
     //Driver control
     public void driver_Control(Joystick driver_Control){
-        drive.move(driver_Control.getRawAxis(1), driver_Control.getRawAxis(5));
-
+        //drive.move(driver_Control.getRawAxis(1), driver_Control.getRawAxis(5));
+        if(driver_Control.getRawButton(2)){
+            shooter.setShooterSpeed(1);
+        }else{
+            shooter.setShooterSpeed(0);
+        }
     }
     //Operator control
     public void operator_Control(Joystick operator_Control){
