@@ -17,7 +17,7 @@ public class OI{
     public void driver_Control(Joystick driver_Control){
         //drive.move(driver_Control.getRawAxis(1), driver_Control.getRawAxis(5));
         if(driver_Control.getRawButton(2)){
-            shooter.setShooterSpeed(1);
+            shooter.setShooterSpeed(driver_Control.getRawAxis(1));
         }else{
             shooter.setShooterSpeed(0);
         }
