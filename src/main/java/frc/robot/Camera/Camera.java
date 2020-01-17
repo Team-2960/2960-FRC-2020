@@ -15,6 +15,13 @@ public class Camera{
 	private Object IMG_LOCK;
 	private CvSource hsv_threashold_source;
 	private CvSource erode_source;
+	private double  width = 0.0;
+	public double height = 0.0;
+	public double distanceCalc(double pixels){
+		double distance;
+		distance = Math.pow((pixels/297.04), (1/-0.5636));
+		return distance;
+	}
 	
 
     public Camera(int cameraPort){
@@ -39,8 +46,10 @@ public class Camera{
 			GripPipeline pipeline = new GripPipeline();
 			Mat cam_frame = new Mat();
 			Boolean lTargetFound;
-			Double LcenterX;
-			Double LcenterY;
+			double LcenterX;
+			double LcenterY;
+			double Lwidth = 0.0;
+			double Lheight = 0.0;
 			
 			
 			
@@ -95,6 +104,8 @@ public class Camera{
 						targetFound = lTargetFound;
 						centerX = LcenterX;
 						centerY = LcenterY;
+						width = Lwidth;
+						height = Lheight;
 
 					}
 					//Output to smartdash board - It may not like having this inside the thread
@@ -122,7 +133,20 @@ public class Camera{
 			
 		}
 	}
-	
+	public double getImageResultsWidth(){
+		//Get results from vision thread -- This will change. 
+		synchronized(IMG_LOCK){
+			return width;
+			
+		}
+	}
+	public double getImageResultsHeight(){
+		//Get results from vision thread -- This will change. 
+		synchronized(IMG_LOCK){
+			return height;
+			
+		}
+	}
 	public Boolean isImageFound() {
 		//Get results from vision thread -- This will change. 
 		synchronized(IMG_LOCK){
