@@ -17,6 +17,7 @@ public class Camera{
 	private CvSource erode_source;
 	private double  width = 0.0;
 	public double height = 0.0;
+	public double turningSpeed = 0.0;
 	public double distanceCalc(double pixels){
 		double distance;
 		distance = Math.pow((pixels/297.04), (1/-0.5636));
@@ -50,6 +51,7 @@ public class Camera{
 			double LcenterY;
 			double Lwidth = 0.0;
 			double Lheight = 0.0;
+			double LTurningSpeed = 0.0;
 			
 			
 			
@@ -86,6 +88,12 @@ public class Camera{
 						//Did we find a target? Record center value
 							LcenterX = (double) tempRec.width/2 + tempRec.x;
 							LcenterY = (double) tempRec.height/2 + tempRec.y;
+							if(LcenterX < 240){
+								LTurningSpeed = 0.2;
+							}
+							else{
+								LTurningSpeed = -0.2;
+							}
 							lTargetFound = true;
 						
 
@@ -106,6 +114,7 @@ public class Camera{
 						centerY = LcenterY;
 						width = Lwidth;
 						height = Lheight;
+						turningSpeed = LTurningSpeed;
 
 					}
 					//Output to smartdash board - It may not like having this inside the thread
@@ -144,6 +153,13 @@ public class Camera{
 		//Get results from vision thread -- This will change. 
 		synchronized(IMG_LOCK){
 			return height;
+			
+		}
+	}
+	public double getImageResultsTurningSpeed(){
+		//Get results from vision thread -- This will change. 
+		synchronized(IMG_LOCK){
+			return turningSpeed;
 			
 		}
 	}

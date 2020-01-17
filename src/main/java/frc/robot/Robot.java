@@ -14,6 +14,7 @@ public class Robot extends TimedRobot {
   private Joystick driver_Control;
   private Joystick operator_Control;
   private OI oi;
+  private LEDs leds;
   @Override
   public void robotInit() {
   }
@@ -30,6 +31,7 @@ public class Robot extends TimedRobot {
   public void teleopInit() {
     oi = new OI();
     camera = new Camera(0);
+    leds = new LEDs();
     //init Driver and Oerator Joystick
     driver_Control = new Joystick(Constants.driver_Control);
     operator_Control = new Joystick(Constants.operator_Control);
