@@ -89,6 +89,7 @@ public class Camera{
 							LcenterX = (double) tempRec.width/2 + tempRec.x;
 							LcenterY = (double) tempRec.height/2 + tempRec.y;
 							if(LcenterX < 240){
+								System.out.println("TURN SPEED");
 								LTurningSpeed = 0.2;
 							}
 							else{
@@ -160,6 +161,7 @@ public class Camera{
 		//Get results from vision thread -- This will change. 
 		synchronized(IMG_LOCK){
 			return turningSpeed;
+			
 			
 		}
 	}

@@ -4,7 +4,7 @@ import edu.wpi.first.wpilibj.Joystick;
 import frc.robot.SubSystems.*;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import frc.robot.Camera.*;
+import frc.robot.Camera.Camera;
 public class OI{
     private Drive drive;
     private Climb climb;
@@ -35,7 +35,9 @@ public class OI{
             shooter.setShooterSpeed(0);
         }
         */
+        if(driver_Control.getRawButton(1)){
         drive.move(-1 * camera.getImageResultsTurningSpeed(), camera.getImageResultsTurningSpeed());
+        }
     }
     //Operator control
     public void operator_Control(Joystick operator_Control){
