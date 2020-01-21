@@ -1,6 +1,7 @@
 package frc.robot;
 
 import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import frc.robot.SubSystems.*;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -14,7 +15,7 @@ public class OI{
     private double cameraTurn;
     public OI(){
         camera = new Camera(0);
-        drive = Drive.get_Instance();
+        //drive = Drive.get_Instance();
         //climb = Climb.get_Instance();
         //intake = Intake.get_Instance();
         shooter = Shooter.get_Instance();
@@ -37,8 +38,17 @@ public class OI{
             shooter.setShooterSpeed(0);
         }
         */
+        //driver_Control.setRumble(RumbleType.kLeftRumble, 1);
+        //driver_Control.setRumble(RumbleType.kRightRumble, 1);
+        shooter.smart();
+        if(driver_Control.getRawButton(2)){
+            shooter.setPIDShooterSpeed(1000);
+        }
+        else{
+            shooter.setPIDShooterSpeed(0);
+        }
         cameraTurn = camera.getImageResultsTurningSpeed();
-        drive.move(driver_Control.getRawAxis(1), driver_Control.getRawAxis(5));
+        /* drive.move(driver_Control.getRawAxis(1), driver_Control.getRawAxis(5));
         if(driver_Control.getRawAxis(1) == 0){
         if(driver_Control.getRawButton(1)){
 
@@ -46,8 +56,8 @@ public class OI{
         }
         else{
             drive.move(0, 0);
-        }
-    }
+        } */
+    //}
     }
     //Operator control
     public void operator_Control(Joystick operator_Control){
