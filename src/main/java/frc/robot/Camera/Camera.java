@@ -18,9 +18,10 @@ public class Camera{
 	private double  width = 0.0;
 	public double height = 0.0;
 	public double turningSpeed = 0.0;
+	public double targetRatio = 0.0;
 	public double distanceCalc(double pixels){
 		double distance;
-		distance = Math.pow((pixels/297.04), (1/-0.5636));
+		distance = (15.75 * (double) Constants.cHeight)/(2.0 * pixels * Math.tan(Math.toRadians(Constants.verticalViewAngle)));
 		return distance;
 	}
 	
@@ -52,6 +53,7 @@ public class Camera{
 			double Lwidth = 0.0;
 			double Lheight = 0.0;
 			double LTurningSpeed = 0.0;
+			double LtargetRatio = 0.0;
 			
 			
 			
@@ -88,13 +90,18 @@ public class Camera{
 						//Did we find a target? Record center value
 							LcenterX = (double) tempRec.width/2 + tempRec.x;
 							LcenterY = (double) tempRec.height/2 + tempRec.y;
-							if(LcenterX < 240){
+								LtargetRatio = (double) tempRec.height/tempRec.width;
+
+								Lwidth = (double) tempRec.width;
+								Lheight = (double) tempRec.height;
+								double distancePixels;
+								double p = 0.005;
+								distancePixels = LcenterX - 240;
 								System.out.println("TURN SPEED");
-								LTurningSpeed = 0.2;
-							}
-							else{
-								LTurningSpeed = -0.2;
-							}
+								LTurningSpeed = (distancePixels * p);
+							
+								
+							
 							lTargetFound = true;
 						
 
@@ -116,6 +123,7 @@ public class Camera{
 						width = Lwidth;
 						height = Lheight;
 						turningSpeed = LTurningSpeed;
+						targetRatio = LtargetRatio;
 
 					}
 					//Output to smartdash board - It may not like having this inside the thread
@@ -161,7 +169,15 @@ public class Camera{
 		//Get results from vision thread -- This will change. 
 		synchronized(IMG_LOCK){
 			return turningSpeed;
+
 			
+		}
+	}
+	public double getImageResultsTargetRatio(){
+		//Get results from vision thread -- This will change. 
+		synchronized(IMG_LOCK){
+			return targetRatio;
+
 			
 		}
 	}

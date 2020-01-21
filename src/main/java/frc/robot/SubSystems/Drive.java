@@ -9,6 +9,10 @@ package frc.robot.SubSystems;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
+
+import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.ctre.phoenix.motorcontrol.can.TalonSRX;
+import com.fasterxml.jackson.databind.deser.std.NumberDeserializers.BooleanDeserializer;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
@@ -17,6 +21,9 @@ public class Drive extends SubsystemBase {
 
   private CANSparkMax leftMotor;
   private CANSparkMax rightMotor;
+  private TalonSRX leftTalon;
+  private TalonSRX rightTalon;
+  private Boolean Talon = true;
   public static Drive get_Instance(){
     
     if(drive == null){
@@ -26,14 +33,26 @@ public class Drive extends SubsystemBase {
   }
 
   private Drive() {
+    if(!Talon){
     leftMotor = new CANSparkMax(2, MotorType.kBrushless);
     rightMotor = new CANSparkMax(1, MotorType.kBrushless);
+    }
+    else{
+      leftTalon = new TalonSRX(1);
+      rightTalon = new TalonSRX(0);
+    }
   }
   public void move(double right, double left){
+    if(Talon){
+      leftTalon.set(ControlMode.PercentOutput, left);
+      rightTalon.set(ControlMode.PercentOutput, -right);
+    }
+    else{
     leftMotor.set( 1 * left);
     rightMotor.set( -1 * left);
     System.out.println(rightMotor.getEncoder());
     System.out.println(leftMotor.getEncoder());
+    }
   }
   @Override
   public void periodic() {
