@@ -96,7 +96,7 @@ public class Camera{
 								Lheight = (double) tempRec.height;
 								double distancePixels;
 								double p = 0.005;
-								distancePixels = LcenterX - 240;
+								distancePixels = LcenterX - 320;
 								System.out.println("TURN SPEED");
 								LTurningSpeed = (distancePixels * p);
 							
