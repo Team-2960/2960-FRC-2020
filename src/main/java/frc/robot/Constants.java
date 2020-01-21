@@ -16,13 +16,15 @@ public class Constants{
     public final static int mLeftShooter = 7;
     public final static int mRightShooter = 8;
     //camera
-    public final static int cWidth = 480;
-    public final static int cHeight = 640;
+    public final static int cWidth = 640;
+    public final static int cHeight = 480;
     // values for grippipelines
     public static double[] hsvThresholdHue = {40, 98};
     public static double[] hsvThresholdSaturation = {99, 220};
     public static double[] hsvThresholdValue = {140, 255};
-    
+    //view angles
+    public static double horizontalViewAngle = 61;
+    public static double verticalViewAngle = 20.55;
     
     
 }

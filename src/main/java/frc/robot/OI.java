@@ -11,14 +11,16 @@ public class OI{
     private Intake intake;
     private Shooter shooter;
     private Camera camera;
+    private double cameraTurn;
     public OI(){
         camera = new Camera(0);
-        //drive = Drive.get_Instance();
+        drive = Drive.get_Instance();
         //climb = Climb.get_Instance();
         //intake = Intake.get_Instance();
         shooter = Shooter.get_Instance();
         SmartDashboard.putNumber("CenterX", camera.getImageResultsX());
         SmartDashboard.putNumber("CenterY", camera.getImageResultsY());
+        SmartDashboard.putNumber("TargetRatio", camera.getImageResultsTargetRatio());
         SmartDashboard.putNumber("Constants.hsvThresholdHueMin", Constants.hsvThresholdHue[0]);
         SmartDashboard.putNumber("Constants.hsvThresholdHueMax", Constants.hsvThresholdHue[1]);
         SmartDashboard.putNumber("Constants.hsvThresholdSaturationMin", Constants.hsvThresholdSaturation[0]);
@@ -35,9 +37,17 @@ public class OI{
             shooter.setShooterSpeed(0);
         }
         */
+        cameraTurn = camera.getImageResultsTurningSpeed();
+        drive.move(driver_Control.getRawAxis(1), driver_Control.getRawAxis(5));
+        if(driver_Control.getRawAxis(1) == 0){
         if(driver_Control.getRawButton(1)){
-        drive.move(-1 * camera.getImageResultsTurningSpeed(), camera.getImageResultsTurningSpeed());
+
+        drive.move(-cameraTurn, cameraTurn);
         }
+        else{
+            drive.move(0, 0);
+        }
+    }
     }
     //Operator control
     public void operator_Control(Joystick operator_Control){
@@ -46,6 +56,9 @@ public class OI{
     public void smartDashboradUpdate(){
         SmartDashboard.putNumber("CenterX", camera.getImageResultsX());
         SmartDashboard.putNumber("CenterY", camera.getImageResultsY());
+        SmartDashboard.putNumber("TargetRatio", camera.getImageResultsTargetRatio());
+        SmartDashboard.putNumber("Width", camera.getImageResultsWidth());
+        SmartDashboard.putNumber("Height", camera.getImageResultsHeight());
         Constants.hsvThresholdHue[0] = SmartDashboard.getNumber("Constants.hsvThresholdHueMin", Constants.hsvThresholdHue[0]);
         Constants.hsvThresholdHue[1] = SmartDashboard.getNumber("Constants.hsvThresholdHueMax", Constants.hsvThresholdHue[1]);
         Constants.hsvThresholdSaturation[0] = SmartDashboard.getNumber("Constants.hsvThresholdSaturationMin", Constants.hsvThresholdSaturation[0]);
