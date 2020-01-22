@@ -15,7 +15,7 @@ public class OI{
     private double cameraTurn;
     public OI(){
         camera = new Camera(0);
-        //drive = Drive.get_Instance();
+        drive = Drive.get_Instance();
         //climb = Climb.get_Instance();
         //intake = Intake.get_Instance();
         shooter = Shooter.get_Instance();
@@ -31,24 +31,24 @@ public class OI{
     }
     //Driver control
     public void driver_Control(Joystick driver_Control){
-        //drive.move(driver_Control.getRawAxis(1), driver_Control.getRawAxis(5));
-        /*if(driver_Control.getRawButton(2)){
+/*         //drive.move(driver_Control.getRawAxis(1), driver_Control.getRawAxis(5));
+        if(driver_Control.getRawButton(2)){
             shooter.setShooterSpeed(driver_Control.getRawAxis(1));
         }else{
             shooter.setShooterSpeed(0);
         }
-        */
+         */
         //driver_Control.setRumble(RumbleType.kLeftRumble, 1);
         //driver_Control.setRumble(RumbleType.kRightRumble, 1);
-        shooter.smart();
+/*         shooter.smart();
         if(driver_Control.getRawButton(2)){
             shooter.setPIDShooterSpeed(1000);
         }
         else{
             shooter.setPIDShooterSpeed(0);
-        }
-        cameraTurn = camera.getImageResultsTurningSpeed();
-        /* drive.move(driver_Control.getRawAxis(1), driver_Control.getRawAxis(5));
+        } */
+        cameraTurn = camera.getImageResultsTurningSpeed(); 
+        drive.move(driver_Control.getRawAxis(1), driver_Control.getRawAxis(5));
         if(driver_Control.getRawAxis(1) == 0){
         if(driver_Control.getRawButton(1)){
 
@@ -56,8 +56,8 @@ public class OI{
         }
         else{
             drive.move(0, 0);
-        } */
-    //}
+        } 
+    }
     }
     //Operator control
     public void operator_Control(Joystick operator_Control){
@@ -67,6 +67,9 @@ public class OI{
         SmartDashboard.putNumber("CenterX", camera.getImageResultsX());
         SmartDashboard.putNumber("CenterY", camera.getImageResultsY());
         SmartDashboard.putNumber("TargetRatio", camera.getImageResultsTargetRatio());
+        System.out.println(camera.horizontalDistanceCalc(camera.getImageResultsX()));
+        System.out.println(camera.getImageResultsX());
+        SmartDashboard.putNumber("Angle", camera.horizontalDistanceCalc(camera.getImageResultsX()));
         SmartDashboard.putNumber("Width", camera.getImageResultsWidth());
         SmartDashboard.putNumber("Height", camera.getImageResultsHeight());
         Constants.hsvThresholdHue[0] = SmartDashboard.getNumber("Constants.hsvThresholdHueMin", Constants.hsvThresholdHue[0]);

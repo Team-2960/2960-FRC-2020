@@ -24,6 +24,13 @@ public class Camera{
 		distance = (15.75 * (double) Constants.cHeight)/(2.0 * pixels * Math.tan(Math.toRadians(Constants.verticalViewAngle)));
 		return distance;
 	}
+	public double horizontalDistanceCalc(double pixels){
+		double distance;
+		System.out.println("a" + (27/640));
+		distance = (Math.abs((double) pixels - 320) * ((double) 27/640) - 0.9);
+		
+		return distance;
+	}
 	
 
     public Camera(int cameraPort){
