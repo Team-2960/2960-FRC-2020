@@ -16,6 +16,11 @@ public class Robot extends TimedRobot {
   private LEDs leds;
   @Override
   public void robotInit() {
+    oi = new OI();
+    leds = new LEDs();
+    //init Driver and Oerator Joystick
+    driver_Control = new Joystick(Constants.driver_Control);
+    operator_Control = new Joystick(Constants.operator_Control);
   }
   
   @Override
@@ -28,11 +33,7 @@ public class Robot extends TimedRobot {
 
   @Override
   public void teleopInit() {
-    oi = new OI();
-    leds = new LEDs();
-    //init Driver and Oerator Joystick
-    driver_Control = new Joystick(Constants.driver_Control);
-    operator_Control = new Joystick(Constants.operator_Control);
+    
     
 
   

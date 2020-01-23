@@ -19,8 +19,12 @@ import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 public class Drive extends SubsystemBase {
   private static Drive drive;
 
-  private CANSparkMax leftMotor;
-  private CANSparkMax rightMotor;
+  private CANSparkMax leftMotorM;
+  private CANSparkMax rightMotorM;
+  private CANSparkMax leftMotor1;
+  private CANSparkMax rightMotor1;
+  private CANSparkMax leftMotor2;
+  private CANSparkMax rightMotor2;
   private TalonSRX leftTalon;
   private TalonSRX rightTalon;
   private Boolean Talon = true;
@@ -34,8 +38,12 @@ public class Drive extends SubsystemBase {
 
   private Drive() {
     if(!Talon){
-    leftMotor = new CANSparkMax(2, MotorType.kBrushless);
-    rightMotor = new CANSparkMax(1, MotorType.kBrushless);
+    leftMotorM = new CANSparkMax(1, MotorType.kBrushless);
+    leftMotor1 = new CANSparkMax(1, MotorType.kBrushless);
+    leftMotor2 = new CANSparkMax(1, MotorType.kBrushless);
+    rightMotorM = new CANSparkMax(4, MotorType.kBrushless);
+    rightMotor1 = new CANSparkMax(4, MotorType.kBrushless);
+    rightMotor2 = new CANSparkMax(4, MotorType.kBrushless);
     }
     else{
       leftTalon = new TalonSRX(1);
@@ -48,10 +56,12 @@ public class Drive extends SubsystemBase {
       rightTalon.set(ControlMode.PercentOutput, -right);
     }
     else{
-    leftMotor.set( 1 * left);
-    rightMotor.set( -1 * left);
-    System.out.println(rightMotor.getEncoder());
-    System.out.println(leftMotor.getEncoder());
+    leftMotorM.set( 1 * left);
+    rightMotorM.set( -1 * right);
+    leftMotor1.set( 1 * left);
+    rightMotor1.set( -1 * right);
+    leftMotor2.set( 1 * left);
+    rightMotor2.set( -1 * right);
     }
   }
   @Override

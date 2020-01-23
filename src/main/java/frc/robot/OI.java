@@ -6,19 +6,24 @@ import frc.robot.SubSystems.*;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Camera.Camera;
+import edu.wpi.first.wpilibj.AnalogGyro;
 public class OI{
     private Drive drive;
     private Climb climb;
     private Intake intake;
-    private Shooter shooter;
+    //private Shooter shooter;
     private Camera camera;
     private double cameraTurn;
+    private AnalogGyro gyro;
     public OI(){
         camera = new Camera(0);
         drive = Drive.get_Instance();
+        System.out.println("init gyro");
+        gyro = new AnalogGyro(0);
         //climb = Climb.get_Instance();
         //intake = Intake.get_Instance();
-        shooter = Shooter.get_Instance();
+        //shooter = Shooter.get_Instance();
+        gyro.calibrate();
         SmartDashboard.putNumber("CenterX", camera.getImageResultsX());
         SmartDashboard.putNumber("CenterY", camera.getImageResultsY());
         SmartDashboard.putNumber("TargetRatio", camera.getImageResultsTargetRatio());
@@ -47,17 +52,27 @@ public class OI{
         else{
             shooter.setPIDShooterSpeed(0);
         } */
-        cameraTurn = camera.getImageResultsTurningSpeed(); 
+        if(driver_Control.getRawButton(4)){
+            gyro.reset();
+        }
         drive.move(driver_Control.getRawAxis(1), driver_Control.getRawAxis(5));
-        if(driver_Control.getRawAxis(1) == 0){
+        if(driver_Control.getRawAxis(1) == 0 && driver_Control.getRawAxis(5) == 0){
         if(driver_Control.getRawButton(1)){
-
+            if(Math.abs(gyro.getAngle()) < 26.4243){
+                driver_Control.setRumble(RumbleType.kRightRumble, 1);
+                driver_Control.setRumble(RumbleType.kLeftRumble, 1);
+            }
+            else{
+                    driver_Control.setRumble(RumbleType.kRightRumble, 0);
+                    driver_Control.setRumble(RumbleType.kLeftRumble, 0);
+            }
         drive.move(-cameraTurn, cameraTurn);
         }
         else{
             drive.move(0, 0);
         } 
-    }
+        }
+    
     }
     //Operator control
     public void operator_Control(Joystick operator_Control){
@@ -67,8 +82,8 @@ public class OI{
         SmartDashboard.putNumber("CenterX", camera.getImageResultsX());
         SmartDashboard.putNumber("CenterY", camera.getImageResultsY());
         SmartDashboard.putNumber("TargetRatio", camera.getImageResultsTargetRatio());
-        System.out.println(camera.horizontalDistanceCalc(camera.getImageResultsX()));
-        System.out.println(camera.getImageResultsX());
+
+        SmartDashboard.putNumber("Gyro Angle", gyro.getAngle());
         SmartDashboard.putNumber("Angle", camera.horizontalDistanceCalc(camera.getImageResultsX()));
         SmartDashboard.putNumber("Width", camera.getImageResultsWidth());
         SmartDashboard.putNumber("Height", camera.getImageResultsHeight());
