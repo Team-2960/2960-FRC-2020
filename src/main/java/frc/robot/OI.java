@@ -13,6 +13,9 @@ public class OI{
     private Drive drive;
     private Climb climb;
     private Intake intake;
+    double previousAngle = 0.0;
+    double currentAngle = 0.0;
+    
     //private Shooter shooter;
     private Camera camera;
     private double cameraTurn;
@@ -59,9 +62,12 @@ public class OI{
         if(driver_Control.getRawButton(4)){
             gyro.reset();
         }
-
+        previousAngle = currentAngle;
+        currentAngle= navX.getAngle();
         drive.move((driver_Control.getRawAxis(1)), (joystick2.getRawAxis(1)));
-        
+        if(driver_Control.getRawButton(2)){
+            drive.rate(previousAngle, currentAngle);drive.setDrivePID(drive.rate(previousAngle, currentAngle), 10);
+        }
         /*if(driver_Control.getRawAxis(1) == 0 && driver_Control.getRawAxis(5) == 0){
         if(driver_Control.getRawButton(1)){
             if(Math.abs(gyro.getAngle()) < 26.4243){

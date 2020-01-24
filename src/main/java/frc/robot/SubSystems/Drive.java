@@ -7,10 +7,13 @@
 
 package frc.robot.SubSystems;
 
+import edu.wpi.first.wpilibj.controller.PIDController;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import frc.robot.Constants;
+import edu.wpi.first.wpiutil.math.MathUtil;
+
 
 public class Drive extends SubsystemBase {
   private static Drive drive;
@@ -21,7 +24,7 @@ public class Drive extends SubsystemBase {
   private CANSparkMax mRightMaster;
   private CANSparkMax mRightMfollow1;
   private CANSparkMax mRightMfollow2;
-  
+  private PIDController drivePidController;
   public static Drive get_Instance(){
     
     if(drive == null){
@@ -45,9 +48,19 @@ public class Drive extends SubsystemBase {
     mLeftFollow2.follow(mLeftMaster);
     mRightMfollow1.follow(mRightMaster);
     mRightMfollow2.follow(mRightMaster);
+
+
+    drivePidController = new PIDController(0.00001, 0, 0);
   }
-  
+  public double rate(double previousRate, double currentRate){
+    double rate;
+    rate = currentRate - previousRate;
+    return rate;
+  }
   //set motor speed
+  public void setDrivePID(double rate, double setpoint){
+    double speed = MathUtil.clamp(drivePidController.calculate(rate, setpoint), -0.25, 0.5);
+  }
   public void move(double left, double right){
     mLeftMaster.set(left);
     mRightMaster.set(-right);
