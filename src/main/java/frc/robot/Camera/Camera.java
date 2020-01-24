@@ -24,6 +24,13 @@ public class Camera{
 		distance = (15.75 * (double) Constants.cHeight)/(2.0 * pixels * Math.tan(Math.toRadians(Constants.verticalViewAngle)));
 		return distance;
 	}
+	public double horizontalDistanceCalc(double pixels){
+		double distance;
+		
+		distance = (Math.abs((double) pixels - 320) * ((double) 27/640) - 0.9);
+		
+		return distance;
+	}
 	
 
     public Camera(int cameraPort){
@@ -38,13 +45,13 @@ public class Camera{
 		}
 
 		IMG_LOCK = new Object();
-		System.out.println("call start thread");	
+			
 		startThread();
 	}
 	
     private void startThread(){
 		visionThread = new Thread(() -> {
-			System.out.println("thread started");
+			
 			GripPipeline pipeline = new GripPipeline();
 			Mat cam_frame = new Mat();
 			Boolean lTargetFound;
@@ -79,10 +86,10 @@ public class Camera{
 					
 					//Find countors in image
 					if (!pipeline.filterContoursOutput().isEmpty()){
-						System.out.println("target found");
+						
 							Rect tempRec = Imgproc.boundingRect(pipeline.filterContoursOutput().get(0));
 							//System.out.println("Target: " + count + " x: " + tempRec.x + " Angle: " + tempAngle.angle);						}
-							System.out.println("finding center");
+							
 						
 						
 						
@@ -97,7 +104,7 @@ public class Camera{
 								double distancePixels;
 								double p = 0.005;
 								distancePixels = LcenterX - 320;
-								System.out.println("TURN SPEED");
+								
 								LTurningSpeed = (distancePixels * p);
 							
 								
@@ -108,7 +115,7 @@ public class Camera{
 						
 
 					}else{
-						System.out.println("target not found");
+						
 						lTargetFound = false;
 						//System.out.println("No Contours");
 					}

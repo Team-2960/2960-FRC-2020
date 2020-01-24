@@ -12,10 +12,17 @@ public class Robot extends TimedRobot {
  
   private Joystick driver_Control;
   private Joystick operator_Control;
+  private Joystick joystick2;
   private OI oi;
   private LEDs leds;
   @Override
   public void robotInit() {
+    oi = new OI();
+    leds = new LEDs();
+    //init Driver and Oerator Joystick
+    driver_Control = new Joystick(Constants.driver_Control);
+    joystick2 = new Joystick(1);
+    operator_Control = new Joystick(Constants.operator_Control);
   }
   
   @Override
@@ -28,11 +35,7 @@ public class Robot extends TimedRobot {
 
   @Override
   public void teleopInit() {
-    oi = new OI();
-    leds = new LEDs();
-    //init Driver and Oerator Joystick
-    driver_Control = new Joystick(Constants.driver_Control);
-    operator_Control = new Joystick(Constants.operator_Control);
+    
     
 
   
@@ -40,7 +43,7 @@ public class Robot extends TimedRobot {
 
   @Override
   public void teleopPeriodic() {
-    oi.driver_Control(driver_Control);
+    oi.driver_Control(driver_Control, joystick2);
     oi.operator_Control(operator_Control);
     oi.smartDashboradUpdate();
   }

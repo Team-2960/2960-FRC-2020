@@ -2,14 +2,14 @@ package frc.robot;
 public class Constants{
     //Joystick
     public final static int driver_Control = 0;
-    public final static int operator_Control = 1;
+    public final static int operator_Control = 3;
     //Drive train motor
     public final static int mLeftMaster = 1;
-    public final static int mLeftMotor1 = 2;
-    public final static int mLeftMotor2 = 3;
+    public final static int mLeftFollow1 = 2;
+    public final static int mLeftFollow2 = 3;
     public final static int mRightMaster = 4;
-    public final static int mRightMotor1 = 5;
-    public final static int mRightMotor2 = 6;
+    public final static int mRightMfollow1 = 5;
+    public final static int mRightMfollow2 = 6;
     //Intake motor
     //Climb motor
     //Shooter motor
