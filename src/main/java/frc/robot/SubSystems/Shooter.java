@@ -19,22 +19,24 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 public class Shooter extends SubsystemBase{
     private static Shooter shooter;
 
+    //shooter motor
     private TalonFX mLeftShooter;
     private TalonFX mRightShooter;
-
+    //Angle motor
     private CANSparkMax mLeftangle;
     private CANSparkMax mRightangle;
-
-    
+    //angle PID controler
     private PIDController aPidController;
 
     private SpeedControllerGroup mAngle;
   
     private Encoder eArm;
-    
+    //pid value will move to constants later.
     double kp = 0.033,
            ki = 0.000045,
            kd = 0.01;
+
+    
     public static Shooter get_Instance(){
       if(shooter == null){
         shooter = new Shooter();
@@ -43,6 +45,7 @@ public class Shooter extends SubsystemBase{
     }
     
     private Shooter(){
+      //init code
       mLeftShooter = new TalonFX(Constants.mLeftShooter);
       mRightShooter = new TalonFX(Constants.mRightShooter);
 
@@ -50,7 +53,7 @@ public class Shooter extends SubsystemBase{
       mRightangle = new CANSparkMax(12, MotorType.kBrushless);
 
       mAngle = new SpeedControllerGroup(mLeftangle, mRightangle);
-
+      //encoder 
       eArm = new Encoder(4, 5, true, Encoder.EncodingType.k4X);
     
       //Arm PID
@@ -61,24 +64,27 @@ public class Shooter extends SubsystemBase{
       eArm.setDistancePerPulse(360.0/1024.0);
       aPidController = new PIDController(0.004, 0.0001, 0.01);
 
+      //invert right shooter motor
       mRightShooter.setInverted(true);
 
+      //set the rigth motor pid
       mRightShooter.configSelectedFeedbackSensor(FeedbackDevice.IntegratedSensor, 0, 30);
       
       mRightShooter.setStatusFramePeriod(StatusFrameEnhanced.Status_13_Base_PIDF0, 10, 30);
       mRightShooter.setStatusFramePeriod(StatusFrameEnhanced.Status_10_MotionMagic, 10, 30);
-
+      //out put range
       mRightShooter.configNominalOutputForward(0, 30);
       mRightShooter.configNominalOutputReverse(0, 30);
       mRightShooter.configPeakOutputForward(1, 30);
       mRightShooter.configPeakOutputReverse(-1, 30);
-
+      //set PID value
       mRightShooter.selectProfileSlot(0, 0);
 		  mRightShooter.config_kP(0, kp, 30);
 		  mRightShooter.config_kI(0, ki, 30);
       mRightShooter.config_kD(0, kd, 30);
       mRightShooter.config_kF(0, 1023.0/22968.0, 30);
       
+      //get sensor value
       mLeftShooter.setSelectedSensorPosition(0, 0, 30);
       
       mLeftShooter.configSelectedFeedbackSensor(FeedbackDevice.IntegratedSensor, 0, 30);
@@ -100,11 +106,11 @@ public class Shooter extends SubsystemBase{
       
       mLeftShooter.setSelectedSensorPosition(0, 0, 30);
     }
-
+    //set the shooter speed
     public void setShooterSpeed(double speed){
       mRightShooter.set(ControlMode.PercentOutput, speed);
     }
-
+    //setting the pid speed
     public void setPIDShooterSpeed(double speed){
       mRightShooter.set(ControlMode.Velocity, speed);
       mLeftShooter.set(ControlMode.Velocity, speed);
@@ -113,6 +119,7 @@ public class Shooter extends SubsystemBase{
       mLeftangle.set(speed);
       mRightangle.set(-speed);
     }
+    //set arm speed
     public void SetPIDSpeed(double setpoint){
       /*       MathUtil.clamp(pid.calculate(encoder.getDistance(), setpoint), -0.5, 0.5);
  */   double speed = MathUtil.clamp(aPidController.calculate(eArm.getRate(), setpoint), -0.25, 0.5);

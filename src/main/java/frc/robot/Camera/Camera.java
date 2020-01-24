@@ -6,19 +6,30 @@ import org.opencv.core.*;
 import org.opencv.imgproc.Imgproc;
 import frc.robot.Constants;
 public class Camera{
+	//init code
 	public UsbCamera camera;
 	private CvSink cam_sink;
 	private Thread visionThread;
+
+	//getting the center X and Y
 	private double centerX;
 	private double centerY;
+
 	private Boolean targetFound;
+
 	private Object IMG_LOCK;
+
 	private CvSource hsv_threashold_source;
 	private CvSource erode_source;
+
+	//the width and the height of the vision type
 	private double  width = 0.0;
 	public double height = 0.0;
+
+
 	public double turningSpeed = 0.0;
 	public double targetRatio = 0.0;
+
 	public double distanceCalc(double pixels){
 		double distance;
 		distance = (15.75 * (double) Constants.cHeight)/(2.0 * pixels * Math.tan(Math.toRadians(Constants.verticalViewAngle)));
@@ -34,9 +45,10 @@ public class Camera{
 	
 
     public Camera(int cameraPort){
-		System.out.println("startconstructor");
+		//init camera
 		camera = CameraServer.getInstance().startAutomaticCapture(cameraPort);
 		if(camera != null){
+			//send to smartdash board
 			camera.setResolution(Constants.cWidth, Constants.cHeight);
 			camera.setFPS(10);
 			cam_sink = CameraServer.getInstance().getVideo();
@@ -87,13 +99,9 @@ public class Camera{
 					//Find countors in image
 					if (!pipeline.filterContoursOutput().isEmpty()){
 						
-							Rect tempRec = Imgproc.boundingRect(pipeline.filterContoursOutput().get(0));
-							//System.out.println("Target: " + count + " x: " + tempRec.x + " Angle: " + tempAngle.angle);						}
+						Rect tempRec = Imgproc.boundingRect(pipeline.filterContoursOutput().get(0));
+						//System.out.println("Target: " + count + " x: " + tempRec.x + " Angle: " + tempAngle.angle);						}
 							
-						
-						
-						
-				
 						//Did we find a target? Record center value
 							LcenterX = (double) tempRec.width/2 + tempRec.x;
 							LcenterY = (double) tempRec.height/2 + tempRec.y;
@@ -106,14 +114,7 @@ public class Camera{
 								distancePixels = LcenterX - 320;
 								
 								LTurningSpeed = (distancePixels * p);
-							
-								
-							
 							lTargetFound = true;
-						
-
-						
-
 					}else{
 						
 						lTargetFound = false;
