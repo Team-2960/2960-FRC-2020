@@ -5,6 +5,7 @@ import edu.wpi.first.wpilibj.Joystick;
 import frc.robot.Camera.Camera;
 import frc.robot.OI;
 import frc.robot.Constants;
+import frc.robot.SubSystems.*;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
@@ -43,9 +44,12 @@ public class Robot extends TimedRobot {
 
   @Override
   public void teleopPeriodic() {
+
+
     oi.driver_Control(driver_Control, joystick2);
     oi.operator_Control(operator_Control);
     oi.smartDashboradUpdate();
+    oi.update();
   }
 
   @Override

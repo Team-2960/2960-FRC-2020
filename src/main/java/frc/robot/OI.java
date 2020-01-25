@@ -6,31 +6,21 @@ import frc.robot.SubSystems.*;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Camera.Camera;
-import edu.wpi.first.wpilibj.AnalogGyro;
-import com.kauailabs.navx.frc.AHRS;
-import edu.wpi.first.wpilibj.SPI;
 public class OI{
     private Drive drive;
     private Climb climb;
     private Intake intake;
-    double previousAngle = 0.0;
-    double currentAngle = 0.0;
     
-    //private Shooter shooter;
+    private Shooter shooter;
     private Camera camera;
     private double cameraTurn;
-    private AnalogGyro gyro;
-    private AHRS navX;
     public OI(){
         camera = new Camera(0);
         drive = Drive.get_Instance();
         System.out.println("init gyro");
-        gyro = new AnalogGyro(0);
-        navX = new AHRS(SPI.Port.kMXP);
         //climb = Climb.get_Instance();
         //intake = Intake.get_Instance();
         //shooter = Shooter.get_Instance();
-        gyro.calibrate();
         SmartDashboard.putNumber("CenterX", camera.getImageResultsX());
         SmartDashboard.putNumber("CenterY", camera.getImageResultsY());
         SmartDashboard.putNumber("TargetRatio", camera.getImageResultsTargetRatio());
@@ -59,14 +49,11 @@ public class OI{
         else{
             shooter.setPIDShooterSpeed(0);
         } */
-        if(driver_Control.getRawButton(4)){
-            gyro.reset();
-        }
-        previousAngle = currentAngle;
-        currentAngle= navX.getAngle();
+        
+        
         drive.move((driver_Control.getRawAxis(1)), (joystick2.getRawAxis(1)));
         if(driver_Control.getRawButton(2)){
-            drive.rate(previousAngle, currentAngle);drive.setDrivePID(drive.rate(previousAngle, currentAngle), 10);
+           
         }
         /*if(driver_Control.getRawAxis(1) == 0 && driver_Control.getRawAxis(5) == 0){
         if(driver_Control.getRawButton(1)){
@@ -95,9 +82,6 @@ public class OI{
         SmartDashboard.putNumber("CenterY", camera.getImageResultsY());
         SmartDashboard.putNumber("TargetRatio", camera.getImageResultsTargetRatio());
 
-        SmartDashboard.putNumber("rate", navX.getRate());
-        SmartDashboard.putNumber("Accelration x", navX.getRawAccelX());
-        SmartDashboard.putNumber("Gyro Angle", navX.getAngle());
         SmartDashboard.putNumber("Angle", camera.horizontalDistanceCalc(camera.getImageResultsX()));
         SmartDashboard.putNumber("Width", camera.getImageResultsWidth());
         SmartDashboard.putNumber("Height", camera.getImageResultsHeight());
@@ -108,5 +92,11 @@ public class OI{
         Constants.hsvThresholdValue[0] = SmartDashboard.getNumber("Constants.hsvThresholdValueMin", Constants.hsvThresholdValue[0]);
         Constants.hsvThresholdValue[1] = SmartDashboard.getNumber("Constants.hsvThresholdValueMax", Constants.hsvThresholdValue[1]);
         SmartDashboard.putNumber("Distance", camera.distanceCalc(camera.getImageResultsHeight()));
+    }
+    public void update(){
+        drive.periodic();
+        //climb.periodic();
+        //shooter.periodic();
+        //intake.periodic();
     }
 }

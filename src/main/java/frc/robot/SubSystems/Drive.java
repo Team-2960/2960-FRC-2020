@@ -7,12 +7,18 @@
 
 package frc.robot.SubSystems;
 
+import edu.wpi.first.wpilibj.AnalogGyro;
 import edu.wpi.first.wpilibj.controller.PIDController;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+
+import com.kauailabs.navx.frc.AHRS;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import frc.robot.Constants;
 import edu.wpi.first.wpiutil.math.MathUtil;
+
+import edu.wpi.first.wpilibj.SPI;
 
 
 public class Drive extends SubsystemBase {
@@ -25,6 +31,17 @@ public class Drive extends SubsystemBase {
   private CANSparkMax mRightMfollow1;
   private CANSparkMax mRightMfollow2;
   private PIDController drivePidController;
+
+  
+  double previousAngle = 0.0;
+  double currentAngle = 0.0;
+
+  
+  private AnalogGyro gyro;
+  private AHRS navX;
+
+  
+  
   public static Drive get_Instance(){
     
     if(drive == null){
@@ -49,6 +66,17 @@ public class Drive extends SubsystemBase {
     mRightMfollow1.follow(mRightMaster);
     mRightMfollow2.follow(mRightMaster);
 
+    previousAngle = currentAngle;
+
+    gyro = new AnalogGyro(0);
+    navX = new AHRS(SPI.Port.kMXP);
+
+    gyro.calibrate();
+
+    currentAngle = navX.getAngle();
+
+
+
 
     drivePidController = new PIDController(0.00001, 0, 0);
   }
@@ -68,5 +96,9 @@ public class Drive extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
+System.out.println("here");
+    SmartDashboard.putNumber("rate", navX.getRate());
+    SmartDashboard.putNumber("Accelration x", navX.getRawAccelX());
+    SmartDashboard.putNumber("Gyro Angle", navX.getAngle());
   }
 }
