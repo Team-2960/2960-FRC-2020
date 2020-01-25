@@ -51,9 +51,15 @@ public class OI{
         } */
         
         
-        drive.move((driver_Control.getRawAxis(1)), (joystick2.getRawAxis(1)));
+        
         if(driver_Control.getRawButton(2)){
-           
+           drive.setDrivePID(20);
+        }
+        else if(joystick2.getRawButton(2)){
+            drive.setDriveArcPID(-200 * joystick2.getRawAxis(0), -1 * driver_Control.getRawAxis(1));
+        }
+        else{
+            drive.move((driver_Control.getRawAxis(1)), (joystick2.getRawAxis(1)));
         }
         /*if(driver_Control.getRawAxis(1) == 0 && driver_Control.getRawAxis(5) == 0){
         if(driver_Control.getRawButton(1)){

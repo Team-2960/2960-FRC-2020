@@ -33,8 +33,8 @@ public class Drive extends SubsystemBase {
   private PIDController drivePidController;
 
   
-  double previousAngle = 0.0;
-  double currentAngle = 0.0;
+  public double previousAngle = 0.0;
+  public double currentAngle = 0.0;
 
   
   private AnalogGyro gyro;
@@ -78,16 +78,24 @@ public class Drive extends SubsystemBase {
 
 
 
-    drivePidController = new PIDController(0.00001, 0, 0);
+    drivePidController = new PIDController(0.0009, 0, 0.0);
   }
   public double rate(double previousRate, double currentRate){
     double rate;
     rate = currentRate - previousRate;
+    
     return rate;
   }
   //set motor speed
-  public void setDrivePID(double rate, double setpoint){
-    double speed = MathUtil.clamp(drivePidController.calculate(rate, setpoint), -0.25, 0.5);
+  public void setDrivePID(double setpoint){
+    double speed = drivePidController.calculate(navX.getRawGyroZ(), setpoint);
+    SmartDashboard.putNumber("speed", speed);
+    move(-speed, speed);
+  }
+  public void setDriveArcPID(double setpoint, double forwardSpeed){
+    double speed = drivePidController.calculate(navX.getRawGyroZ(), setpoint);
+    SmartDashboard.putNumber("speed", speed);
+    move(speed - forwardSpeed, -speed - forwardSpeed);
   }
   public void move(double left, double right){
     mLeftMaster.set(left);
@@ -96,9 +104,13 @@ public class Drive extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-System.out.println("here");
-    SmartDashboard.putNumber("rate", navX.getRate());
+    SmartDashboard.putNumber("NavX Config", navX.getActualUpdateRate());
+    previousAngle = currentAngle;
+    currentAngle = navX.getAngle();
+    SmartDashboard.putNumber("rate", navX.getYaw());
+    SmartDashboard.putNumber("gyroz", navX.getRawGyroZ());
     SmartDashboard.putNumber("Accelration x", navX.getRawAccelX());
+    SmartDashboard.putNumber("Accelration y", navX.getRawAccelY());
     SmartDashboard.putNumber("Gyro Angle", navX.getAngle());
   }
 }
