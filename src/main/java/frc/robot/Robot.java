@@ -45,11 +45,10 @@ public class Robot extends TimedRobot {
   @Override
   public void teleopPeriodic() {
 
-
+    oi.update();
     oi.driver_Control(driver_Control, joystick2);
     oi.operator_Control(operator_Control);
     oi.smartDashboradUpdate();
-    oi.update();
   }
 
   @Override
