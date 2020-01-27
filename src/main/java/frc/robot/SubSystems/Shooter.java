@@ -2,15 +2,17 @@ package frc.robot.SubSystems;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpiutil.math.MathUtil;
+import java.lang.Math;
 import frc.robot.Constants;
 import com.ctre.phoenix.motorcontrol.can.*;
+import com.ctre.phoenix.sensors.CANCoder;
+import com.revrobotics.CANEncoder;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.StatusFrameEnhanced;
 import edu.wpi.first.wpilibj.Encoder;
-import edu.wpi.first.wpilibj.PIDSourceType;
 import edu.wpi.first.wpilibj.SpeedControllerGroup;
 import edu.wpi.first.wpilibj.controller.PIDController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -26,6 +28,8 @@ public class Shooter extends SubsystemBase{
     private CANSparkMax mRightangle;
     //angle PID controler
     private PIDController aPidController;
+
+    private CANEncoder EArm;
 
     private SpeedControllerGroup mAngle;
   
@@ -45,8 +49,8 @@ public class Shooter extends SubsystemBase{
     
     private Shooter(){
       //init code
-      mLeftShooter = new TalonFX(Constants.mLeftShooter);
-      mRightShooter = new TalonFX(Constants.mRightShooter);
+      //mLeftShooter = new TalonFX(Constants.mLeftShooter);
+      //mRightShooter = new TalonFX(Constants.mRightShooter);
 
       mLeftangle = new CANSparkMax(11, MotorType.kBrushless);
       mRightangle = new CANSparkMax(12, MotorType.kBrushless);
@@ -61,9 +65,9 @@ public class Shooter extends SubsystemBase{
       eArm.setMinRate(10);
       eArm.setSamplesToAverage(7);
       eArm.setDistancePerPulse(360.0/1024.0);
-      aPidController = new PIDController(0.004, 0.0001, 0.01);
+      aPidController = new PIDController(0.00018, 0.00003, 0.0);
 
-      //invert right shooter motor
+      /* //invert right shooter motor
       mRightShooter.setInverted(true);
 
       //set the rigth motor pid
@@ -103,7 +107,10 @@ public class Shooter extends SubsystemBase{
       mLeftShooter.config_kF(0, 1023.0/22968.0, 30);
       
       
-      mLeftShooter.setSelectedSensorPosition(0, 0, 30);
+      mLeftShooter.setSelectedSensorPosition(0, 0, 30); */
+      
+      EArm = new CANEncoder(mRightangle);
+      
     }
     //set the shooter speed
     public void setShooterSpeed(double speed){
@@ -119,18 +126,48 @@ public class Shooter extends SubsystemBase{
       mRightangle.set(-speed);
     }
     //set arm speed
-    public void SetPIDSpeed(double setpoint){
+    public void SetPIDSpeed(double rate){
       /*       MathUtil.clamp(pid.calculate(encoder.getDistance(), setpoint), -0.5, 0.5);
- */   double speed = MathUtil.clamp(aPidController.calculate(eArm.getRate(), setpoint), -0.25, 0.5);
-      mLeftangle.set(speed);
-      mRightangle.set(-speed);
+ */   double speed = MathUtil.clamp(aPidController.calculate(EArm.getVelocity(), rate), -0.25, 0.5);
+      SetSpeed(speed);
+    }
+    public void SetPIDPosition(double angle){
+      double errer = Math.abs(eArm.getDistance() - angle);
+      double dirction;
+      if(eArm.getDistance() - angle >= 0){
+        dirction = 1;
+      }
+      else{
+        dirction = -1;
+      }
+      
+      if(errer > 30){
+        SetPIDSpeed(600 * dirction);
+        System.out.println("here 30");
+      }else if(errer > 20){
+        SetPIDSpeed(300 * dirction);
+        
+        System.out.println("here 15");
+      }else if(errer > 10){
+        SetPIDSpeed(200 * dirction);
+      }
+      else{
+        SetPIDSpeed(0);
+        
+        System.out.println("here 0");
+      }
     }
     public void smart(){
-      SmartDashboard.putNumber("encoder1", mRightShooter.getSelectedSensorVelocity());
-      SmartDashboard.putNumber("encoder2", mLeftShooter.getSelectedSensorVelocity());
+      /* SmartDashboard.putNumber("encoder1", mRightShooter.getSelectedSensorVelocity());
+      SmartDashboard.putNumber("encoder2", mLeftShooter.getSelectedSensorVelocity()); */
+
     }
     @Override
   public void periodic() {
     // This method will be called once per scheduler run
+    SmartDashboard.putNumber("Encoder ", eArm.getDistance());
+    SmartDashboard.putNumber("Encoder rate ", EArm.getVelocity());
+    SmartDashboard.putNumber("mSpeed ", mLeftangle.get());
+    SmartDashboard.putNumber("Errer ", eArm.getDistance() - -40);
   }
 }
