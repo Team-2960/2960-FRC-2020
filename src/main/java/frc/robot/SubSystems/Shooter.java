@@ -5,7 +5,6 @@ import edu.wpi.first.wpiutil.math.MathUtil;
 import java.lang.Math;
 import frc.robot.Constants;
 import com.ctre.phoenix.motorcontrol.can.*;
-import com.ctre.phoenix.sensors.CANCoder;
 import com.revrobotics.CANEncoder;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
@@ -19,7 +18,8 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class Shooter extends SubsystemBase{
     private static Shooter shooter;
-
+    private boolean isPivotEnabled = false;
+    private double pTargetAngle;
     //shooter motor
     private TalonFX mLeftShooter;
     private TalonFX mRightShooter;
@@ -65,7 +65,7 @@ public class Shooter extends SubsystemBase{
       eArm.setMinRate(10);
       eArm.setSamplesToAverage(7);
       eArm.setDistancePerPulse(360.0/1024.0);
-      aPidController = new PIDController(0.00018, 0.00003, 0.0);
+      aPidController = new PIDController(0.00015, 0.0, 0.0);
 
       /* //invert right shooter motor
       mRightShooter.setInverted(true);
@@ -126,48 +126,49 @@ public class Shooter extends SubsystemBase{
       mRightangle.set(-speed);
     }
     //set arm speed
-    public void SetPIDSpeed(double rate){
+    public void SetPivotPIDRate(double rate){
       /*       MathUtil.clamp(pid.calculate(encoder.getDistance(), setpoint), -0.5, 0.5);
- */   double speed = MathUtil.clamp(aPidController.calculate(EArm.getVelocity(), rate), -0.25, 0.5);
+ */   double speed = MathUtil.clamp(aPidController.calculate(EArm.getVelocity(), rate), -0.25, 0.75);
       SetSpeed(speed);
     }
-    public void SetPIDPosition(double angle){
-      double errer = Math.abs(eArm.getDistance() - angle);
-      double dirction;
-      if(eArm.getDistance() - angle >= 0){
-        dirction = 1;
-      }
-      else{
-        dirction = -1;
-      }
-      
-      if(errer > 30){
-        SetPIDSpeed(600 * dirction);
-        System.out.println("here 30");
-      }else if(errer > 20){
-        SetPIDSpeed(300 * dirction);
-        
-        System.out.println("here 15");
-      }else if(errer > 10){
-        SetPIDSpeed(200 * dirction);
-      }
-      else{
-        SetPIDSpeed(0);
-        
-        System.out.println("here 0");
-      }
+    //set target Pivot Angle
+    public void setPTargetAngle(double target){
+      pTargetAngle = target;
     }
-    public void smart(){
-      /* SmartDashboard.putNumber("encoder1", mRightShooter.getSelectedSensorVelocity());
-      SmartDashboard.putNumber("encoder2", mLeftShooter.getSelectedSensorVelocity()); */
 
+    //set Pivot Angle
+    private void setPAngle(double angle){
+      double errer = eArm.getDistance() - angle;
+      double dirction;
+      
+      SetPivotPIDRate(MathUtil.clamp(errer * 12, -600, 1000));
+      SmartDashboard.putNumber("speed", MathUtil.clamp(errer * 12, -600, 1000) );
     }
+    
     @Override
   public void periodic() {
     // This method will be called once per scheduler run
+
+    //enable pivot PID
+    if(isPivotEnabled){
+      setPAngle(pTargetAngle);
+    }
+    else{
+      pTargetAngle = 0;
+    }
     SmartDashboard.putNumber("Encoder ", eArm.getDistance());
     SmartDashboard.putNumber("Encoder rate ", EArm.getVelocity());
     SmartDashboard.putNumber("mSpeed ", mLeftangle.get());
     SmartDashboard.putNumber("Errer ", eArm.getDistance() - -40);
+  }
+
+  //enable the pivot pid
+  public void EnablePivotPID(){
+    isPivotEnabled = true;
+  }
+  //disable the pivot pid
+  public void DisablePivotPID(){
+    isPivotEnabled = false;
+    pTargetAngle = 0;
   }
 }

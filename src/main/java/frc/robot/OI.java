@@ -7,7 +7,7 @@ import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Camera.Camera;
 public class OI{
-    private Drive drive;
+    //private Drive drive;
     private Climb climb;
     private Intake intake;
     
@@ -16,11 +16,11 @@ public class OI{
     private double cameraTurn;
     public OI(){
         camera = new Camera(0);
-        drive = Drive.get_Instance();
+        //drive = Drive.get_Instance();
         System.out.println("init gyro");
         //climb = Climb.get_Instance();
         //intake = Intake.get_Instance();
-        //shooter = Shooter.get_Instance();
+        shooter = Shooter.get_Instance();
         SmartDashboard.putNumber("CenterX", camera.getImageResultsX());
         SmartDashboard.putNumber("CenterY", camera.getImageResultsY());
         SmartDashboard.putNumber("TargetRatio", camera.getImageResultsTargetRatio());
@@ -52,7 +52,7 @@ public class OI{
         
         
         
-        if(driver_Control.getRawButton(2)){
+        /* if(driver_Control.getRawButton(2)){
            drive.setDrivePID(20);
         }
         else if(joystick2.getRawButton(2)){
@@ -60,7 +60,7 @@ public class OI{
         }
         else{
             drive.move((driver_Control.getRawAxis(1)), (joystick2.getRawAxis(1)));
-        }
+        } */
         /*if(driver_Control.getRawAxis(1) == 0 && driver_Control.getRawAxis(5) == 0){
         if(driver_Control.getRawButton(1)){
             if(Math.abs(gyro.getAngle()) < 26.4243){
@@ -81,6 +81,13 @@ public class OI{
     }
     //Operator control
     public void operator_Control(Joystick operator_Control){
+        if(operator_Control.getRawButton(2)){
+            shooter.EnablePivotPID();
+        }else if(operator_Control.getRawButton(1)){
+            shooter.DisablePivotPID();
+        }
+        
+        shooter.setPTargetAngle(-40);
 
     }
     public void smartDashboradUpdate(){
@@ -100,9 +107,9 @@ public class OI{
         SmartDashboard.putNumber("Distance", camera.distanceCalc(camera.getImageResultsHeight()));
     }
     public void update(){
-        drive.periodic();
+       // drive.periodic();
         //climb.periodic();
-        //shooter.periodic();
+        shooter.periodic();
         //intake.periodic();
     }
 }
