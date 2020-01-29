@@ -50,6 +50,14 @@ public class Robot extends TimedRobot {
   }
 
   @Override
+  public void disabledInit() {
+    // TODO Auto-generated method stub
+    super.disabledInit();
+
+    oi.shooter.DisablePivotPID();
+  }
+
+  @Override
   public void teleopPeriodic() {
     oi.driver_Control(driver_Control, joystick2);
     oi.operator_Control(operator_Control);

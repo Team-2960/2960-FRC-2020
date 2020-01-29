@@ -12,9 +12,20 @@ public class Constants{
     public final static int mRightMfollow2 = 6;
     //Intake motor
     //Climb motor
+
     //Shooter motor
     public final static int mLeftShooter = 7;
     public final static int mRightShooter = 8;
+    
+    //Pivot Motor
+    public final static int mLeftPivot = 11;
+    public final static int mRightPivot = 12;
+
+    //Pivot PID
+    public final static double Kp = 0.00018;
+    public final static double Ki = 0.000025;
+    public final static double Kd = 0.00001;
+    
     //camera
     public final static int cWidth = 640;
     public final static int cHeight = 480;

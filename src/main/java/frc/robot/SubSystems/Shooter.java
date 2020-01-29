@@ -2,7 +2,6 @@ package frc.robot.SubSystems;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpiutil.math.MathUtil;
-import java.lang.Math;
 import frc.robot.Constants;
 import com.ctre.phoenix.motorcontrol.can.*;
 import com.revrobotics.CANEncoder;
@@ -19,19 +18,17 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 public class Shooter extends SubsystemBase{
     private static Shooter shooter;
     private boolean isPivotEnabled = false;
-    private double pTargetAngle;
+    private double pTargetPivot;
     //shooter motor
     private TalonFX mLeftShooter;
     private TalonFX mRightShooter;
-    //Angle motor
-    private CANSparkMax mLeftangle;
-    private CANSparkMax mRightangle;
-    //angle PID controler
+    //Pivot motor
+    private CANSparkMax mLeftPivot;
+    private CANSparkMax mRightPivot;
+    //Pivot PID controler
     private PIDController aPidController;
 
     private CANEncoder EArm;
-
-    private SpeedControllerGroup mAngle;
   
     private Encoder eArm;
     //pid value will move to constants later.
@@ -52,10 +49,9 @@ public class Shooter extends SubsystemBase{
       //mLeftShooter = new TalonFX(Constants.mLeftShooter);
       //mRightShooter = new TalonFX(Constants.mRightShooter);
 
-      mLeftangle = new CANSparkMax(11, MotorType.kBrushless);
-      mRightangle = new CANSparkMax(12, MotorType.kBrushless);
+      mLeftPivot = new CANSparkMax(Constants.mLeftPivot, MotorType.kBrushless);
+      mRightPivot = new CANSparkMax(Constants.mRightPivot, MotorType.kBrushless);
 
-      mAngle = new SpeedControllerGroup(mLeftangle, mRightangle);
       //encoder 
       eArm = new Encoder(4, 5, true, Encoder.EncodingType.k4X);
     
@@ -65,7 +61,7 @@ public class Shooter extends SubsystemBase{
       eArm.setMinRate(10);
       eArm.setSamplesToAverage(7);
       eArm.setDistancePerPulse(360.0/1024.0);
-      aPidController = new PIDController(0.00015, 0.0, 0.0);
+      aPidController = new PIDController(Constants.Kp, Constants.Ki, Constants.Kd);
 
       /* //invert right shooter motor
       mRightShooter.setInverted(true);
@@ -109,7 +105,7 @@ public class Shooter extends SubsystemBase{
       
       mLeftShooter.setSelectedSensorPosition(0, 0, 30); */
       
-      EArm = new CANEncoder(mRightangle);
+      EArm = new CANEncoder(mRightPivot);
       
     }
     //set the shooter speed
@@ -121,45 +117,53 @@ public class Shooter extends SubsystemBase{
       mRightShooter.set(ControlMode.Velocity, speed);
       mLeftShooter.set(ControlMode.Velocity, speed);
     }
-    public void SetSpeed(double speed){
-      mLeftangle.set(speed);
-      mRightangle.set(-speed);
+    public void SetPivotSpeed(double speed){
+      mLeftPivot.set(speed);
+      mRightPivot.set(-speed);
     }
-    //set arm speed
+    //set Pivot speed
     public void SetPivotPIDRate(double rate){
-      /*       MathUtil.clamp(pid.calculate(encoder.getDistance(), setpoint), -0.5, 0.5);
- */   double speed = MathUtil.clamp(aPidController.calculate(EArm.getVelocity(), rate), -0.25, 0.75);
-      SetSpeed(speed);
-    }
-    //set target Pivot Angle
-    public void setPTargetAngle(double target){
-      pTargetAngle = target;
+      double pid_output = aPidController.calculate(EArm.getVelocity(), rate) +.025;
+
+      double speed = MathUtil.clamp(pid_output, -0.25, 0.75);
+      SetPivotSpeed(speed);
     }
 
-    //set Pivot Angle
-    private void setPAngle(double angle){
-      double errer = eArm.getDistance() - angle;
-      double dirction;
-      
-      SetPivotPIDRate(MathUtil.clamp(errer * 12, -600, 1000));
-      SmartDashboard.putNumber("speed", MathUtil.clamp(errer * 12, -600, 1000) );
+    //set target Pivot Pivot
+    public void setPTargetAngle(double target){
+      pTargetPivot = target;
     }
-    
+
+    //set Pivot Pivot
+    private void setPAngle(double Pivot){
+      double error = eArm.getDistance() - Pivot;
+      double set_speed = 10 * error;
+      SmartDashboard.putNumber("speed set point", set_speed );
+      set_speed = MathUtil.clamp(set_speed, -600, 1000);
+
+      SetPivotPIDRate(set_speed);
+
+      SmartDashboard.putNumber("speed set point - Clamped", set_speed );
+    }
+
     @Override
   public void periodic() {
     // This method will be called once per scheduler run
 
     //enable pivot PID
     if(isPivotEnabled){
-      setPAngle(pTargetAngle);
+      setPAngle(pTargetPivot);
     }
     else{
-      pTargetAngle = 0;
+      pTargetPivot = 0;
     }
+
+
     SmartDashboard.putNumber("Encoder ", eArm.getDistance());
     SmartDashboard.putNumber("Encoder rate ", EArm.getVelocity());
-    SmartDashboard.putNumber("mSpeed ", mLeftangle.get());
-    SmartDashboard.putNumber("Errer ", eArm.getDistance() - -40);
+    SmartDashboard.putNumber("mSpeed ", mLeftPivot.get());
+    SmartDashboard.putNumber("Error ", eArm.getDistance() - -40);
+    
   }
 
   //enable the pivot pid
@@ -169,6 +173,7 @@ public class Shooter extends SubsystemBase{
   //disable the pivot pid
   public void DisablePivotPID(){
     isPivotEnabled = false;
-    pTargetAngle = 0;
+    pTargetPivot = 0;
+    SetPivotSpeed(0);
   }
 }

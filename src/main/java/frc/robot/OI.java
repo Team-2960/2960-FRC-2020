@@ -11,7 +11,7 @@ public class OI{
     private Climb climb;
     private Intake intake;
     
-    private Shooter shooter;
+    public Shooter shooter;
     private Camera camera;
     private double cameraTurn;
     public OI(){
