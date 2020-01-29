@@ -12,6 +12,7 @@ import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.StatusFrameEnhanced;
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.SpeedControllerGroup;
+import edu.wpi.first.wpilibj.controller.ArmFeedforward;
 import edu.wpi.first.wpilibj.controller.PIDController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
@@ -27,6 +28,7 @@ public class Shooter extends SubsystemBase{
     private CANSparkMax mRightPivot;
     //Pivot PID controler
     private PIDController aPidController;
+    private ArmFeedforward armfeedforward;
 
     private CANEncoder EArm;
   
@@ -62,7 +64,7 @@ public class Shooter extends SubsystemBase{
       eArm.setSamplesToAverage(7);
       eArm.setDistancePerPulse(360.0/1024.0);
       aPidController = new PIDController(Constants.Kp, Constants.Ki, Constants.Kd);
-
+      armfeedforward = new ArmFeedforward(Constants.Ks, Constants.kcos, Constants.Kv)
       /* //invert right shooter motor
       mRightShooter.setInverted(true);
 

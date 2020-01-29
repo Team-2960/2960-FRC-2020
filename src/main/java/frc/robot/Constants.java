@@ -21,11 +21,16 @@ public class Constants{
     public final static int mLeftPivot = 11;
     public final static int mRightPivot = 12;
 
-    //Pivot PID
+    //Pivot PID and feedForward control
     public final static double Kp = 0.00018;
     public final static double Ki = 0.000025;
     public final static double Kd = 0.00001;
     
+    public final static double Ks = 0.0;
+    public final static double Kcos = 0.0;
+    public final static double Kv = 0.0;
+    
+
     //camera
     public final static int cWidth = 640;
     public final static int cHeight = 480;
