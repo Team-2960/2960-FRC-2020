@@ -64,7 +64,7 @@ public class Shooter extends SubsystemBase{
       eArm.setSamplesToAverage(7);
       eArm.setDistancePerPulse(360.0/1024.0);
       aPidController = new PIDController(Constants.Kp, Constants.Ki, Constants.Kd);
-      armfeedforward = new ArmFeedforward(Constants.Ks, Constants.kcos, Constants.Kv)
+      armfeedforward = new ArmFeedforward(Constants.Ks, Constants.Kcos, Constants.Kv)
       /* //invert right shooter motor
       mRightShooter.setInverted(true);
 
