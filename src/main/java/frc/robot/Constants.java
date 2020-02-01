@@ -26,9 +26,11 @@ public class Constants{
     public final static double Ki = 0.000025;
     public final static double Kd = 0.00001;
     
-    public final static double Ks = 0.0;
-    public final static double Kcos = 0.0;
-    public final static double Kv = 0.0;
+    public final static double Ks = 0.28;
+    public final static double Kcos = -0.421;
+    public final static double Kv = 0.0462;
+    public final static double Ka = 0.001;
+
     
 
     //camera
