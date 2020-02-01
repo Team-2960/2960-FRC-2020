@@ -21,8 +21,6 @@ public class OI{
         //climb = Climb.get_Instance();
         //intake = Intake.get_Instance();
         shooter = Shooter.get_Instance();
-        SmartDashboard.putNumber("CenterX", camera.getImageResultsX());
-        SmartDashboard.putNumber("CenterY", camera.getImageResultsY());
         SmartDashboard.putNumber("TargetRatio", camera.getImageResultsTargetRatio());
         SmartDashboard.putNumber("Constants.hsvThresholdHueMin", Constants.hsvThresholdHue[0]);
         SmartDashboard.putNumber("Constants.hsvThresholdHueMax", Constants.hsvThresholdHue[1]);
@@ -88,23 +86,17 @@ public class OI{
         }
         
         shooter.setPTargetAngle(-40);
+        shooter.SetPivotSpeed(operator_Control.getRawAxis(1));
 
     }
     public void smartDashboradUpdate(){
-        SmartDashboard.putNumber("CenterX", camera.getImageResultsX());
-        SmartDashboard.putNumber("CenterY", camera.getImageResultsY());
         SmartDashboard.putNumber("TargetRatio", camera.getImageResultsTargetRatio());
-
-        SmartDashboard.putNumber("Angle", camera.horizontalDistanceCalc(camera.getImageResultsX()));
-        SmartDashboard.putNumber("Width", camera.getImageResultsWidth());
-        SmartDashboard.putNumber("Height", camera.getImageResultsHeight());
         Constants.hsvThresholdHue[0] = SmartDashboard.getNumber("Constants.hsvThresholdHueMin", Constants.hsvThresholdHue[0]);
         Constants.hsvThresholdHue[1] = SmartDashboard.getNumber("Constants.hsvThresholdHueMax", Constants.hsvThresholdHue[1]);
         Constants.hsvThresholdSaturation[0] = SmartDashboard.getNumber("Constants.hsvThresholdSaturationMin", Constants.hsvThresholdSaturation[0]);
         Constants.hsvThresholdSaturation[1] = SmartDashboard.getNumber("Constants.hsvThresholdSaturationMax", Constants.hsvThresholdSaturation[1]);
         Constants.hsvThresholdValue[0] = SmartDashboard.getNumber("Constants.hsvThresholdValueMin", Constants.hsvThresholdValue[0]);
         Constants.hsvThresholdValue[1] = SmartDashboard.getNumber("Constants.hsvThresholdValueMax", Constants.hsvThresholdValue[1]);
-        SmartDashboard.putNumber("Distance", camera.distanceCalc(camera.getImageResultsHeight()));
     }
     public void update(){
        // drive.periodic();

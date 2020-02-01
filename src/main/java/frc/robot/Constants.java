@@ -23,8 +23,8 @@ public class Constants{
 
     //Pivot PID and feedForward control
     public final static double Kp = 0.00018;
-    public final static double Ki = 0.000025;
-    public final static double Kd = 0.00001;
+    public final static double Ki = 0.0000;
+    public final static double Kd = 0.0000;
     
     public final static double Ks = 0.28;
     public final static double Kcos = -0.421;

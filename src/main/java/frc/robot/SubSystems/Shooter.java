@@ -11,6 +11,7 @@ import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.StatusFrameEnhanced;
 import edu.wpi.first.wpilibj.Encoder;
+import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.SpeedControllerGroup;
 import edu.wpi.first.wpilibj.controller.ArmFeedforward;
 import edu.wpi.first.wpilibj.controller.PIDController;
@@ -121,13 +122,19 @@ public class Shooter extends SubsystemBase{
     }
     public void SetPivotSpeed(double speed){
       mLeftPivot.set(speed);
-      mRightPivot.set(-speed);
+      mRightPivot.set(speed);
+    }
+    public void SetPivotVoltage(double Voltage){
+      mLeftPivot.setVoltage(Voltage);
+      mRightPivot.setVoltage(Voltage);
     }
     //set Pivot speed
     public void SetPivotPIDRate(double rate){
-      double pid_output = aPidController.calculate(EArm.getVelocity(), rate) +.025;
-
-      double speed = MathUtil.clamp(pid_output, -0.25, 0.75);
+      double pid_output = aPidController.calculate(EArm.getVelocity(), rate);
+      double feedforward = armfeedforward.calculate(EArm.getPosition(), 0) / RobotController.getBatteryVoltage();
+      double speed = pid_output + feedforward;
+      SmartDashboard.putNumber("pidout", pid_output);
+      SmartDashboard.putNumber("feed", feedforward);
       SetPivotSpeed(speed);
     }
 
@@ -139,11 +146,22 @@ public class Shooter extends SubsystemBase{
     //set Pivot Pivot
     private void setPAngle(double Pivot){
       double error = eArm.getDistance() - Pivot;
-      double set_speed = 10 * error;
+      double set_speed = 40 * error;
       SmartDashboard.putNumber("speed set point", set_speed );
       set_speed = MathUtil.clamp(set_speed, -600, 1000);
 
-      SetPivotPIDRate(set_speed);
+      double minspeed = 0;
+      if(eArm.getDistance() < -50){
+        minspeed = -76;
+      }
+      else if(eArm.getDistance() < -20){
+        minspeed = -450;
+      }
+      else{
+        minspeed = 0;
+      }
+      
+      SetPivotPIDRate(-set_speed + minspeed);
 
       SmartDashboard.putNumber("speed set point - Clamped", set_speed );
     }

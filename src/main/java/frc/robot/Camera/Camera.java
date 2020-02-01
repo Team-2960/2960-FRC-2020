@@ -118,12 +118,7 @@ public class Camera{
 					}else{
 						
 						lTargetFound = false;
-						//System.out.println("No Contours");
 					}
-					
-					//System.out.println("Is target found:" + lTargetFound);
-					//Allow main thread to access center
-					//System.out.println("Distance from center: " + lVisionTarget);
 					synchronized(IMG_LOCK){
 						targetFound = lTargetFound;
 						centerX = LcenterX;
@@ -144,29 +139,28 @@ public class Camera{
 		visionThread.start();
 	}
 	
-	public double getImageResultsX() {
+
+	public double getCenterX() {
 		//Get results from vision thread -- This will change. 
 		synchronized(IMG_LOCK){
 			return centerX;
-			
 		}
 	}
 		
-	public double getImageResultsY() {
+	public double getCenterY() {
 		//Get results from vision thread -- This will change. 
 		synchronized(IMG_LOCK){
 			return centerY;
-			
 		}
 	}
-	public double getImageResultsWidth(){
+	public double getTargetWidth(){
 		//Get results from vision thread -- This will change. 
 		synchronized(IMG_LOCK){
 			return width;
 			
 		}
 	}
-	public double getImageResultsHeight(){
+	public double getTargetHeight(){
 		//Get results from vision thread -- This will change. 
 		synchronized(IMG_LOCK){
 			return height;
