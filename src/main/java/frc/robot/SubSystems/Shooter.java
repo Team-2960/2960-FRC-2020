@@ -169,7 +169,7 @@ public class Shooter extends SubsystemBase{
     @Override
   public void periodic() {
     // This method will be called once per scheduler run
-
+    System.out.println("hello");
     //enable pivot PID
     if(isPivotEnabled){
       setPAngle(pTargetPivot);

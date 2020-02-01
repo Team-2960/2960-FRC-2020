@@ -27,6 +27,7 @@ public class Robot extends TimedRobot {
     driver_Control = new Joystick(Constants.driver_Control);
     joystick2 = new Joystick(1);
     operator_Control = new Joystick(Constants.operator_Control);
+    CommandScheduler.getInstance().run();
   }
 
   @Override
@@ -46,7 +47,7 @@ public class Robot extends TimedRobot {
   public void robotPeriodic() {
     // TODO Auto-generated method stub
     super.robotPeriodic();
-    oi.update();
+    //oi.update();
   }
 
   @Override

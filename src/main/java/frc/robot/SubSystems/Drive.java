@@ -112,5 +112,7 @@ public class Drive extends SubsystemBase {
     SmartDashboard.putNumber("Accelration x", navX.getRawAccelX());
     SmartDashboard.putNumber("Accelration y", navX.getRawAccelY());
     SmartDashboard.putNumber("Gyro Angle", navX.getAngle());
+    System.out.println("hello");
+
   }
 }
