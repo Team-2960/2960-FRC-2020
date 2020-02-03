@@ -27,6 +27,7 @@ public class Drive extends SubsystemBase {
   private CANSparkMax mLeftMaster;
   private CANSparkMax mLeftFollow1;
   private CANSparkMax mLeftFollow2;
+  
   private CANSparkMax mRightMaster;
   private CANSparkMax mRightMfollow1;
   private CANSparkMax mRightMfollow2;
@@ -80,30 +81,35 @@ public class Drive extends SubsystemBase {
 
     drivePidController = new PIDController(0.0009, 0, 0.0);
   }
+
   public double rate(double previousRate, double currentRate){
     double rate;
     rate = currentRate - previousRate;
-    
     return rate;
   }
-  //set motor speed
-  public void setDrivePID(double setpoint){
-    double speed = drivePidController.calculate(navX.getRawGyroZ(), setpoint);
+
+  //rate drive
+  public void setDriveRate(double rate){
+    double speed = drivePidController.calculate(navX.getRawGyroZ(), rate); //calc the speed
     SmartDashboard.putNumber("speed", speed);
-    move(-speed, speed);
+    setSpeed(-speed, speed);
   }
-  public void setDriveArcPID(double setpoint, double forwardSpeed){
-    double speed = drivePidController.calculate(navX.getRawGyroZ(), setpoint);
+
+  //Arc drive pid
+  public void setArcDriveRate(double rate, double forwardSpeed){
+    double speed = drivePidController.calculate(navX.getRawGyroZ(), rate); //calc the speed
     SmartDashboard.putNumber("speed", speed);
-    move(speed - forwardSpeed, -speed - forwardSpeed);
+    setSpeed(speed - forwardSpeed, -speed - forwardSpeed);
   }
-  public void move(double left, double right){
+
+  //set lefe and right motor speed.
+  public void setSpeed(double left, double right){
     mLeftMaster.set(left);
     mRightMaster.set(-right);
   }
   @Override
+  // This method will be called once per scheduler run
   public void periodic() {
-    // This method will be called once per scheduler run
     SmartDashboard.putNumber("NavX Config", navX.getActualUpdateRate());
     previousAngle = currentAngle;
     currentAngle = navX.getAngle();
@@ -112,7 +118,6 @@ public class Drive extends SubsystemBase {
     SmartDashboard.putNumber("Accelration x", navX.getRawAccelX());
     SmartDashboard.putNumber("Accelration y", navX.getRawAccelY());
     SmartDashboard.putNumber("Gyro Angle", navX.getAngle());
-    System.out.println("hello");
 
   }
 }

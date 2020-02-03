@@ -1,5 +1,7 @@
 package frc.robot.Camera;
+
 import edu.wpi.first.cameraserver.CameraServer;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Constants;
 import edu.wpi.cscore.*;
 import org.opencv.core.*;
@@ -26,7 +28,7 @@ public class Camera{
 	private double  width = 0.0;
 	public double height = 0.0;
 
-
+	//may be keep
 	public double turningSpeed = 0.0;
 	public double targetRatio = 0.0;
 
@@ -171,22 +173,31 @@ public class Camera{
 		//Get results from vision thread -- This will change. 
 		synchronized(IMG_LOCK){
 			return turningSpeed;
-
-			
 		}
 	}
 	public double getImageResultsTargetRatio(){
 		//Get results from vision thread -- This will change. 
 		synchronized(IMG_LOCK){
 			return targetRatio;
-
-			
 		}
 	}
-	public Boolean isImageFound() {
+	public Boolean isTargetFound() {
 		//Get results from vision thread -- This will change. 
 		synchronized(IMG_LOCK){
 			return targetFound;
 		}
+	}
+	public void update(){
+		SmartDashboard.putNumber("CenterX", getCenterX());
+		SmartDashboard.putNumber("CenterY", getCenterY());
+
+        SmartDashboard.putNumber("Constants.hsvThresholdHueMin", Constants.hsvThresholdHue[0]);
+        SmartDashboard.putNumber("Constants.hsvThresholdHueMax", Constants.hsvThresholdHue[1]);
+        SmartDashboard.putNumber("Constants.hsvThresholdSaturationMin", Constants.hsvThresholdSaturation[0]);
+        SmartDashboard.putNumber("Constants.hsvThresholdSaturationMax", Constants.hsvThresholdSaturation[1]);
+        SmartDashboard.putNumber("Constants.hsvThresholdValueMin", Constants.hsvThresholdValue[0]);
+		SmartDashboard.putNumber("Constants.hsvThresholdValueMax", Constants.hsvThresholdValue[1]);
+		
+		
 	}
 }

@@ -14,6 +14,12 @@ public class OI{
     public Shooter shooter;
     private Camera camera;
     private double cameraTurn;
+
+    private Joystick driver_Control;
+    private Joystick operator_Control;
+    private Joystick joystick2;
+
+
     public OI(){
         camera = new Camera(0);
         //drive = Drive.get_Instance();
@@ -21,13 +27,10 @@ public class OI{
         //climb = Climb.get_Instance();
         //intake = Intake.get_Instance();
         shooter = Shooter.get_Instance();
-        SmartDashboard.putNumber("TargetRatio", camera.getImageResultsTargetRatio());
-        SmartDashboard.putNumber("Constants.hsvThresholdHueMin", Constants.hsvThresholdHue[0]);
-        SmartDashboard.putNumber("Constants.hsvThresholdHueMax", Constants.hsvThresholdHue[1]);
-        SmartDashboard.putNumber("Constants.hsvThresholdSaturationMin", Constants.hsvThresholdSaturation[0]);
-        SmartDashboard.putNumber("Constants.hsvThresholdSaturationMax", Constants.hsvThresholdSaturation[1]);
-        SmartDashboard.putNumber("Constants.hsvThresholdValueMin", Constants.hsvThresholdValue[0]);
-        SmartDashboard.putNumber("Constants.hsvThresholdValueMax", Constants.hsvThresholdValue[1]);
+        //joysticks
+        driver_Control = new Joystick(Constants.driver_Control);
+        joystick2 = new Joystick(1);
+        operator_Control = new Joystick(Constants.operator_Control);
     }
     //Driver control
     public void driver_Control(Joystick driver_Control, Joystick joystick2){
@@ -89,19 +92,8 @@ public class OI{
         shooter.SetPivotSpeed(operator_Control.getRawAxis(1));
 
     }
-    public void smartDashboradUpdate(){
-        SmartDashboard.putNumber("TargetRatio", camera.getImageResultsTargetRatio());
-        Constants.hsvThresholdHue[0] = SmartDashboard.getNumber("Constants.hsvThresholdHueMin", Constants.hsvThresholdHue[0]);
-        Constants.hsvThresholdHue[1] = SmartDashboard.getNumber("Constants.hsvThresholdHueMax", Constants.hsvThresholdHue[1]);
-        Constants.hsvThresholdSaturation[0] = SmartDashboard.getNumber("Constants.hsvThresholdSaturationMin", Constants.hsvThresholdSaturation[0]);
-        Constants.hsvThresholdSaturation[1] = SmartDashboard.getNumber("Constants.hsvThresholdSaturationMax", Constants.hsvThresholdSaturation[1]);
-        Constants.hsvThresholdValue[0] = SmartDashboard.getNumber("Constants.hsvThresholdValueMin", Constants.hsvThresholdValue[0]);
-        Constants.hsvThresholdValue[1] = SmartDashboard.getNumber("Constants.hsvThresholdValueMax", Constants.hsvThresholdValue[1]);
-    }
     public void update(){
-       // drive.periodic();
-        //climb.periodic();
-        shooter.periodic();
-        //intake.periodic();
+        driver_Control(driver_Control, joystick2);
+        operator_Control(operator_Control);
     }
 }
