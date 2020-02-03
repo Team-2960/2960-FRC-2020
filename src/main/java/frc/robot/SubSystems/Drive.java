@@ -11,13 +11,15 @@ import edu.wpi.first.wpilibj.AnalogGyro;
 import edu.wpi.first.wpilibj.controller.PIDController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-
+import edu.wpi.first.wpiutil.math.MathUtil;
 import com.kauailabs.navx.frc.AHRS;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import frc.robot.Constants;
-import edu.wpi.first.wpiutil.math.MathUtil;
-
+import edu.wpi.first.wpilibj.DutyCycleEncoder;
+import edu.wpi.first.wpilibj.Encoder;
+import edu.wpi.first.wpilibj.SPI;
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.SPI;
 
 
@@ -41,7 +43,9 @@ public class Drive extends SubsystemBase {
   private AnalogGyro gyro;
   private AHRS navX;
 
-  
+  private DutyCycleEncoder absoluteEncoder;
+  private Encoder leftEncoder;
+  private DigitalInput photoeye;
   
   public static Drive get_Instance(){
     
@@ -71,15 +75,15 @@ public class Drive extends SubsystemBase {
 
     gyro = new AnalogGyro(0);
     navX = new AHRS(SPI.Port.kMXP);
+    absoluteEncoder = new DutyCycleEncoder(2);
+    leftEncoder = new Encoder(0, 1);
 
     gyro.calibrate();
 
     currentAngle = navX.getAngle();
 
-
-
-
-    drivePidController = new PIDController(0.0009, 0, 0.0);
+    drivePidController = new PIDController(Constants.dKp, Constants.dKi, Constants.dKd);
+    
   }
 
   public double rate(double previousRate, double currentRate){
@@ -94,18 +98,42 @@ public class Drive extends SubsystemBase {
     SmartDashboard.putNumber("speed", speed);
     setSpeed(-speed, speed);
   }
-
+  public void setDriveToAngle(double angle, double forwardspeed){
+    double error = angle - navX.getAngle();
+    double absError = Math.abs(error);
+    int negative;
+    if(error < 0){
+      negative = -1;
+    }
+    else{
+      negative = 1;
+    }
+    if(absError > 20){
+    double rate = 2.5 * error;
+    setArcDriveRate(rate, forwardspeed);
+    }
+    else if(absError < 2){
+      setArcDriveRate(0, forwardspeed);
+    }
+    else{
+      double rate = 70;
+      setArcDriveRate(negative * rate, forwardspeed);
+    }
+  }
   //Arc drive pid
   public void setArcDriveRate(double rate, double forwardSpeed){
     double speed = drivePidController.calculate(navX.getRawGyroZ(), rate); //calc the speed
     SmartDashboard.putNumber("speed", speed);
-    setSpeed(speed - forwardSpeed, -speed - forwardSpeed);
+    setSpeed(-speed + forwardSpeed, speed + forwardSpeed);
   }
 
   //set lefe and right motor speed.
   public void setSpeed(double left, double right){
     mLeftMaster.set(left);
     mRightMaster.set(-right);
+  }
+  public void navXReset(){
+    navX.reset();
   }
   @Override
   // This method will be called once per scheduler run
