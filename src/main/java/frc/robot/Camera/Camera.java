@@ -44,7 +44,11 @@ public class Camera{
 		
 		return distance;
 	}
-	
+	public double calcAngle(double pixels){
+		double angle;
+		angle = (Math.abs((double) pixels - 320) * (0.0911));
+		return angle;
+	}
 
     public Camera(int cameraPort){
 		//init camera
