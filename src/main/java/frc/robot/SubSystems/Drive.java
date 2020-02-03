@@ -102,6 +102,7 @@ public class Drive extends SubsystemBase {
     double error = angle - navX.getAngle();
     double absError = Math.abs(error);
     int negative;
+    
     if(error < 0){
       negative = -1;
     }
