@@ -22,9 +22,9 @@ public class Constants{
     public final static int mRightPivot = 12;
 
     //Pivot PID and feedForward control
-    public final static double pKp = 0.00018;
-    public final static double pKi = 0.0000;
-    public final static double pKd = 0.0000;
+    public final static double pKp = 0.0002;
+    public final static double pKi = 0.00002;
+    public final static double pKd = 0.00001;
     
     public final static double pKs = 0.28;
     public final static double pKcos = -0.421;

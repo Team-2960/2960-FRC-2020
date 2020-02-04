@@ -27,6 +27,7 @@ public class Robot extends TimedRobot {
 
   @Override
   public void autonomousPeriodic() {
+    
   }
 
   @Override
@@ -39,19 +40,19 @@ public class Robot extends TimedRobot {
     // TODO Auto-generated method stub
     super.robotPeriodic();
     CommandScheduler.getInstance().run();
+    
   }
 
   @Override
   public void disabledInit() {
     // TODO Auto-generated method stub
     super.disabledInit();
-
     oi.shooter.DisablePivotPID();
   }
 
   @Override
   public void teleopPeriodic() {
-    oi.update();
+    //no code have to be here
   }
 
   @Override

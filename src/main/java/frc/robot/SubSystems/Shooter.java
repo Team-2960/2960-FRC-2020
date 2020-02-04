@@ -31,6 +31,8 @@ public class Shooter extends SubsystemBase{
     private PIDController aPidController;
     private ArmFeedforward armfeedforward;
 
+    private double startPivotError = 0.0;
+
     private CANEncoder EArm;
   
     private Encoder eArm;
@@ -108,8 +110,9 @@ public class Shooter extends SubsystemBase{
       
       mLeftShooter.setSelectedSensorPosition(0, 0, 30); */
       
-      EArm = new CANEncoder(mRightPivot);
-      
+      EArm = new CANEncoder(mLeftPivot);
+
+      mRightPivot.setInverted(true);
     }
     //set the shooter speed
     public void setShooterSpeed(double speed){
@@ -141,27 +144,25 @@ public class Shooter extends SubsystemBase{
     //set target Pivot Pivot
     public void setPTargetAngle(double target){
       pTargetPivot = target;
+      startPivotError = eArm.getDistance() - target;
     }
 
     //set Pivot Pivot
     private void setPAngle(double Pivot){
       double error = eArm.getDistance() - Pivot;
-      double set_speed = 40 * error;
+      double start = error / startPivotError;
+      double scale =0;
+      if(start > 0.5){
+        scale =20;
+      }else{
+        scale = 30;
+      }
+      System.out.println("scale " + scale);
+      double set_speed = scale * error;
       SmartDashboard.putNumber("speed set point", set_speed );
-      set_speed = MathUtil.clamp(set_speed, -600, 1000);
+      set_speed = MathUtil.clamp(set_speed, -1200, 2000);
 
-      double minspeed = 0;
-      if(eArm.getDistance() < -50){
-        minspeed = -76;
-      }
-      else if(eArm.getDistance() < -20){
-        minspeed = -450;
-      }
-      else{
-        minspeed = 0;
-      }
-      
-      SetPivotPIDRate(-set_speed + minspeed);
+      SetPivotPIDRate(set_speed);
 
       SmartDashboard.putNumber("speed set point - Clamped", set_speed );
     }
