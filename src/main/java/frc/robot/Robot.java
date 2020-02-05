@@ -47,7 +47,7 @@ public class Robot extends TimedRobot {
   public void disabledInit() {
     // TODO Auto-generated method stub
     super.disabledInit();
-    oi.shooter.DisablePivotPID();
+    oi.pivot.DisablePivotPID();
   }
 
   @Override

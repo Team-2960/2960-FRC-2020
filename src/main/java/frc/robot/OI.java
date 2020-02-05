@@ -13,8 +13,11 @@ public class OI extends SubsystemBase{
     private Climb climb;
     private Intake intake;
     private Drive drive;
-    public Shooter shooter;
+    private Shooter shooter;
+    public Pivot pivot;
+    
     private Camera camera;
+
     private double cameraTurn;
 
     private Joystick driver_Control;
@@ -28,7 +31,9 @@ public class OI extends SubsystemBase{
         System.out.println("init gyro");
         //climb = Climb.get_Instance();
         //intake = Intake.get_Instance();
-        shooter = Shooter.get_Instance();
+        //shooter = Shooter.get_Instance();
+        pivot = Pivot.get_Instance();
+
         //joysticks
         driver_Control = new Joystick(Constants.driver_Control);
         joystick2 = new Joystick(1);
@@ -91,14 +96,14 @@ public class OI extends SubsystemBase{
     //Operator control
     public void operator_Control(Joystick operator_Control){
         if(operator_Control.getRawButton(2)){
-            shooter.EnablePivotPID();
-            shooter.setPTargetAngle(-40);
+            pivot.EnablePivotPID();
+            pivot.setPTargetAngle(-40);
         }else if(operator_Control.getRawButton(1)){
-            shooter.DisablePivotPID();
+            pivot.DisablePivotPID();
         }
         
         
-        shooter.SetPivotSpeed(operator_Control.getRawAxis(1));
+        pivot.SetPivotSpeed(operator_Control.getRawAxis(1));
 
     }
     public void periodic(){

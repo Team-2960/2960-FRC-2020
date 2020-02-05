@@ -60,8 +60,7 @@ public class MoveForwardDistance extends CommandGroup{
 
     @Override
     protected void end() {
-       // drive.setSpeed(0,0);
-        //WILL CHANGE TO THIS NAME LATER
+       drive.setSpeed(0,0);
     }
 
 
