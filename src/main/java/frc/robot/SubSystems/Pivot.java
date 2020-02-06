@@ -5,9 +5,11 @@ import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.RobotController;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.controller.ArmFeedforward;
 import edu.wpi.first.wpilibj.controller.PIDController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpiutil.math.MathUtil;
 import frc.robot.Constants;
@@ -22,6 +24,8 @@ public class Pivot extends SubsystemBase{
     private PIDController aPidController;
     private ArmFeedforward armfeedforward;
 
+    TrapezoidProfile trapezoidProfile;
+
     private CANEncoder EArm;  
     private Encoder eArm;
 
@@ -29,7 +33,8 @@ public class Pivot extends SubsystemBase{
     private boolean isPivotEnabled = false;
     private double pTargetPivot;
 
-    private double startPivotError = 0.0;
+
+    private Timer trapezidTimer;
 
     public static Pivot get_Instance(){
         if(pivot == null){
@@ -39,9 +44,6 @@ public class Pivot extends SubsystemBase{
     }
     private Pivot(){
         //init code
-        //mLeftShooter = new TalonFX(Constants.mLeftShooter);
-        //mRightShooter = new TalonFX(Constants.mRightShooter);
-  
         mLeftPivot = new CANSparkMax(Constants.mLeftPivot, MotorType.kBrushless);
         mRightPivot = new CANSparkMax(Constants.mRightPivot, MotorType.kBrushless);
   
@@ -57,9 +59,14 @@ public class Pivot extends SubsystemBase{
         aPidController = new PIDController(Constants.pKp, Constants.pKi, Constants.pKd);
         armfeedforward = new ArmFeedforward(Constants.pKs, Constants.pKcos, Constants.pKv, Constants.pKa);
 
+        trapezidTimer = new Timer();
+        
         EArm = new CANEncoder(mLeftPivot);
 
         mRightPivot.setInverted(true);
+
+        
+
     }
     public void SetPivotSpeed(double speed){
         mLeftPivot.set(speed);
@@ -80,52 +87,48 @@ public class Pivot extends SubsystemBase{
     }
     //set target Pivot Pivot
     public void setPTargetAngle(double target){
-        pTargetPivot = target;
-        startPivotError = eArm.getDistance() - target;
+      //reset and start the timer
+      trapezidTimer.reset();
+      trapezidTimer.start();
+
+      pTargetPivot = target;
+
+      trapezoidProfile = new TrapezoidProfile(new TrapezoidProfile.Constraints(-1000, -300), 
+                                              new TrapezoidProfile.State(target, 0),
+                                              new TrapezoidProfile.State(eArm.getDistance(), 0));
     }
   
       //set Pivot Pivot
-      private void setPAngle(double Pivot){
-        double error = eArm.getDistance() - Pivot;
-        double start = error / startPivotError;
-        double scale =0;
-        if(start > 0.5){
-          scale =20;
-        }else{
-          scale = 30;
-        }
-        System.out.println("scale " + scale);
-        double set_speed = scale * error;
-        SmartDashboard.putNumber("speed set point", set_speed );
-        set_speed = MathUtil.clamp(set_speed, -1200, 2000);
+    private void setAngle(double Pivot){
+      var set_point = trapezoidProfile.calculate(trapezidTimer.get());
+      
+      SetPivotPIDRate(set_point.velocity);
+
+      SmartDashboard.putNumber("velocity", set_point.velocity);
+    }
   
-        SetPivotPIDRate(set_speed);
-  
-        SmartDashboard.putNumber("speed set point - Clamped", set_speed );
-      }
-  
-        //enable the pivot pid
+    //enable the pivot pid
     public void EnablePivotPID(){
         isPivotEnabled = true;
     }
-        //disable the pivot pid
-  public void DisablePivotPID(){
-    isPivotEnabled = false;
-    pTargetPivot = 0;
-    SetPivotSpeed(0);
-  }
+    //disable the pivot pid
+    public void DisablePivotPID(){
+      isPivotEnabled = false;
+      pTargetPivot = 0;
+      SetPivotSpeed(0);
+    }
       @Override
     public void periodic() {
       // This method will be called once per scheduler run
       //enable pivot PID
       if(isPivotEnabled){
-        setPAngle(pTargetPivot);
+        setAngle(pTargetPivot);
       }
       else{
         pTargetPivot = 0;
       }
-  
-  
+      
+      
       SmartDashboard.putNumber("Encoder ", eArm.getDistance());
       SmartDashboard.putNumber("Encoder rate ", EArm.getVelocity());
       SmartDashboard.putNumber("mSpeed ", mLeftPivot.get());
