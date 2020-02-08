@@ -4,6 +4,9 @@ import edu.wpi.first.wpilibj.AddressableLEDBuffer;
 public class LEDs{
     private AddressableLED LEDStrip;
     private AddressableLEDBuffer LEDBuffer;
+    /**
+     * LEDS
+     */
     public LEDs(){
         LEDStrip = new AddressableLED(1);
         LEDBuffer = new AddressableLEDBuffer(25);
