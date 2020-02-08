@@ -42,6 +42,7 @@ public class Pivot extends SubsystemBase{
         } 
         return pivot;
     }
+
     private Pivot(){
         //init code
         mLeftPivot = new CANSparkMax(Constants.mLeftPivot, MotorType.kBrushless);
@@ -70,7 +71,7 @@ public class Pivot extends SubsystemBase{
     }
     /**
      * Set the motor speed
-     * @param speed
+     * @param speed set speed
      */
     public void SetPivotSpeed(double speed){
       mLeftPivot.set(speed);
@@ -78,7 +79,7 @@ public class Pivot extends SubsystemBase{
     }
     /**
      * set the motor voltage
-     * @param Voltage
+     * @param Voltage set voltage
      */
     public void SetPivotVoltage(double Voltage){
         mLeftPivot.setVoltage(Voltage);
@@ -86,7 +87,7 @@ public class Pivot extends SubsystemBase{
     }
     /**
      * set the motor rate with pid
-     * @param rate
+     * @param rate target rate
      */
     public void SetPivotPIDRate(double rate){
         double pid_output = aPidController.calculate(EArm.getVelocity(), rate);
@@ -98,7 +99,7 @@ public class Pivot extends SubsystemBase{
     }
     /**
      * set the target
-     * @param target
+     * @param target set target
      */
     public void setPTargetAngle(double target){
       pTargetPivot = target;

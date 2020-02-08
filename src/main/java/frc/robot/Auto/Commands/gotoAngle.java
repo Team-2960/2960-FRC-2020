@@ -5,7 +5,7 @@ import frc.robot.SubSystems.Drive;
 
 public class gotoAngle extends CommandGroup{
     //go to a angle;
-    
+    Drive drive = Drive.get_Instance();
     private boolean isFinish = false;
     private double angle;
 
@@ -57,8 +57,7 @@ public class gotoAngle extends CommandGroup{
 
     @Override
     protected void end() {
-        //drive.setSpeed(0,0);
-        //WILL CHANGE TO THIS NAME LATER
+        drive.setSpeed(0,0);
     }
 
 
