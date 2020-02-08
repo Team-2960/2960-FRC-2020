@@ -51,11 +51,12 @@ public class Camera{
 			
 		startThread();
 	}
+
+	//calculate the distance away from the target
 	public double distanceCalc(double pixels){
-		double distance;
-		distance = (15.75 * (double) Constants.cHeight)/(2.0 * pixels * Math.tan(Math.toRadians(Constants.verticalViewAngle)));
-		return distance;
+		return (15.75 * (double) Constants.cHeight)/(2.0 * pixels * Math.tan(Math.toRadians(Constants.verticalViewAngle)));
 	}
+	//calculate the angle away from the target
 	public double calcAngle(double pixels){
 		double angle;
 		int negative;
@@ -84,9 +85,6 @@ public class Camera{
 			double LTurningSpeed = 0.0;
 			double LtargetRatio = 0.0;
 
-			
-			
-			
 			//Run this code as long as the thread is not interrupted
 			while(!Thread.interrupted()){
 				//reset target varibles
@@ -198,7 +196,7 @@ public class Camera{
 			return targetFound;
 		}
 	}
-	public void update(){
+	public void SmartDashboard(){
 		SmartDashboard.putNumber("CenterX", getCenterX());
 		SmartDashboard.putNumber("CenterY", getCenterY());
 
@@ -208,7 +206,5 @@ public class Camera{
         SmartDashboard.putNumber("Constants.hsvThresholdSaturationMax", Constants.hsvThresholdSaturation[1]);
         SmartDashboard.putNumber("Constants.hsvThresholdValueMin", Constants.hsvThresholdValue[0]);
 		SmartDashboard.putNumber("Constants.hsvThresholdValueMax", Constants.hsvThresholdValue[1]);
-		
-		
 	}
 }
