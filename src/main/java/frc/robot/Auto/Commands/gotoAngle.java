@@ -8,7 +8,10 @@ public class gotoAngle extends CommandGroup{
     Drive drive = Drive.get_Instance();
     private boolean isFinish = false;
     private double angle;
-
+    /**
+     * go to the angle
+     * @param angle target angle
+     */
     public gotoAngle(double angle){
         this.angle = angle;
     }
@@ -16,6 +19,7 @@ public class gotoAngle extends CommandGroup{
     @Override
     protected void initialize() {
         super.initialize();
+        drive.startGotoAngleDistance(0, angle, 0, 2);
     }
 
     /**
@@ -52,12 +56,14 @@ public class gotoAngle extends CommandGroup{
 
     @Override
     protected void execute() {
-        //isFinish = drive.gotoAngle(angle);
+        isFinish = drive.checkAngle();
     }
 
     @Override
     protected void end() {
         drive.setSpeed(0,0);
+        drive.disableDrivePID();
+
     }
 
 

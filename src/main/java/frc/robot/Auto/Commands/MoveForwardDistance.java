@@ -10,15 +10,18 @@ public class MoveForwardDistance extends CommandGroup{
     private boolean isFinish = false;
     private double distance;
     private double speed;
+    private double angle;
 
-    public MoveForwardDistance(double distance, double speed){
+    public MoveForwardDistance(double distance, double angle, double speed){
         this.distance = distance;
         this.speed = speed;
+        this.angle = angle;
     }
 
     @Override
     protected void initialize() {
         super.initialize();
+        drive.startGotoAngleDistance(speed, angle, distance, 1);
     }
 
     /**
@@ -55,12 +58,13 @@ public class MoveForwardDistance extends CommandGroup{
 
     @Override
     protected void execute() {
-    //    isFinish = drive.moveForward(distance, speed);
+        isFinish = drive.checkDistance();
     }
 
     @Override
     protected void end() {
        drive.setSpeed(0,0);
+       drive.disableDrivePID();
     }
 
 
