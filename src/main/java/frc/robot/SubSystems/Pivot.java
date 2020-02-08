@@ -68,17 +68,26 @@ public class Pivot extends SubsystemBase{
         
 
     }
-    //Pivot Speed Function
+    /**
+     * Set the motor speed
+     * @param speed
+     */
     public void SetPivotSpeed(double speed){
       mLeftPivot.set(speed);
       mRightPivot.set(speed);
     }
-      //Pivot Speed Voltage
+    /**
+     * set the motor voltage
+     * @param Voltage
+     */
     public void SetPivotVoltage(double Voltage){
         mLeftPivot.setVoltage(Voltage);
         mRightPivot.setVoltage(Voltage);
     }
-    //set Pivot speed
+    /**
+     * set the motor rate with pid
+     * @param rate
+     */
     public void SetPivotPIDRate(double rate){
         double pid_output = aPidController.calculate(EArm.getVelocity(), rate);
         double feedforward = armfeedforward.calculate(EArm.getPosition(), 0) / RobotController.getBatteryVoltage();
@@ -87,54 +96,54 @@ public class Pivot extends SubsystemBase{
         SmartDashboard.putNumber("feed", feedforward);
         SetPivotSpeed(speed);
     }
-    //set target Pivot Pivot
+    /**
+     * set the target
+     * @param target
+     */
     public void setPTargetAngle(double target){
-      //reset and start the timer
-      trapezidTimer.reset();
-      trapezidTimer.start();
-
       pTargetPivot = target;
-
-      trapezoidProfile = new TrapezoidProfile(new TrapezoidProfile.Constraints(-2000, -1000), 
-                                              new TrapezoidProfile.State(target, 0),
-                                              new TrapezoidProfile.State(eArm.getDistance(), 0));
     }
   
-      //set Pivot Pivot
-    private void setAngle(double Pivot){
-      var set_point = trapezoidProfile.calculate(trapezidTimer.get());
-      
-      SetPivotPIDRate(set_point.velocity);
+    /**
+     * go to target angle
+     * @param angle
+     */
+    private void gotoAngle(double Angle){
 
-      SmartDashboard.putNumber("velocity", set_point.velocity);
     }
   
-    //enable the pivot pid
+    /**
+     * enable the pivot pid
+     */
     public void EnablePivotPID(){
         isPivotEnabled = true;
     }
-    //disable the pivot pid
+    /**
+     * disable the pivot pid
+     */
     public void DisablePivotPID(){
       isPivotEnabled = false;
       pTargetPivot = 0;
       SetPivotSpeed(0);
     }
-      @Override
-    public void periodic() {
-      // This method will be called once per scheduler run
-      //enable pivot PID
-      if(isPivotEnabled){
-        setAngle(pTargetPivot);
-      }
-      else{
-        pTargetPivot = 0;
-      }
-      
-      //SmartDashBoard Update
+    public void smartdashboard(){
       SmartDashboard.putNumber("Encoder ", eArm.getDistance());
       SmartDashboard.putNumber("Encoder rate ", EArm.getVelocity());
       SmartDashboard.putNumber("mSpeed ", mLeftPivot.get());
       SmartDashboard.putNumber("Error ", eArm.getDistance() - -40);
-      
+    }
+    
+    /**
+     * run every time
+     */
+    public void periodic() {
+      // This method will be called once per scheduler run
+      //enable pivot PID
+      if(isPivotEnabled){
+        gotoAngle(pTargetPivot);
+      }
+      else{
+        pTargetPivot = 0;
+      }
     }
 }
