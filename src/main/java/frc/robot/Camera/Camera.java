@@ -141,6 +141,7 @@ public class Camera{
 						
 						lTargetFound = false;
 					}
+					
 					synchronized(IMG_LOCK){
 						targetFound = lTargetFound;
 						centerX = LcenterX;
@@ -233,7 +234,6 @@ public class Camera{
 	public void SmartDashboard(){
 		SmartDashboard.putNumber("CenterX", getCenterX());
 		SmartDashboard.putNumber("CenterY", getCenterY());
-
         SmartDashboard.putNumber("Constants.hsvThresholdHueMin", Constants.hsvThresholdHue[0]);
         SmartDashboard.putNumber("Constants.hsvThresholdHueMax", Constants.hsvThresholdHue[1]);
         SmartDashboard.putNumber("Constants.hsvThresholdSaturationMin", Constants.hsvThresholdSaturation[0]);

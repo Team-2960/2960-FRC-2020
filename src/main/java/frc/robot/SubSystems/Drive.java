@@ -16,6 +16,8 @@ import edu.wpi.first.wpilibj.CounterBase.EncodingType;
 import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.SPI;
+import frc.robot.Camera.Camera;
+
 
 
 public class Drive extends SubsystemBase {
@@ -43,6 +45,8 @@ public class Drive extends SubsystemBase {
   public double forwardSpeed;
   public int PIDCheck = 0;
   public boolean isDrivePIDEnabled = false;
+  private Camera camera;
+  public double cameraAngle = 0;
   
   public static Drive get_Instance(){
     
@@ -54,7 +58,7 @@ public class Drive extends SubsystemBase {
 
   private Drive() {
     //init code
-
+    camera = new Camera(0);
     //init all the motors
     mLeftMaster = new CANSparkMax(Constants.mLeftMaster, MotorType.kBrushless);
     mLeftFollow1 = new CANSparkMax(Constants.mLeftFollow1, MotorType.kBrushless);
@@ -239,6 +243,9 @@ public class Drive extends SubsystemBase {
     mLeftMaster.set(left);
     mRightMaster.set(-right);
   }
+  public void adjustToTarget(){
+    startGoToAngleDistance(0, cameraAngle, 0, 2);
+  }
   /**
    * Resets the NavX
    */
@@ -273,7 +280,7 @@ public class Drive extends SubsystemBase {
     SmartDashboard.putNumber("Gyro Angle", navX.getAngle());
     SmartDashboard.putNumber("left Encoder", rightEncoder.get());
     SmartDashboard.putNumber("calc encoder", currentDistance);
-
+    cameraAngle = (camera.calcAngle(camera.getCenterX()) +  navX.getAngle());
   }
 
     /**
