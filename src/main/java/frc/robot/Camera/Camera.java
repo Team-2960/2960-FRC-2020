@@ -34,6 +34,10 @@ public class Camera{
 	public double turningSpeed = 0.0;
 	public double targetRatio = 0.0;
 	
+	/**
+	 * Constructor
+	 * @param cameraPort
+	 */
 	public Camera(int cameraPort){
 		//init camera
 		timer = new Timer();
@@ -48,15 +52,23 @@ public class Camera{
 		}
 
 		IMG_LOCK = new Object();
-			
 		startThread();
 	}
 
-	//calculate the distance away from the target
+	/**
+	 * calculate the distance away from the target
+	 * @param pixels
+	 * @return distance away from the target
+	 */
 	public double distanceCalc(double pixels){
 		return (15.75 * (double) Constants.cHeight)/(2.0 * pixels * Math.tan(Math.toRadians(Constants.verticalViewAngle)));
 	}
-	//calculate the angle away from the target
+
+	/**
+	 * calculate the angle away from the target
+	 * @param pixels
+	 * @return angle away from the target
+	 */
 	public double calcAngle(double pixels){
 		double angle;
 		int negative;
@@ -70,8 +82,9 @@ public class Camera{
 		return angle;
 	}
 
-
-	
+	/**
+	 * Start vision code
+	 */
     private void startThread(){
 		visionThread = new Thread(() -> {
 			timer.start();
@@ -150,52 +163,73 @@ public class Camera{
 		visionThread.start();
 	}
 	
-
+	/**
+	 * return synchronized CenterX of the target
+	 * @return CenterX of the target
+	 */	
 	public double getCenterX() {
-		//Get results from vision thread -- This will change. 
 		synchronized(IMG_LOCK){
 			return centerX;
 		}
 	}
-		
+
+	/**
+	 * return synchronized CenterY of the target
+	 * @return CenterY of the target
+	 */	
 	public double getCenterY() {
-		//Get results from vision thread -- This will change. 
 		synchronized(IMG_LOCK){
 			return centerY;
 		}
 	}
+	/**
+	 * return synchronized Width of the target
+	 * @return Width of the target
+	 */
 	public double getTargetWidth(){
-		//Get results from vision thread -- This will change. 
 		synchronized(IMG_LOCK){
 			return width;
-			
 		}
 	}
+	/**
+	 * return synchronized height of the target
+	 * @return height of the target
+	 */
 	public double getTargetHeight(){
-		//Get results from vision thread -- This will change. 
 		synchronized(IMG_LOCK){
 			return height;
-			
 		}
 	}
+	/**
+	 * return synchronized ratio
+	 * @return Ratio
+	 */
 	public double getImageResultsTurningSpeed(){
-		//Get results from vision thread -- This will change. 
 		synchronized(IMG_LOCK){
 			return turningSpeed;
 		}
 	}
+	/**
+	 * return synchronized ratio
+	 * @return Ratio
+	 */
 	public double getImageResultsTargetRatio(){
-		//Get results from vision thread -- This will change. 
 		synchronized(IMG_LOCK){
 			return targetRatio;
 		}
 	}
+	/**
+	 * return synchronized is target found or not
+	 * @return target found or not
+	 */
 	public Boolean isTargetFound() {
-		//Get results from vision thread -- This will change. 
 		synchronized(IMG_LOCK){
 			return targetFound;
 		}
 	}
+	/**
+	 * put to smartdashboard
+	 */
 	public void SmartDashboard(){
 		SmartDashboard.putNumber("CenterX", getCenterX());
 		SmartDashboard.putNumber("CenterY", getCenterY());
