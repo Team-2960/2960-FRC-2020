@@ -7,11 +7,13 @@ import edu.wpi.cscore.*;
 import org.opencv.core.*;
 import org.opencv.imgproc.Imgproc;
 import frc.robot.Constants;
+import edu.wpi.first.wpilibj.Timer;
 public class Camera{
 	//init code
 	public UsbCamera camera;
 	private CvSink cam_sink;
 	private Thread visionThread;
+	private Timer timer;
 
 	//getting the center X and Y
 	private double centerX;
@@ -31,32 +33,15 @@ public class Camera{
 	//may be keep
 	public double turningSpeed = 0.0;
 	public double targetRatio = 0.0;
-
-	public double distanceCalc(double pixels){
-		double distance;
-		distance = (15.75 * (double) Constants.cHeight)/(2.0 * pixels * Math.tan(Math.toRadians(Constants.verticalViewAngle)));
-		return distance;
-	}
-	public double horizontalDistanceCalc(double pixels){
-		double distance;
-		
-		distance = (Math.abs((double) pixels - 320) * ((double) 27/640) - 0.9);
-		
-		return distance;
-	}
-	public double calcAngle(double pixels){
-		double angle;
-		angle = (Math.abs((double) pixels - 320) * (0.0911));
-		return angle;
-	}
-
-    public Camera(int cameraPort){
+	
+	public Camera(int cameraPort){
 		//init camera
+		timer = new Timer();
 		camera = CameraServer.getInstance().startAutomaticCapture(cameraPort);
 		if(camera != null){
 			//send to smartdash board
 			camera.setResolution(Constants.cWidth, Constants.cHeight);
-			camera.setFPS(10);
+			camera.setFPS(30);
 			cam_sink = CameraServer.getInstance().getVideo();
 			hsv_threashold_source = CameraServer.getInstance().putVideo("HSV Threshold", Constants.cWidth, Constants.cWidth);
 			erode_source = CameraServer.getInstance().putVideo("Erode", Constants.cWidth, Constants.cWidth);
@@ -66,10 +51,29 @@ public class Camera{
 			
 		startThread();
 	}
+	public double distanceCalc(double pixels){
+		double distance;
+		distance = (15.75 * (double) Constants.cHeight)/(2.0 * pixels * Math.tan(Math.toRadians(Constants.verticalViewAngle)));
+		return distance;
+	}
+	public double calcAngle(double pixels){
+		double angle;
+		int negative;
+		if(getCenterX() > Constants.cWidth/2){
+			negative = 1;
+		}
+		else{
+			negative = -1;
+		}
+		angle = negative * (Math.abs((double) pixels - Constants.cWidth/2) * (Constants.deg_per_px));
+		return angle;
+	}
+
+
 	
     private void startThread(){
 		visionThread = new Thread(() -> {
-			
+			timer.start();
 			GripPipeline pipeline = new GripPipeline();
 			Mat cam_frame = new Mat();
 			Boolean lTargetFound;
@@ -79,6 +83,7 @@ public class Camera{
 			double Lheight = 0.0;
 			double LTurningSpeed = 0.0;
 			double LtargetRatio = 0.0;
+
 			
 			
 			
@@ -117,7 +122,7 @@ public class Camera{
 								Lheight = (double) tempRec.height;
 								double distancePixels;
 								double p = 0.005;
-								distancePixels = LcenterX - 320;
+								distancePixels = LcenterX - Constants.cWidth;
 								
 								LTurningSpeed = (distancePixels * p);
 							lTargetFound = true;
@@ -138,6 +143,8 @@ public class Camera{
 					//Output to smartdash board - It may not like having this inside the thread
 					hsv_threashold_source.putFrame(pipeline.hsvThresholdOutput());
 					erode_source.putFrame(pipeline.cvErodeOutput());
+					SmartDashboard.putNumber("Timer Value", timer.get());
+					timer.reset();
 				}
 			}
         }
