@@ -39,18 +39,14 @@ public class OI extends SubsystemBase{
         operator_Control = new Joystick(Constants.operator_Control);
     }
     /**
-     * Driver controler
-     * @param driver_Control
-     * @param joystick2
+     * Commands for the joysticks
+     * @param driver_Control joystick 1
+     * @param joystick2 joystick 2
      */
     public void driver_Control(Joystick driver_Control, Joystick joystick2){
                 if(driver_Control.getRawButton(1)){
                     //Drive forawrd speed, angle and targetDistance
-                    drive.giveNums(0, 90, 0);
-                    //enable function
-                    drive.enableDrivePID();
-                    //The method of checking 1 = distance, 2 = anlge, 3 = both
-                    drive.PIDCheck = 2;
+                    drive.startGoToAngleDistance(0, 90, 0, 2);
                 }    
     /*             else if(driver_Control.getRawButton(2)){
                     drive.setDriveToAngle((camera.calcAngle(camera.getCenterX()) +  drive.navXAngle()), joystick2.getRawAxis(1));
@@ -76,7 +72,7 @@ public class OI extends SubsystemBase{
     }
     /**
      * Operator control
-     * @param operator_Control
+     * @param operator_Control operator control joystick
      */
     public void operator_Control(Joystick operator_Control){
         /* if(operator_Control.getRawButton(2)){

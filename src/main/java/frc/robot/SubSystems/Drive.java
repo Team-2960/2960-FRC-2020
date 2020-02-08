@@ -143,12 +143,15 @@ public class Drive extends SubsystemBase {
    * @param angle sets the target angle the we should be going
    * @param distance sets the target distance we should be going
    */
-  public void giveNums(double forwardSpeed, double angle, double distance){
+  public void startGoToAngleDistance(double forwardSpeed, double angle, double distance, int PIDCheck){
     TargetDistance = distance;
     TargetAngle = angle;
     this.forwardSpeed = forwardSpeed;
     encoderReset();
     navXReset();
+    enableDrivePID();
+    this.PIDCheck = PIDCheck;
+
   }
   /**
    * Is the PID that we use to drive the robot around
