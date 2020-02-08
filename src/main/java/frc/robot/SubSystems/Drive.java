@@ -31,9 +31,6 @@ public class Drive extends SubsystemBase {
   //PID Controller
   private PIDController drivePidController;
 
-  //current Angle
-  public double currentAngle = 0.0;
-
   //Gyro Sensor
   private AnalogGyro gyro;
   private AHRS navX;
@@ -41,13 +38,11 @@ public class Drive extends SubsystemBase {
   private Encoder rightEncoder;
   private Encoder leftEncoder;
   private double currentDistance = 0;
-  public double distance;
-  public double angle;
+  public double TargetDistance;
+  public double TargetAngle;
   public double forwardSpeed;
   public int PIDCheck = 0;
-  public boolean enableDrivePID = false;
-  
-  private DigitalInput photoeye;
+  public boolean isDrivePIDEnabled = false;
   
   public static Drive get_Instance(){
     
@@ -59,6 +54,8 @@ public class Drive extends SubsystemBase {
 
   private Drive() {
     //init code
+
+    //init all the motors
     mLeftMaster = new CANSparkMax(Constants.mLeftMaster, MotorType.kBrushless);
     mLeftFollow1 = new CANSparkMax(Constants.mLeftFollow1, MotorType.kBrushless);
     mLeftFollow2 = new CANSparkMax(Constants.mLeftFollow2, MotorType.kBrushless);
@@ -73,28 +70,24 @@ public class Drive extends SubsystemBase {
     mRightMfollow1.follow(mRightMaster);
     mRightMfollow2.follow(mRightMaster);
 
+    //init gyro
     gyro = new AnalogGyro(0);
     navX = new AHRS(SPI.Port.kMXP);
+    gyro.calibrate();
+
+    //init encoder
     rightEncoder = new Encoder(3, 4, false, EncodingType.k4X);
     leftEncoder = new Encoder(0, 1, false, EncodingType.k4X);
 
-    gyro.calibrate();
-
-    currentAngle = navX.getAngle();
-
+    //drive pid
     drivePidController = new PIDController(Constants.dKp, Constants.dKi, Constants.dKd);
   }
-  public void enableDrivePIDF(){
-    enableDrivePID = true;
-  }
-  
-  public double navXAngle(){
-    double angle = navX.getAngle();
-    return angle;
-  }
+
+
+  //check the distance
   public boolean checkDistance(){
     boolean isAtDistance;
-    if(currentDistance < (distance + Constants.distanceTolerance) && currentDistance > (distance - Constants.distanceTolerance)){
+    if(currentDistance < (TargetDistance + Constants.distanceTolerance) && currentDistance > (TargetDistance - Constants.distanceTolerance)){
       isAtDistance = true;
     }
     else{
@@ -104,7 +97,7 @@ public class Drive extends SubsystemBase {
   }
   public boolean checkAngle(){
     boolean isAtAngle;
-    if((currentAngle < (angle + Constants.angleTolerance) && currentAngle > (angle - Constants.angleTolerance)) && Math.abs(navX.getRawGyroZ()) < 1){
+    if((getAngle() < (TargetAngle + Constants.angleTolerance) && getAngle() > (TargetAngle - Constants.angleTolerance)) && Math.abs(navX.getRawGyroZ()) < 1){
       isAtAngle = true;
     }
     else{
@@ -130,8 +123,8 @@ public class Drive extends SubsystemBase {
     currentDistance = 0;
   }
   public void giveNums(double forwardSpeed, double angle, double distance){
-    this.distance = distance;
-    this.angle = angle;
+    TargetDistance = distance;
+    TargetAngle = angle;
     this.forwardSpeed = forwardSpeed;
     leftEncoder.reset();
     rightEncoder.reset();
@@ -213,32 +206,47 @@ public class Drive extends SubsystemBase {
   @Override
   // This method will be called once per scheduler run
   public void periodic() {
-    if(enableDrivePID){
+    if(isDrivePIDEnabled){
      
     if(PIDCheck == 1){
-      drive.setDriveAuton(forwardSpeed, angle, distance);
+      drive.setDriveAuton(forwardSpeed, TargetAngle, TargetDistance);
     if(checkDistance()){
-      enableDrivePID = false;
+      isDrivePIDEnabled = false;
     }
     }
     else if(PIDCheck == 2){
-      setDriveToAngle(angle, 0);
+      setDriveToAngle(TargetAngle, 0);
     if(checkAngle()){
-      enableDrivePID = false;
+      isDrivePIDEnabled = false;
     }
     }
     
     else if(PIDCheck == 3){
-      drive.setDriveAuton(forwardSpeed, angle, distance);
+      drive.setDriveAuton(forwardSpeed, TargetAngle, TargetDistance);
       if(checkAngle() && checkDistance()){
-        enableDrivePID = false;
+        isDrivePIDEnabled = false;
       }
     }
   }
-    currentAngle = navX.getAngle();
     SmartDashboard.putNumber("Gyro Angle", navX.getAngle());
     SmartDashboard.putNumber("left Encoder", rightEncoder.get());
     SmartDashboard.putNumber("calc encoder", currentDistance);
 
   }
+
+    //enable drive pid
+    public void enableDriveID(){
+      isDrivePIDEnabled = true;
+    }
+    //disable Drive pid 
+    public void disableDriveID(){
+      isDrivePIDEnabled = false;
+    }
+    //return the angle
+    public double getAngle(){
+      return navX.getAngle();
+    }
+    public double getDistanceInches(){
+      
+    }
 }
