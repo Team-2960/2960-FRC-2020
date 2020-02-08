@@ -36,6 +36,10 @@ public class Pivot extends SubsystemBase{
 
     private Timer trapezidTimer;
 
+    
+    /** 
+     * @return Pivot
+     */
     public static Pivot get_Instance(){
         if(pivot == null){
             pivot = new Pivot();

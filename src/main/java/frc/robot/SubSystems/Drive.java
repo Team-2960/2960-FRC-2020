@@ -54,6 +54,10 @@ public class Drive extends SubsystemBase {
   private Camera camera;
   public double cameraAngle = 0;
   
+  
+  /** 
+   * @return Drive
+   */
   public static Drive get_Instance(){
     
     if(drive == null){
@@ -122,6 +126,12 @@ public class Drive extends SubsystemBase {
     }
     return isAtAngle;
   }
+  
+  /** 
+   * @param previousRate
+   * @param currentRate
+   * @return double
+   */
   public double rate(double previousRate, double currentRate){
     double rate;
     rate = currentRate - previousRate;

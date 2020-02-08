@@ -13,6 +13,10 @@ import frc.robot.Constants;
 public class Intake extends SubsystemBase {
   private static Intake intake;
 
+  
+  /** 
+   * @return Intake
+   */
   public static Intake get_Instance(){
     if(intake == null){
       intake = new Intake();

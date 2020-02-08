@@ -16,6 +16,10 @@ public class Shooter extends SubsystemBase{
            kd = 0.01;
 
     
+    
+    /** 
+     * @return Shooter
+     */
     public static Shooter get_Instance(){
       if(shooter == null){
         shooter = new Shooter();

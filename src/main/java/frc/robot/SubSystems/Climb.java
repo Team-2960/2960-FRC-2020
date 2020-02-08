@@ -13,6 +13,10 @@ import frc.robot.Constants;
 public class Climb extends SubsystemBase {
   private static Climb climb;
 
+  
+  /** 
+   * @return Climb
+   */
   public static Climb get_Instance(){
     if(climb == null){
       climb = new Climb();

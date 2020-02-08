@@ -16,6 +16,10 @@ public class Index extends SubsystemBase {
   
   private CANSparkMax mRightIndex;
   private CANSparkMax mLeftIndex;
+  
+  /** 
+   * @return Index
+   */
   public static Index get_Instance(){
     if(index == null){
       index = new Index();
