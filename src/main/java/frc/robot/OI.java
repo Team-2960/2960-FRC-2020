@@ -44,31 +44,32 @@ public class OI extends SubsystemBase{
      * @param joystick2 joystick 2
      */
     public void driver_Control(Joystick driver_Control, Joystick joystick2){
-                if(driver_Control.getRawButton(1)){
-                    //Drive forawrd speed, angle and targetDistance
-                    drive.startGoToAngleDistance(0, 90, 0, 2);
-                }    
+        
+        if(driver_Control.getRawButton(1)){
+            //Drive forawrd speed, angle and targetDistance
+            drive.startGoToAngleDistance(0, 90, 0, 2);
+        }    
     /*             else if(driver_Control.getRawButton(2)){
-                    drive.setDriveToAngle((camera.calcAngle(camera.getCenterX()) +  drive.navXAngle()), joystick2.getRawAxis(1));
-                }
-                else if(driver_Control.getRawButton(3)){
-                    drive.setDriveToAngle(0, 0);
-                } 
-                else if(driver_Control.getRawButton(4)){
-                    drive.setDrive(-0.5, 0, 75);
-                }
-                else if(driver_Control.getRawButton(5)){
-                    drive.setDriveToAngle((camera.calcAngle(camera.getCenterX()) +  drive.navXAngle()), joystick2.getRawAxis(1));
-                }*/
-                else if(joystick2.getRawButton(2)){
-                    drive.encoderReset();
-                }
-                else if(joystick2.getRawButton(1)){
-                    drive.navXReset();
-                }
-                else{
-                    drive.setSpeed((driver_Control.getRawAxis(1)), (joystick2.getRawAxis(1)));
-                }          
+            drive.setDriveToAngle((camera.calcAngle(camera.getCenterX()) +  drive.navXAngle()), joystick2.getRawAxis(1));
+        }
+        else if(driver_Control.getRawButton(3)){
+            drive.setDriveToAngle(0, 0);
+        } 
+        else if(driver_Control.getRawButton(4)){
+            drive.setDrive(-0.5, 0, 75);
+        }
+        else if(driver_Control.getRawButton(5)){
+            drive.setDriveToAngle((camera.calcAngle(camera.getCenterX()) +  drive.navXAngle()), joystick2.getRawAxis(1));
+        }*/
+        else if(joystick2.getRawButton(2)){
+            drive.encoderReset();
+        }
+        else if(joystick2.getRawButton(1)){
+            drive.navXReset();
+        }
+        else{
+            drive.setSpeed((driver_Control.getRawAxis(1)), (driver_Control.getRawAxis(5)));
+        }          
     }
     /**
      * Operator control
