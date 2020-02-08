@@ -71,11 +71,17 @@ public class Shooter extends SubsystemBase{
       
       mLeftShooter.setSelectedSensorPosition(0, 0, 30); */
     }
-    //set the shooter speed
+    /**
+     * Sets the Shooter Speed 
+     * @param speed the speed you want the shooter to be set to
+     */
     public void setShooterSpeed(double speed){
       mRightShooter.set(ControlMode.PercentOutput, speed);
     }
-    //setting the pid speed
+    /**
+     * Sets the PID shooter speed 
+     * @param speed the PID shooter speed
+     */
     public void setPIDShooterSpeed(double speed){
       mRightShooter.set(ControlMode.Velocity, speed);
       mLeftShooter.set(ControlMode.Velocity, speed);

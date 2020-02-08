@@ -27,6 +27,9 @@ public class Index extends SubsystemBase {
     photoeye = new CANDigitalInput(mRightIndex,  CANDigitalInput.LimitSwitch.kForward,  CANDigitalInput.LimitSwitchPolarity.kNormallyOpen);
 
   }
+  /**
+   * Gets the photo eye and prints it
+   */
   public void setSpeed(double speed){
     System.out.println(photoeye.get());
   }
