@@ -1,10 +1,3 @@
-/*----------------------------------------------------------------------------*/
-/* Copyright (c) 2019 FIRST. All Rights Reserved.                             */
-/* Open Source Software - may be modified and shared by FRC teams. The code   */
-/* must be accompanied by the FIRST BSD license file in the root directory of */
-/* the project.                                                               */
-/*----------------------------------------------------------------------------*/
-
 package frc.robot.SubSystems;
 
 import edu.wpi.first.wpilibj.AnalogGyro;
@@ -14,10 +7,12 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpiutil.math.MathUtil;
 import com.kauailabs.navx.frc.AHRS;
 import com.revrobotics.CANSparkMax;
+import com.revrobotics.EncoderType;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import frc.robot.Constants;
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import edu.wpi.first.wpilibj.Encoder;
+import edu.wpi.first.wpilibj.CounterBase.EncodingType;
 import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.SPI;
@@ -33,18 +28,25 @@ public class Drive extends SubsystemBase {
   private CANSparkMax mRightMaster;
   private CANSparkMax mRightMfollow1;
   private CANSparkMax mRightMfollow2;
+  //PID Controller
   private PIDController drivePidController;
 
-  
-  public double previousAngle = 0.0;
+  //current Angle
   public double currentAngle = 0.0;
 
-  
+  //Gyro Sensor
   private AnalogGyro gyro;
   private AHRS navX;
-
-  private DutyCycleEncoder absoluteEncoder;
+  //Encoders
+  private Encoder rightEncoder;
   private Encoder leftEncoder;
+  private double currentDistance = 0;
+  public double distance;
+  public double angle;
+  public double forwardSpeed;
+  public int PIDCheck = 0;
+  public boolean enableDrivePID = false;
+  
   private DigitalInput photoeye;
   
   public static Drive get_Instance(){
@@ -71,21 +73,45 @@ public class Drive extends SubsystemBase {
     mRightMfollow1.follow(mRightMaster);
     mRightMfollow2.follow(mRightMaster);
 
-    previousAngle = currentAngle;
-
     gyro = new AnalogGyro(0);
     navX = new AHRS(SPI.Port.kMXP);
-    absoluteEncoder = new DutyCycleEncoder(2);
-    leftEncoder = new Encoder(0, 1);
+    rightEncoder = new Encoder(3, 4, false, EncodingType.k4X);
+    leftEncoder = new Encoder(0, 1, false, EncodingType.k4X);
 
     gyro.calibrate();
 
     currentAngle = navX.getAngle();
 
     drivePidController = new PIDController(Constants.dKp, Constants.dKi, Constants.dKd);
-    
   }
-
+  public void enableDrivePIDF(){
+    enableDrivePID = true;
+  }
+  
+  public double navXAngle(){
+    double angle = navX.getAngle();
+    return angle;
+  }
+  public boolean checkDistance(){
+    boolean isAtDistance;
+    if(currentDistance < (distance + Constants.distanceTolerance) && currentDistance > (distance - Constants.distanceTolerance)){
+      isAtDistance = true;
+    }
+    else{
+      isAtDistance = false;
+    }
+    return isAtDistance;
+  }
+  public boolean checkAngle(){
+    boolean isAtAngle;
+    if((currentAngle < (angle + Constants.angleTolerance) && currentAngle > (angle - Constants.angleTolerance)) && Math.abs(navX.getRawGyroZ()) < 1){
+      isAtAngle = true;
+    }
+    else{
+      isAtAngle = false;
+    }
+    return isAtAngle;
+  }
   public double rate(double previousRate, double currentRate){
     double rate;
     rate = currentRate - previousRate;
@@ -98,22 +124,68 @@ public class Drive extends SubsystemBase {
     SmartDashboard.putNumber("speed", speed);
     setSpeed(-speed, speed);
   }
+  public void encoderReset(){
+    leftEncoder.reset();
+    rightEncoder.reset();
+    currentDistance = 0;
+  }
+  public void giveNums(double forwardSpeed, double angle, double distance){
+    this.distance = distance;
+    this.angle = angle;
+    this.forwardSpeed = forwardSpeed;
+    leftEncoder.reset();
+    rightEncoder.reset();
+    currentDistance = 0;
+    navXReset();
+  }
+  public void setDriveAuton(double forwardSpeed, double angle, double distance){
+    int negative;
+    if(distance < 0){
+      negative = -1;
+    }
+    else{
+      negative = 1;
+    }
+    if(Math.abs(currentDistance) < Math.abs(distance)){
+      if(Math.abs(distance) - Math.abs(currentDistance) > 24){
+    currentDistance = Constants.DisPerPulse * ((leftEncoder.get() + -1 * rightEncoder.get())/2);
+    setDriveToAngle(angle, (forwardSpeed));
+    }
+    else if(Math.abs(distance) - Math.abs(currentDistance) > 4){
+      currentDistance = Constants.DisPerPulse * ((leftEncoder.get() + -1 * rightEncoder.get())/2);
+      setDriveToAngle(angle,negative * -0.1);
+    }
+    else{
+      setDriveToAngle(angle, negative * -0.05);
+      currentDistance = Constants.DisPerPulse * ((leftEncoder.get() + -1 * rightEncoder.get())/2);
+    }
+  }
+    else{
+      setDriveRate(0);
+    }
+  }
   public void setDriveToAngle(double angle, double forwardspeed){
-    double error = angle - navX.getAngle();
+    double error =  angle - navX.getAngle();
     double absError = Math.abs(error);
     int negative;
-    
+    System.out.println(absError);
     if(error < 0){
       negative = -1;
     }
     else{
       negative = 1;
     }
-    if(absError > 20){
-    double rate = 2.5 * error;
+    if(absError > 15){
+    double rate = 5 * error;
     setArcDriveRate(rate, forwardspeed);
-    }
-    else if(absError < 2){
+    System.out.println(rate);
+
+    } 
+    else if(absError < 15 && absError > 10){
+      double rate = 100;
+      setArcDriveRate(negative * rate, forwardspeed);
+      } 
+    else if(absError < 1){
       setArcDriveRate(0, forwardspeed);
     }
     else{
@@ -130,6 +202,8 @@ public class Drive extends SubsystemBase {
 
   //set lefe and right motor speed.
   public void setSpeed(double left, double right){
+    SmartDashboard.putNumber("left motor value", left);
+    SmartDashboard.putNumber("right motor value", right);
     mLeftMaster.set(left);
     mRightMaster.set(-right);
   }
@@ -139,14 +213,32 @@ public class Drive extends SubsystemBase {
   @Override
   // This method will be called once per scheduler run
   public void periodic() {
-    SmartDashboard.putNumber("NavX Config", navX.getActualUpdateRate());
-    previousAngle = currentAngle;
+    if(enableDrivePID){
+     
+    if(PIDCheck == 1){
+      drive.setDriveAuton(forwardSpeed, angle, distance);
+    if(checkDistance()){
+      enableDrivePID = false;
+    }
+    }
+    else if(PIDCheck == 2){
+      setDriveToAngle(angle, 0);
+    if(checkAngle()){
+      enableDrivePID = false;
+    }
+    }
+    
+    else if(PIDCheck == 3){
+      drive.setDriveAuton(forwardSpeed, angle, distance);
+      if(checkAngle() && checkDistance()){
+        enableDrivePID = false;
+      }
+    }
+  }
     currentAngle = navX.getAngle();
-    SmartDashboard.putNumber("rate", navX.getYaw());
-    SmartDashboard.putNumber("gyroz", navX.getRawGyroZ());
-    SmartDashboard.putNumber("Accelration x", navX.getRawAccelX());
-    SmartDashboard.putNumber("Accelration y", navX.getRawAccelY());
     SmartDashboard.putNumber("Gyro Angle", navX.getAngle());
+    SmartDashboard.putNumber("left Encoder", rightEncoder.get());
+    SmartDashboard.putNumber("calc encoder", currentDistance);
 
   }
 }
