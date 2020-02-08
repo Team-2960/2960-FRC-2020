@@ -5,6 +5,9 @@ import edu.wpi.first.wpilibj.controller.PIDController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpiutil.math.MathUtil;
+
+import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.kauailabs.navx.frc.AHRS;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.EncoderType;
@@ -23,13 +26,16 @@ import frc.robot.Camera.Camera;
 public class Drive extends SubsystemBase {
   private static Drive drive;
   //motors
-  private CANSparkMax mLeftMaster;
+  /* private CANSparkMax mLeftMaster;
   private CANSparkMax mLeftFollow1;
   private CANSparkMax mLeftFollow2;
   
   private CANSparkMax mRightMaster;
   private CANSparkMax mRightMfollow1;
-  private CANSparkMax mRightMfollow2;
+  private CANSparkMax mRightMfollow2; */
+
+  private TalonSRX mLeftMaster = new TalonSRX(1);
+  private TalonSRX mRightMaster= new TalonSRX(2);
   //PID Controller
   private PIDController drivePidController;
 
@@ -60,7 +66,7 @@ public class Drive extends SubsystemBase {
     //init code
     camera = new Camera(0);
     //init all the motors
-    mLeftMaster = new CANSparkMax(Constants.mLeftMaster, MotorType.kBrushless);
+    /* mLeftMaster = new CANSparkMax(Constants.mLeftMaster, MotorType.kBrushless);
     mLeftFollow1 = new CANSparkMax(Constants.mLeftFollow1, MotorType.kBrushless);
     mLeftFollow2 = new CANSparkMax(Constants.mLeftFollow2, MotorType.kBrushless);
 
@@ -72,7 +78,7 @@ public class Drive extends SubsystemBase {
     mLeftFollow1.follow(mLeftMaster);
     mLeftFollow2.follow(mLeftMaster);
     mRightMfollow1.follow(mRightMaster);
-    mRightMfollow2.follow(mRightMaster);
+    mRightMfollow2.follow(mRightMaster); */
 
     //init gyro
     gyro = new AnalogGyro(0);
@@ -240,8 +246,10 @@ public class Drive extends SubsystemBase {
   public void setSpeed(double left, double right){
     SmartDashboard.putNumber("left motor value", left);
     SmartDashboard.putNumber("right motor value", right);
-    mLeftMaster.set(left);
-    mRightMaster.set(-right);
+    //mLeftMaster.set(left);
+    //mRightMaster.set(-right);
+    mRightMaster.set(ControlMode.PercentOutput, right);
+    mLeftMaster.set(ControlMode.PercentOutput, left);
   }
   public void adjustToTarget(){
     startGoToAngleDistance(0, cameraAngle, 0, 2);
