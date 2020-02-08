@@ -93,7 +93,7 @@ public class Pivot extends SubsystemBase{
 
       pTargetPivot = target;
 
-      trapezoidProfile = new TrapezoidProfile(new TrapezoidProfile.Constraints(-1000, -300), 
+      trapezoidProfile = new TrapezoidProfile(new TrapezoidProfile.Constraints(-2000, -1000), 
                                               new TrapezoidProfile.State(target, 0),
                                               new TrapezoidProfile.State(eArm.getDistance(), 0));
     }
