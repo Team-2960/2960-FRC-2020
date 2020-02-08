@@ -165,17 +165,15 @@ public class Drive extends SubsystemBase {
       negative = 1;
     }
     if(Math.abs(currentDistance) < Math.abs(distance)){
+      currentDistance = getDistanceInches((leftEncoder.get() + -1 * rightEncoder.get())/2);
       if(Math.abs(distance) - Math.abs(currentDistance) > 24){
-    currentDistance = Constants.DisPerPulse * ((leftEncoder.get() + -1 * rightEncoder.get())/2);
-    setDriveToAngle(angle, (forwardSpeed));
-    }
-    else if(Math.abs(distance) - Math.abs(currentDistance) > 4){
-      currentDistance = Constants.DisPerPulse * ((leftEncoder.get() + -1 * rightEncoder.get())/2);
-      setDriveToAngle(angle,negative * -0.1);
-    }
-    else{
-      setDriveToAngle(angle, negative * -0.05);
-      currentDistance = Constants.DisPerPulse * ((leftEncoder.get() + -1 * rightEncoder.get())/2);
+        setDriveToAngle(angle, (forwardSpeed));
+      }
+      else if(Math.abs(distance) - Math.abs(currentDistance) > 4){
+        setDriveToAngle(angle,negative * -0.1);
+      }
+      else{
+        setDriveToAngle(angle, negative * -0.05);
     }
   }
     else{
@@ -298,7 +296,7 @@ public class Drive extends SubsystemBase {
      * Gets the distance we have traveled since last encoder Reset
      * @return the encoder Distance in inches
      */
-    public double getDistanceInches(){
-      
+    public double getDistanceInches(double encoderVal){
+      return Constants.DisPerPulse * encoderVal;
     }
 }
