@@ -19,7 +19,7 @@ public class gotoAngle extends CommandGroup{
     @Override
     protected void initialize() {
         super.initialize();
-        drive.startGotoAngleDistance(0, angle, 0, 2);
+        drive.startGoToAngleDistance(0, angle, 0, 2);
     }
 
     /**

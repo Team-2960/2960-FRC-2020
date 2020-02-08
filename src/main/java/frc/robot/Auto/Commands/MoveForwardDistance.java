@@ -21,7 +21,7 @@ public class MoveForwardDistance extends CommandGroup{
     @Override
     protected void initialize() {
         super.initialize();
-        drive.startGotoAngleDistance(speed, angle, distance, 1);
+        drive.startGoToAngleDistance(speed, angle, distance, 1);
     }
 
     /**
