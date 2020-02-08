@@ -46,6 +46,19 @@ public class Constants{
     //view angles
     public static double horizontalViewAngle = 61;
     public static double verticalViewAngle = 20.55;
+
+
+    
+
+
+    
+    public static double deg_per_px = verticalViewAngle / cHeight;
+
+    public static double wheelDiam = 6;//in.
+    public static double pulsePerRev = 2048;
+    public static double DisPerPulse = (wheelDiam * Math.PI)/pulsePerRev;
+    public static double distanceTolerance = 2;
+    public static double angleTolerance = 1;
     
     
 }
