@@ -50,7 +50,7 @@ public class Pivot extends SubsystemBase{
         //encoder 
         eArm = new Encoder(4, 5, true, Encoder.EncodingType.k4X);
       
-        //Arm PID
+        //Arm PID Setup
         eArm.reset();
         eArm.setMaxPeriod(.1);
         eArm.setMinRate(10);
@@ -68,10 +68,12 @@ public class Pivot extends SubsystemBase{
         
 
     }
+    //Pivot Speed Function
     public void SetPivotSpeed(double speed){
-        mLeftPivot.set(speed);
-        mRightPivot.set(speed);
-      }
+      mLeftPivot.set(speed);
+      mRightPivot.set(speed);
+    }
+      //Pivot Speed Voltage
     public void SetPivotVoltage(double Voltage){
         mLeftPivot.setVoltage(Voltage);
         mRightPivot.setVoltage(Voltage);
@@ -128,7 +130,7 @@ public class Pivot extends SubsystemBase{
         pTargetPivot = 0;
       }
       
-      
+      //SmartDashBoard Update
       SmartDashboard.putNumber("Encoder ", eArm.getDistance());
       SmartDashboard.putNumber("Encoder rate ", EArm.getVelocity());
       SmartDashboard.putNumber("mSpeed ", mLeftPivot.get());
