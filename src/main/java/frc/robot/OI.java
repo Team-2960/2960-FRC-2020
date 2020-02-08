@@ -15,6 +15,7 @@ public class OI extends SubsystemBase{
     private Drive drive;
     private Shooter shooter;
     public Pivot pivot;
+    private Index index;
     
     private Camera camera;
 
@@ -32,7 +33,8 @@ public class OI extends SubsystemBase{
         //climb = Climb.get_Instance();
         //intake = Intake.get_Instance();
         //shooter = Shooter.get_Instance();
-        pivot = Pivot.get_Instance();
+        //pivot = Pivot.get_Instance();
+        index = Index.get_Instance();
 
         //joysticks
         driver_Control = new Joystick(Constants.driver_Control);
@@ -58,53 +60,86 @@ public class OI extends SubsystemBase{
                     shooter.setPIDShooterSpeed(0);
                 } */
                 
-                
-                
-        /* if(driver_Control.getRawButton(2)){
-            drive.setDriveToAngle((camera.calcAngle(camera.getCenterX())), -0.2);
-        } else if (joystick2.getRawButton(2)) {
-            drive.setArcDriveRate(-200 * joystick2.getRawAxis(0), -1 * driver_Control.getRawAxis(1));
-        } else if (driver_Control.getRawButton(1)) {
-            drive.setDriveToAngle(90, 0);
-        } else if (joystick2.getRawButton(1)){
-            drive.setDriveRate(200);
-        } else if (driver_Control.getRawButton(4)){
-            drive.setDriveRate(0);
-        } else if(driver_Control.getRawButton(3)){
-            drive.navXReset();
-        } else{
-            drive.setSpeed((driver_Control.getRawAxis(1)), (joystick2.getRawAxis(1)));
-        }  */
-                /* if(driver_Control.getRawAxis(1) == 0 && driver_Control.getRawAxis(5) == 0){
                 if(driver_Control.getRawButton(1)){
-                    if(Math.abs(gyro.getAngle()) < 26.4243){
-                        driver_Control.setRumble(RumbleType.kRightRumble, 1);
-                        driver_Control.setRumble(RumbleType.kLeftRumble, 1);
-                    }
-                    else{
-                            driver_Control.setRumble(RumbleType.kRightRumble, 0);
-                            driver_Control.setRumble(RumbleType.kLeftRumble, 0);
-                    }
-                drive.move(-cameraTurn, cameraTurn);
-                } */
-        /*         else{
-                    drive.move(0, 0);
+                    drive.giveNums(0, 90, 0);
+                    drive.enableDrivePIDF();
+                    drive.PIDCheck = 2;
+                }    
+    /*             else if(driver_Control.getRawButton(2)){
+                    drive.setDriveToAngle((camera.calcAngle(camera.getCenterX()) +  drive.navXAngle()), joystick2.getRawAxis(1));
                 }
-                } */
-            
+                else if(driver_Control.getRawButton(3)){
+                    drive.setDriveToAngle(0, 0);
+                } 
+                else if(driver_Control.getRawButton(4)){
+                    drive.setDrive(-0.5, 0, 75);
+                }
+                else if(driver_Control.getRawButton(5)){
+                    drive.setDriveToAngle((camera.calcAngle(camera.getCenterX()) +  drive.navXAngle()), joystick2.getRawAxis(1));
+                }*/
+                else if(joystick2.getRawButton(2)){
+                    drive.encoderReset();
+                }
+                else if(joystick2.getRawButton(1)){
+                    drive.navXReset();
+                }
+                else{
+                    drive.setSpeed((driver_Control.getRawAxis(1)), (joystick2.getRawAxis(1)));
+                }     
+            /* if(driver_Control.getRawButton(1)){
+                drive.setDriveToAngle((camera.calcAngle(camera.getCenterX()) +  drive.navXAngle()), joystick2.getRawAxis(1));
+            } else if (joystick2.getRawButton(2)) {
+                drive.setArcDriveRate(-200 * joystick2.getRawAxis(0), -1 * driver_Control.getRawAxis(1));
+            } else if (driver_Control.getRawButton(1)) {
+                drive.setDriveToAngle(90, joystick2.getRawAxis(1));
+            } else if (joystick2.getRawButton(1)){
+                drive.setDriveRate(200);
+            } else if (driver_Control.getRawButton(4)){
+                drive.setDriveRate(0);
+            } else if(driver_Control.getRawButton(3)){
+                drive.navXReset();
+            } else if(joystick2.getRawButton(3)){
+                drive.setDrive(-0.2, 0, 200);
+            } else if(joystick2.getRawButton(4)){
+                drive.encoderReset();
+            } else if(driver_Control.getRawButton(5)){
+                drive.setDriveToAngle(0, 0.05);
+            } else{
+                drive.setSpeed((driver_Control.getRawAxis(1)), (joystick2.getRawAxis(1)));
+            }  */
+                    /* if(driver_Control.getRawAxis(1) == 0 && driver_Control.getRawAxis(5) == 0){
+                    if(driver_Control.getRawButton(1)){
+                        if(Math.abs(gyro.getAngle()) < 26.4243){
+                            driver_Control.setRumble(RumbleType.kRightRumble, 1);
+                            driver_Control.setRumble(RumbleType.kLeftRumble, 1);
+                        }
+                        else{
+                                driver_Control.setRumble(RumbleType.kRightRumble, 0);
+                                driver_Control.setRumble(RumbleType.kLeftRumble, 0);
+                        }
+                    drive.move(-cameraTurn, cameraTurn);
+                    } */
+            /*         else{
+                        drive.move(0, 0);
+                    }
+                    } */        
     }
     //Operator control
     public void operator_Control(Joystick operator_Control){
-        if(operator_Control.getRawButton(2)){
+        /* if(operator_Control.getRawButton(2)){
             pivot.EnablePivotPID();
             pivot.setPTargetAngle(-40);
         }else if(operator_Control.getRawButton(1)){
             pivot.DisablePivotPID();
-        }
+        } */
         
         
-        pivot.SetPivotSpeed(operator_Control.getRawAxis(1));
+        //pivot.SetPivotSpeed(operator_Control.getRawAxis(1));
 
+    }
+    public void SmartDashboard(){
+        SmartDashboard.putNumber("calc angle", (camera.calcAngle(camera.getCenterX()) + drive.navXAngle()));
+        SmartDashboard.putNumber("togo angle", (camera.calcAngle(camera.getCenterX())));
     }
     public void periodic(){
         if(DriverStation.getInstance().isOperatorControl()){
