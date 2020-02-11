@@ -14,8 +14,6 @@ public class Constants{
     public final static int mRightMaster = 4;
     public final static int mRightMfollow1 = 5;
     public final static int mRightMfollow2 = 6;
-    //Intake motor
-    //Climb motor
 
     /**
      * Shooter motor
@@ -26,8 +24,24 @@ public class Constants{
     /**
      * Pivot Motor
      */
-    public final static int mLeftPivot = 11;
-    public final static int mRightPivot = 12;
+    public final static int mLeftPivot = 9;
+    public final static int mRightPivot = 10;
+
+    /**
+     * Intake motor
+     */
+    public final static int mIntake = 11;
+
+    /**
+     * Climb Motor
+     */
+    public final static int mClimb = 12;
+
+    /**
+     * Index Motor
+     */
+    public final static int mLeftIndex = 13;
+    public final static int mRightIndex = 14;
 
     /**
      * Pivot PID and feedForward control

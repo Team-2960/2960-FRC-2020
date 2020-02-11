@@ -7,12 +7,15 @@
 
 package frc.robot.SubSystems;
 
+import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.ctre.phoenix.motorcontrol.can.TalonFX;
+
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
 public class Climb extends SubsystemBase {
   private static Climb climb;
-
+  private TalonFX mClimb;
   
   /** 
    * @return Climb
@@ -25,7 +28,11 @@ public class Climb extends SubsystemBase {
   }
 
   private Climb() {
+    mClimb = new TalonFX(Constants.mClimb);
+  }
 
+  public void setSpeed(double speed){
+    mClimb.set(ControlMode.PercentOutput, speed);
   }
 
   @Override
