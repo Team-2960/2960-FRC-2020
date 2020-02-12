@@ -48,6 +48,10 @@ public class gotoAngle extends CommandBase {
         isFinish = drive.checkAngle();
     }
 
+    
+    /** 
+     * @param interrupt
+     */
     @Override
     public void end(boolean interrupt) {
         drive.setSpeed(0,0);

@@ -31,6 +31,10 @@ public class Climb extends SubsystemBase {
     mClimb = new TalonFX(Constants.mClimb);
   }
 
+  
+  /** 
+   * @param speed
+   */
   public void setSpeed(double speed){
     mClimb.set(ControlMode.PercentOutput, speed);
   }

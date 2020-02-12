@@ -47,6 +47,10 @@ public class AdjustToTarget extends CommandBase{
         isFinish = drive.checkAngle();
     }
 
+    
+    /** 
+     * @param interrupt
+     */
     @Override
     public void end(boolean interrupt) {
         drive.setSpeed(0,0);

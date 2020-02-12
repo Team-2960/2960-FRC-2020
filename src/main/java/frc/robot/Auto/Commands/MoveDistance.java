@@ -50,6 +50,10 @@ public class MoveDistance extends CommandBase{
         isFinish = drive.checkDistance();
     }
 
+    
+    /** 
+     * @param interrupt
+     */
     @Override
     public void end(boolean interrupt) {
        drive.setSpeed(0,0);
