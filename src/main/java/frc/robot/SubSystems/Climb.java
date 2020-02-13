@@ -10,12 +10,15 @@ package frc.robot.SubSystems;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
 
+import edu.wpi.first.wpilibj.DoubleSolenoid;
+import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
 public class Climb extends SubsystemBase {
   private static Climb climb;
   private TalonFX mClimb;
+  private DoubleSolenoid cSolenoid;
   
   /** 
    * @return Climb
@@ -38,6 +41,13 @@ public class Climb extends SubsystemBase {
   public void setSpeed(double speed){
     mClimb.set(ControlMode.PercentOutput, speed);
   }
+  public void setPosition(boolean setPosition){
+    if(setPosition){
+      cSolenoid.set(Value.kReverse); 
+    } else{
+      cSolenoid.set(Value.kForward);
+  }
+}
 
   @Override
   public void periodic() {

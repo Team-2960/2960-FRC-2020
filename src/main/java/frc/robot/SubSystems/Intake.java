@@ -10,12 +10,15 @@ package frc.robot.SubSystems;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
+import edu.wpi.first.wpilibj.DoubleSolenoid;
+import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
 public class Intake extends SubsystemBase {
   private static Intake intake;
   private CANSparkMax mIntake;
+  private DoubleSolenoid iSolenoid;
   
   /** 
    * @return Intake
@@ -27,6 +30,7 @@ public class Intake extends SubsystemBase {
     return intake;
   }
   private Intake() {
+    iSolenoid = new DoubleSolenoid(0, 1);
     mIntake = new CANSparkMax(Constants.mIntake, MotorType.kBrushless);
   }
 
@@ -37,6 +41,13 @@ public class Intake extends SubsystemBase {
   public void setSpeed(double speed){
     mIntake.set(speed);
   }
+  public void setPosition(boolean setPosition){
+    if(setPosition){
+      iSolenoid.set(Value.kReverse); 
+    } else{
+      iSolenoid.set(Value.kForward);
+  }
+}
 
   @Override
   public void periodic() {
