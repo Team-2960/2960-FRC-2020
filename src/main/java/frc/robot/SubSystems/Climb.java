@@ -41,6 +41,10 @@ public class Climb extends SubsystemBase {
   public void setSpeed(double speed){
     mClimb.set(ControlMode.PercentOutput, speed);
   }
+  
+  /** 
+   * @param setPosition
+   */
   public void setPosition(boolean setPosition){
     if(setPosition){
       cSolenoid.set(Value.kReverse); 

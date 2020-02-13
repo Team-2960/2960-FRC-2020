@@ -39,9 +39,13 @@ public class Index extends SubsystemBase {
     mLeftIndex.set(speed);
     mRightIndex.set(speed);
   }
-  public void index(double speed, int forward){
+  
+  /** 
+   * @param speed
+   */
+  public void index(double speed){
     if(photoeye.get()){
-      setSpeed(forward * speed);
+      setSpeed(speed);
     }
     else{
       setSpeed(0);

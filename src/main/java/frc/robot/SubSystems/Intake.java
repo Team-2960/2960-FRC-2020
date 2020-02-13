@@ -41,6 +41,10 @@ public class Intake extends SubsystemBase {
   public void setSpeed(double speed){
     mIntake.set(speed);
   }
+  
+  /** 
+   * @param setPosition
+   */
   public void setPosition(boolean setPosition){
     if(setPosition){
       iSolenoid.set(Value.kReverse); 
