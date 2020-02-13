@@ -9,6 +9,8 @@ import edu.wpi.first.wpiutil.math.MathUtil;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.kauailabs.navx.frc.AHRS;
+import com.revrobotics.AlternateEncoderType;
+import com.revrobotics.CANEncoder;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.EncoderType;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
@@ -41,8 +43,8 @@ public class Drive extends SubsystemBase {
   private AnalogGyro gyro;
   private AHRS navX;
   //Encoders
-  private Encoder rightEncoder;
-  private Encoder leftEncoder;
+  private CANEncoder rightEncoder;
+  private CANEncoder leftEncoder;
   private double currentDistance = 0;
   public double TargetDistance;
   public double TargetAngle;
@@ -88,8 +90,8 @@ public class Drive extends SubsystemBase {
     gyro.calibrate();
 
     //init encoder
-    rightEncoder = new Encoder(3, 4, false, EncodingType.k4X);
-    leftEncoder = new Encoder(0, 1, false, EncodingType.k4X);
+    rightEncoder = new CANEncoder(mRightMfollow2, AlternateEncoderType.kQuadrature, Constants.pulsePerRev);
+    leftEncoder = new CANEncoder(mLeftFollow2, AlternateEncoderType.kQuadrature, Constants.pulsePerRev);
 
     //init drive PID
     drivePidController = new PIDController(Constants.dKp, Constants.dKi, Constants.dKd);
@@ -149,8 +151,8 @@ public class Drive extends SubsystemBase {
    * Resets the encoders and the current distance wew are going
    */
   public void encoderReset(){
-    leftEncoder.reset();
-    rightEncoder.reset();
+    /* leftEncoder.;
+    rightEncoder.reset(); */
     currentDistance = 0;
   }
   /**
@@ -186,8 +188,8 @@ public class Drive extends SubsystemBase {
       negative = 1;
     }
     if(Math.abs(currentDistance) < Math.abs(distance)){
-      currentDistance = getDistanceInches((leftEncoder.get() + -1 * rightEncoder.get())/2);
-      if(Math.abs(distance) - Math.abs(currentDistance) > 24){
+/*       currentDistance = getDistanceInches((leftEncoder.get() + -1 * rightEncoder.get())/2);
+ */      if(Math.abs(distance) - Math.abs(currentDistance) > 24){
         setDriveToAngle(angle, (forwardSpeed));
       }
       else if(Math.abs(distance) - Math.abs(currentDistance) > 4){
@@ -269,6 +271,7 @@ public class Drive extends SubsystemBase {
   @Override
   // This method will be called once per scheduler run
   public void periodic() {
+    System.out.println(rightEncoder.getPosition());
     if(isDrivePIDEnabled){
      
     if(PIDCheck == 1){
@@ -292,8 +295,8 @@ public class Drive extends SubsystemBase {
     }
   }
     SmartDashboard.putNumber("Gyro Angle", navX.getAngle());
-    SmartDashboard.putNumber("left Encoder", rightEncoder.get());
-    SmartDashboard.putNumber("calc encoder", currentDistance);
+/*     SmartDashboard.putNumber("left Encoder", rightEncoder.get());
+ */    SmartDashboard.putNumber("calc encoder", currentDistance);
     cameraAngle = (camera.calcAngle(camera.getCenterX()) +  navX.getAngle());
   }
 

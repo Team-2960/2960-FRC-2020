@@ -96,7 +96,7 @@ public class Constants{
     /**
      * the pulses per revolution on the drive train encoders
      */
-    public static double pulsePerRev = 2048;
+    public static int pulsePerRev = 2048;
     /**
      * The Distance per pulses
      */
