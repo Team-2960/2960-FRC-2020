@@ -285,6 +285,10 @@ public class Drive extends SubsystemBase {
     mLeftMaster.set(left);
     mRightMaster.set(-right);
   }
+  
+  /** 
+   * @return double
+   */
   public double encoderPosition(){
     return (leftEncoder.getPosition() + rightEncoder.getPosition()) / 2;
   }
