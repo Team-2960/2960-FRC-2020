@@ -96,11 +96,11 @@ public class Constants{
     /**
      * the pulses per revolution on the drive train encoders
      */
-    public static int pulsePerRev = 2048;
+    public static int pulsePerRev = 8192;
     /**
      * The Distance per pulses
      */
-    public static double DisPerPulse = (wheelDiam * Math.PI)/pulsePerRev;
+    public static double wheelcircumference = (wheelDiam * Math.PI);
     /**
      * The Tolerance for target distance
      */
