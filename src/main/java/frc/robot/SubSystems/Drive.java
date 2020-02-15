@@ -42,7 +42,7 @@ public class Drive extends SubsystemBase {
   public double forwardSpeed;
   public int PIDCheck = 0;
   public boolean isDrivePIDEnabled = false;
-  private Camera camera;
+  private static Camera camera;
   public double cameraAngle = 0;
   
   
@@ -59,7 +59,7 @@ public class Drive extends SubsystemBase {
 
   private Drive() {
     //init code
-    camera = new Camera(0);
+    camera = Camera.get_Instance();
     //init all the motors
     mLeftMaster = new CANSparkMax(Constants.mLeftMaster, MotorType.kBrushless);
     mLeftFollow1 = new CANSparkMax(Constants.mLeftFollow1, MotorType.kBrushless);
@@ -122,6 +122,9 @@ public class Drive extends SubsystemBase {
       isAtAngle = false;
     }
     return isAtAngle;
+  }
+  public void targetLineUp(){
+    setDriveToAngle(camera.calcAngle(camera.getCenterX()) +  navX.getAngle(), 0);
   }
 
   /**

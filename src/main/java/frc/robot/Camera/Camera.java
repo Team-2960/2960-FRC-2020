@@ -10,7 +10,7 @@ import frc.robot.Constants;
 import edu.wpi.first.wpilibj.Timer;
 public class Camera{
 	//init code
-	public UsbCamera camera;
+	public UsbCamera USBcamera;
 	private CvSink cam_sink;
 	private Thread visionThread;
 	private Timer timer;
@@ -33,23 +33,31 @@ public class Camera{
 	//may be keep
 	public double turningSpeed = 0.0;
 	public double targetRatio = 0.0;
-	
+
+	//camera 
+	public static Camera camera;
+	public static Camera get_Instance(){
+		if(camera != null){
+			camera = new Camera(Constants.cameraPort);
+		}
+		return camera;
+	}
 	/**
 	 * Constructor
 	 * @param cameraPort
 	 */
-	public Camera(int cameraPort){
+	private Camera(int cameraPort){
 		//init camera
 		timer = new Timer();
-		camera = CameraServer.getInstance().startAutomaticCapture(cameraPort);
-		if(camera != null){
+		USBcamera = CameraServer.getInstance().startAutomaticCapture(cameraPort);
+		
 			//send to smartdash board
-			camera.setResolution(Constants.cWidth, Constants.cHeight);
-			camera.setFPS(30);
+			USBcamera.setResolution(Constants.cWidth, Constants.cHeight);
+			USBcamera.setFPS(30);
 			cam_sink = CameraServer.getInstance().getVideo();
 			hsv_threashold_source = CameraServer.getInstance().putVideo("HSV Threshold", Constants.cWidth, Constants.cWidth);
 			erode_source = CameraServer.getInstance().putVideo("Erode", Constants.cWidth, Constants.cWidth);
-		}
+		
 
 		IMG_LOCK = new Object();
 		startThread();

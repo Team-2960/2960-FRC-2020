@@ -25,7 +25,7 @@ public class OI extends SubsystemBase{
 
     public OI(){
         //Init Classes
-        camera = new Camera(0);
+        camera = Camera.get_Instance();
         //drive = Drive.get_Instance();
         //climb = Climb.get_Instance();
         //intake = Intake.get_Instance();
