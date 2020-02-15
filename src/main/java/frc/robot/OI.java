@@ -44,11 +44,37 @@ public class OI extends SubsystemBase{
      * @param joystick2 joystick 2
      */
     public void driver_Control(Joystick driver_Control, Joystick joystick2){
-        
         if(driver_Control.getRawButton(1)){
+            index.setSpeed(0.4);
+        }
+        else if(driver_Control.getRawButton(1)){
+            climb.setPosition(true);
+        }
+        else if(driver_Control.getRawButton(2)){
+            climb.setSpeed(0.4);
+        }
+        else if(driver_Control.getRawButton(3)){
+            intake.setSpeed(0.4);
+        }
+        else if(driver_Control.getRawButton(4)){
+            intake.setPosition(true);
+        }
+        else if(driver_Control.getRawButton(5)){
+            shooter.setShooterSpeed(0.4);
+        }
+        else if(driver_Control.getRawButton(6)){
+            pivot.SetPivotSpeed(driver_Control.getRawAxis(1));
+        }
+        else if(driver_Control.getRawButton(7)){
+            pivot.DisablePivotPID();
+        } 
+        else{
+            drive.setSpeed(driver_Control.getRawAxis(1), joystick2.getRawAxis(1));
+        }
+/*         if(driver_Control.getRawButton(1)){
             //Drive forawrd speed, angle and targetDistance
             drive.startGoToAngleDistance(0, 90, 0, 2);
-        }    
+        }     */
     /*             else if(driver_Control.getRawButton(2)){
             drive.setDriveToAngle((camera.calcAngle(camera.getCenterX()) +  drive.navXAngle()), joystick2.getRawAxis(1));
         }
@@ -61,7 +87,7 @@ public class OI extends SubsystemBase{
         else if(driver_Control.getRawButton(5)){
             drive.setDriveToAngle((camera.calcAngle(camera.getCenterX()) +  drive.navXAngle()), joystick2.getRawAxis(1));
         }*/
-        else if(joystick2.getRawButton(2)){
+/*         else if(joystick2.getRawButton(2)){
             drive.encoderReset();
         }
         else if(joystick2.getRawButton(1)){
@@ -69,19 +95,14 @@ public class OI extends SubsystemBase{
         }
         else{
             drive.setSpeed((driver_Control.getRawAxis(1)), (driver_Control.getRawAxis(5)));
-        }          
+        }    */       
     }
     /**
      * Operator control
      * @param operator_Control operator control joystick
      */
     public void operator_Control(Joystick operator_Control){
-        /* if(operator_Control.getRawButton(2)){
-            pivot.EnablePivotPID();
-            pivot.setPTargetAngle(-40);
-        }else if(operator_Control.getRawButton(1)){
-            pivot.DisablePivotPID();
-        } */
+        
         
         
         //pivot.SetPivotSpeed(operator_Control.getRawAxis(1));
