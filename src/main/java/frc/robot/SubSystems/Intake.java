@@ -18,7 +18,7 @@ import frc.robot.Constants;
 public class Intake extends SubsystemBase {
   private static Intake intake;
   private CANSparkMax mIntake;
-  private DoubleSolenoid iSolenoid;
+  private DoubleSolenoid sIntake;
   
   /** 
    * @return Intake
@@ -30,7 +30,7 @@ public class Intake extends SubsystemBase {
     return intake;
   }
   private Intake() {
-    iSolenoid = new DoubleSolenoid(0, 1);
+    sIntake = new DoubleSolenoid(Constants.IntakeSolenoid1, Constants.IntakeSolenoid2);
     mIntake = new CANSparkMax(Constants.mIntake, MotorType.kBrushless);
   }
 
@@ -45,14 +45,14 @@ public class Intake extends SubsystemBase {
   /** 
    * @param setPosition
    */
-  public void setPosition(boolean setPosition){
-    if(setPosition){
-      iSolenoid.set(Value.kReverse); 
-    } else{
-      iSolenoid.set(Value.kForward);
+  public void setPosition(int state){
+    if(state == 0)
+      sIntake.set(Value.kForward);
+    else if(state == 1)
+      sIntake.set(Value.kReverse);
+    else
+      sIntake.set(Value.kOff);
   }
-}
-
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
