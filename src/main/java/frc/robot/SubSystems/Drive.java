@@ -4,22 +4,12 @@ import edu.wpi.first.wpilibj.AnalogGyro;
 import edu.wpi.first.wpilibj.controller.PIDController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import edu.wpi.first.wpiutil.math.MathUtil;
-
-import com.ctre.phoenix.motorcontrol.ControlMode;
-import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.kauailabs.navx.frc.AHRS;
 import com.revrobotics.AlternateEncoderType;
 import com.revrobotics.CANEncoder;
 import com.revrobotics.CANSparkMax;
-import com.revrobotics.EncoderType;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import frc.robot.Constants;
-import edu.wpi.first.wpilibj.DutyCycleEncoder;
-import edu.wpi.first.wpilibj.Encoder;
-import edu.wpi.first.wpilibj.CounterBase.EncodingType;
-import edu.wpi.first.wpilibj.SPI;
-import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.SPI;
 import frc.robot.Camera.Camera;
 
@@ -45,9 +35,10 @@ public class Drive extends SubsystemBase {
   //Encoders
   private CANEncoder rightEncoder;
   private CANEncoder leftEncoder;
-  private double currentDistance = 0;
+
   public double TargetDistance;
   public double TargetAngle;
+
   public double forwardSpeed;
   public int PIDCheck = 0;
   public boolean isDrivePIDEnabled = false;
@@ -90,8 +81,12 @@ public class Drive extends SubsystemBase {
     gyro.calibrate();
 
     //init encoder
-    rightEncoder = new CANEncoder(mRightMfollow2, AlternateEncoderType.kQuadrature, Constants.pulsePerRev);
-    leftEncoder = new CANEncoder(mLeftFollow2, AlternateEncoderType.kQuadrature, Constants.pulsePerRev);
+    rightEncoder = mRightMfollow2.getAlternateEncoder(AlternateEncoderType.kQuadrature, Constants.pulsePerRev);
+    rightEncoder.setPositionConversionFactor(Constants.wheelcircumference);
+    rightEncoder.setPosition(0);
+    leftEncoder = mRightMfollow2.getAlternateEncoder(AlternateEncoderType.kQuadrature, Constants.pulsePerRev);
+    leftEncoder.setPositionConversionFactor(Constants.wheelcircumference);
+    leftEncoder.setPosition(0);
 
     //init drive PID
     drivePidController = new PIDController(Constants.dKp, Constants.dKi, Constants.dKd);
@@ -104,7 +99,8 @@ public class Drive extends SubsystemBase {
    */
   public boolean checkDistance(){
     boolean isAtDistance;
-    if(currentDistance < (TargetDistance + Constants.distanceTolerance) && currentDistance > (TargetDistance - Constants.distanceTolerance)){
+    double error = Math.abs(encoderPosition() - TargetDistance);
+    if(error < Constants.distanceTolerance){
       isAtDistance = true;
     }
     else{
@@ -118,24 +114,14 @@ public class Drive extends SubsystemBase {
    */
   public boolean checkAngle(){
     boolean isAtAngle;
-    if((getAngle() < (TargetAngle + Constants.angleTolerance) && getAngle() > (TargetAngle - Constants.angleTolerance)) && Math.abs(navX.getRawGyroZ()) < 1){
+    double error = Math.abs(getAngle() - TargetAngle);
+    if(error < Constants.angleTolerance){
       isAtAngle = true;
     }
     else{
       isAtAngle = false;
     }
     return isAtAngle;
-  }
-  
-  /** 
-   * @param previousRate
-   * @param currentRate
-   * @return double
-   */
-  public double rate(double previousRate, double currentRate){
-    double rate;
-    rate = currentRate - previousRate;
-    return rate;
   }
 
   /**
@@ -146,14 +132,6 @@ public class Drive extends SubsystemBase {
     double speed = drivePidController.calculate(navX.getRawGyroZ(), rate); //calc the speed
     SmartDashboard.putNumber("speed", speed);
     setSpeed(-speed, speed);
-  }
-  /**
-   * Resets the encoders and the current distance wew are going
-   */
-  public void encoderReset(){
-    /* leftEncoder.;
-    rightEncoder.reset(); */
-    currentDistance = 0;
   }
   /**
    * gives the PID the numbers that we want to be going
@@ -180,25 +158,21 @@ public class Drive extends SubsystemBase {
    * @param distance sets the target distance we should be going
    */
   public void setDriveAuton(double forwardSpeed, double angle, double distance){
-    int negative;
-    if(distance < 0){
-      negative = -1;
-    }
-    else{
-      negative = 1;
-    }
-    if(Math.abs(currentDistance) < Math.abs(distance)){
-/*       currentDistance = getDistanceInches((leftEncoder.get() + -1 * rightEncoder.get())/2);
- */      if(Math.abs(distance) - Math.abs(currentDistance) > 24){
+    int negative = (distance < 0) ? -1 : 1;
+
+    double abscurrentposition = Math.abs(encoderPosition());
+
+    if(abscurrentposition < Math.abs(distance)){
+      if(Math.abs(distance) - abscurrentposition > 24){
         setDriveToAngle(angle, (forwardSpeed));
       }
-      else if(Math.abs(distance) - Math.abs(currentDistance) > 4){
+      else if(Math.abs(distance) - abscurrentposition > 4){
         setDriveToAngle(angle,negative * -0.1);
       }
       else{
         setDriveToAngle(angle, negative * -0.05);
+      }
     }
-  }
     else{
       setDriveRate(0);
     }
@@ -247,20 +221,54 @@ public class Drive extends SubsystemBase {
     SmartDashboard.putNumber("speed", speed);
     setSpeed(-speed + forwardSpeed, speed + forwardSpeed);
   }
-
-  /**
-   * Sets the speed that the motors are going
-   * @param left left motor speed
-   * @param right right motor speed
-   */
-  public void setSpeed(double left, double right){
-    SmartDashboard.putNumber("left motor value", left);
-    SmartDashboard.putNumber("right motor value", right);
-    mLeftMaster.set(left);
-    mRightMaster.set(-right);
-  }
   public void adjustToTarget(){
     startGoToAngleDistance(0, cameraAngle, 0, 2);
+  }
+
+  @Override
+  // This method will be called once per scheduler run
+  public void periodic() {
+    if(isDrivePIDEnabled){
+      if(PIDCheck == 1){
+        drive.setDriveAuton(forwardSpeed, TargetAngle, TargetDistance);
+        if(checkDistance()){
+          isDrivePIDEnabled = false;
+        }
+      }
+      else if(PIDCheck == 2){
+        setDriveToAngle(TargetAngle, 0);
+        if(checkAngle()){
+          isDrivePIDEnabled = false;
+        }
+      }
+      else if(PIDCheck == 3){
+        drive.setDriveAuton(forwardSpeed, TargetAngle, TargetDistance);
+        if(checkAngle() && checkDistance()){
+          isDrivePIDEnabled = false;
+        }
+      }
+  }
+    cameraAngle = (camera.calcAngle(camera.getCenterX()) +  navX.getAngle());
+  }
+
+  /**
+   * Enables the Drive PID
+   */
+  public void enableDrivePID(){
+    isDrivePIDEnabled = true;
+  }
+  /**
+   * Disables the drive PID
+   */
+  public void disableDrivePID(){
+    isDrivePIDEnabled = false;
+  }
+  /**
+   * gets the angle of the NavX
+   * @return the angle of the NavX
+   */
+  public double getAngle(){
+    return navX.getAngle();
   }
   /**
    * Resets the NavX
@@ -268,62 +276,27 @@ public class Drive extends SubsystemBase {
   public void navXReset(){
     navX.reset();
   }
-  @Override
-  // This method will be called once per scheduler run
-  public void periodic() {
-    System.out.println(rightEncoder.getPosition());
-    if(isDrivePIDEnabled){
-     
-    if(PIDCheck == 1){
-      drive.setDriveAuton(forwardSpeed, TargetAngle, TargetDistance);
-    if(checkDistance()){
-      isDrivePIDEnabled = false;
-    }
-    }
-    else if(PIDCheck == 2){
-      setDriveToAngle(TargetAngle, 0);
-    if(checkAngle()){
-      isDrivePIDEnabled = false;
-    }
-    }
-    
-    else if(PIDCheck == 3){
-      drive.setDriveAuton(forwardSpeed, TargetAngle, TargetDistance);
-      if(checkAngle() && checkDistance()){
-        isDrivePIDEnabled = false;
-      }
-    }
+  /**
+   * Sets the speed that the motors are going
+   * @param left left motor speed
+   * @param right right motor speed
+   */
+  public void setSpeed(double left, double right){
+    mLeftMaster.set(left);
+    mRightMaster.set(-right);
   }
-    SmartDashboard.putNumber("Gyro Angle", navX.getAngle());
-/*     SmartDashboard.putNumber("left Encoder", rightEncoder.get());
- */    SmartDashboard.putNumber("calc encoder", currentDistance);
-    cameraAngle = (camera.calcAngle(camera.getCenterX()) +  navX.getAngle());
+  
+  /** 
+   * @return double
+   */
+  public double encoderPosition(){
+    return (leftEncoder.getPosition() + rightEncoder.getPosition()) / 2;
   }
-
-    /**
-     * Enables the Drive PID
-     */
-    public void enableDrivePID(){
-      isDrivePIDEnabled = true;
-    }
-    /**
-     * Disables the drive PID
-     */
-    public void disableDrivePID(){
-      isDrivePIDEnabled = false;
-    }
-    /**
-     * gets the angle of the NavX
-     * @return the angle of the NavX
-     */
-    public double getAngle(){
-      return navX.getAngle();
-    }
-    /**
-     * Gets the distance we have traveled since last encoder Reset
-     * @return the encoder Distance in inches
-     */
-    public double getDistanceInches(double encoderVal){
-      return Constants.DisPerPulse * encoderVal;
-    }
+  /**
+   * Resets the encoders and the current distance wew are going
+   */
+  public void encoderReset(){
+    leftEncoder.setPosition(0);
+    rightEncoder.setPosition(0);
+  }
 }
