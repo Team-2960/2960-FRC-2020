@@ -18,7 +18,7 @@ import frc.robot.Constants;
 public class Climb extends SubsystemBase {
   private static Climb climb;
   private TalonFX mClimb;
-  private DoubleSolenoid cSolenoid;
+  private DoubleSolenoid sClimb;
   
   /** 
    * @return Climb
@@ -32,6 +32,7 @@ public class Climb extends SubsystemBase {
 
   private Climb() {
     mClimb = new TalonFX(Constants.mClimb);
+    sClimb = new DoubleSolenoid(Constants.ClimbSolenoid1, Constants.ClimbSolenoid2);
   }
 
   
@@ -43,15 +44,16 @@ public class Climb extends SubsystemBase {
   }
   
   /** 
-   * @param setPosition
+   * @param state
    */
-  public void setPosition(boolean setPosition){
-    if(setPosition){
-      cSolenoid.set(Value.kReverse); 
-    } else{
-      cSolenoid.set(Value.kForward);
-  }
-}
+    public void setPosition(int state){
+      if(state == 0)
+        sClimb.set(Value.kForward);
+      else if(state == 1)
+        sClimb.set(Value.kReverse);
+      else
+        sClimb.set(Value.kOff);
+    }
 
   @Override
   public void periodic() {

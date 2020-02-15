@@ -17,6 +17,10 @@ public class Index extends SubsystemBase {
   private CANSparkMax mRightIndex;
   private CANSparkMax mLeftIndex;
 
+  private int isIndexEnabled = 0;
+
+  private int balls; // not very important
+
   /** 
    * @return Index
    */
@@ -39,22 +43,35 @@ public class Index extends SubsystemBase {
     mLeftIndex.set(speed);
     mRightIndex.set(speed);
   }
-  
-  /** 
-   * @param speed
-   */
-  public void index(double speed){
-    if(photoeye.get()){
-      setSpeed(speed);
-    }
-    else{
-      setSpeed(0);
-    }
+  public void startIndexIn(){
+      if(photoeye.get())
+        setSpeed(0.5);
+      else
+        setSpeed(0);
   }
+  public void startIndexOut(){
+    if(!photoeye.get())
+      setSpeed(-0.5);
+    else
+      setSpeed(0);
+}
 
   @Override
   public void periodic() {
     // This method will be called once per scheduler run 
-    System.out.println(photoeye.get());
+    if(isIndexEnabled == 1){
+      startIndexIn();
+    }else if(isIndexEnabled == -1){
+      startIndexOut();
+    }else{
+      setSpeed(0);
+    }
+  }
+
+  public void enableIndex(int dirction){
+    isIndexEnabled = dirction;
+  }
+  public void disableIndex(){
+    isIndexEnabled = 0;
   }
 }
