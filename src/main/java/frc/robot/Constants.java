@@ -89,6 +89,9 @@ public class Constants{
 
     public final static int cameraPort = 0;
 
+    public final static int pabsEncoder = 0;
+    public final static int pEncoder1 = 1;
+    public final static int pEncoder2 = 2;
 
 
     /**
