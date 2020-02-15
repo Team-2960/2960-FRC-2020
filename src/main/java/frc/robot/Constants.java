@@ -78,37 +78,43 @@ public class Constants{
     /**
      * view angles
      */
-    public static double horizontalViewAngle = 61;
-    public static double verticalViewAngle = 20.55;
+    public final static double horizontalViewAngle = 61;
+    public final static double verticalViewAngle = 20.55;
 
 
-    
+    public final static int IntakeSolenoid1 = 0;
+    public final static int IntakeSolenoid2 = 1;
+    public final static int ClimbSolenoid1 = 2;
+    public final static int ClimbSolenoid2 = 3;
+
+    public final static int cameraPort = 0;
+
 
 
     /**
      * The degrees per pixel on the Microsoft Life Cam HD -3000
      */
-    public static double deg_per_px = verticalViewAngle / cHeight;
+    public final static double deg_per_px = verticalViewAngle / cHeight;
     /**
      * The diameter of the drive train wheels
      */
-    public static double wheelDiam = 6;//in.
+    public final static double wheelDiam = 6;
     /**
      * the pulses per revolution on the drive train encoders
      */
-    public static int pulsePerRev = 8192;
+    public final static int pulsePerRev = 8192;
     /**
      * The Distance per pulses
      */
-    public static double wheelcircumference = (wheelDiam * Math.PI);
+    public final static double wheelcircumference = (wheelDiam * Math.PI);
     /**
      * The Tolerance for target distance
      */
-    public static double distanceTolerance = 2;
+    public final static double distanceTolerance = 2;
     /**
      * The tolerance for the target angle
      */
-    public static double angleTolerance = 1;
+    public final static double angleTolerance = 1;
     
     
 }

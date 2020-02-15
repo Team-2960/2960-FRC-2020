@@ -10,12 +10,11 @@ public class Shooter extends SubsystemBase{
     //shooter motor
     private TalonFX mLeftShooter;
     private TalonFX mRightShooter;
+
     //pid value will move to constants later.
     double kp = 0.033,
            ki = 0.000045,
            kd = 0.01;
-
-    
     
     /** 
      * @return Shooter
