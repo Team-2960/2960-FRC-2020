@@ -44,14 +44,14 @@ public class MEGAShooter extends SubsystemBase {
   }
   public void intakeEnable(){
       intake.setPosition(down);
-      pivot.gotToAngle(intake);
+      pivot.setTargetPAngle(intake);
       shooter.setPIDShooterSpeed(intake);
       intake.setSpeed(in);
       index.enableIndex(1);
   }
   public void intakeDisable(){
     intake.setSpeed(off);
-    pivot.goToAngle(neutural);
+    pivot.setTargetPAngle(neutural);
     intake.setPosition(up);
     index.disableIndex();
   }
@@ -64,7 +64,6 @@ public class MEGAShooter extends SubsystemBase {
   public void disableShoot(){
     index.disableIndex();
     shooter.setPIDShooterSpeed(0);
-    pivot.goToAngle(neutural);
   }
   
   @Override
