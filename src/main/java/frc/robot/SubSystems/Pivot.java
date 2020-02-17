@@ -14,9 +14,12 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpiutil.math.MathUtil;
 import frc.robot.Constants;
+import frc.robot.Util.Trapezoid;
+import frc.robot.Camera.*;
 
 public class Pivot extends SubsystemBase{
     public static Pivot pivot;
+    private Camera camera = Camera.get_Instance();
     //Pivot motor
     private CANSparkMax mLeftPivot;
     private CANSparkMax mRightPivot;
@@ -26,8 +29,11 @@ public class Pivot extends SubsystemBase{
     private ArmFeedforward armfeedforward;
 
     private boolean isPivotEnabled = false;
-    private double pTargetPivot;
-    
+
+    private Trapezoid trapezoid;  
+    private double pivotTarget;
+
+    private boolean isFront = true;
     //encoder
     private Encoder pEncoder;
     private DutyCycleEncoder pabsEncoder;
@@ -58,9 +64,6 @@ public class Pivot extends SubsystemBase{
         armfeedforward = new ArmFeedforward(Constants.pKs, Constants.pKcos, Constants.pKv, Constants.pKa);
 
         mRightPivot.setInverted(true);
-
-        
-
     }
     /**
      * Set the motor speed
@@ -93,31 +96,25 @@ public class Pivot extends SubsystemBase{
      * @param target set target
      */
     public void setPTargetAngle(double target){
-      pTargetPivot = target;
+      EnablePivotPID();
+      pivotTarget = target;
+      trapezoid = new Trapezoid(1, 325, -100, -2000, 2000, pabsEncoder.getDistance(), target, pEncoder.getRate(), -200, -200);
     }
   
     /**
      * go to target angle
      * @param angle
      */
-    private void gotoAngle(double Angle){
+    private void gotoAngle(){
+      double rate = trapezoid.trapezoidCalc(pabsEncoder.getDistance());
+      SetPivotPIDRate(rate);
+    }
+    
+    public boolean atPivotTarget(){
+      double error = pEncoder.getDistance() - pivotTarget;
+      return error < Constants.angleTolerance;
+    }
 
-    }
-  
-    /**
-     * enable the pivot pid
-     */
-    public void EnablePivotPID(){
-        isPivotEnabled = true;
-    }
-    /**
-     * disable the pivot pid
-     */
-    public void DisablePivotPID(){
-      isPivotEnabled = false;
-      pTargetPivot = 0;
-      SetPivotSpeed(0);
-    }
     public void smartdashboard(){
 
     }
@@ -129,10 +126,34 @@ public class Pivot extends SubsystemBase{
       // This method will be called once per scheduler run
       //enable pivot PID
       if(isPivotEnabled){
-        gotoAngle(pTargetPivot);
+          gotoAngle();
       }
-      else{
-        pTargetPivot = 0;
+      if(!camera.isTargetFound() || !(pabsEncoder.getDistance() < 100 || pabsEncoder.getDistance() > 180)){
+        //
+      }else{
+        //pivot to target
       }
     }
+
+  /**
+   * enable the pivot pid
+   */
+  public void EnablePivotPID(){
+    isPivotEnabled = true;
+  }
+  /**
+   * disable the pivot pid
+   */
+  public void DisablePivotPID(){
+    isPivotEnabled = false;
+    pivotTarget = 0;
+    SetPivotSpeed(0);
+  }
+
+  public void isFront(){
+    isFront = true;
+  }
+  public void isBack(){
+    isFront = false;
+  }
 }
