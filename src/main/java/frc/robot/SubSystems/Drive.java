@@ -230,6 +230,10 @@ public class Drive extends SubsystemBase {
   @Override
   // This method will be called once per scheduler run
   public void periodic() {
+    SmartDashboard.putNumber("Right Encoder", rightEncoder.getPosition());
+    SmartDashboard.putNumber("Left Encoder", leftEncoder.getPosition());
+    SmartDashboard.putNumber("Angle", navX.getAngle());
+
     if(isDrivePIDEnabled){
       if(PIDCheck == 1){
         drive.setDriveAuton(forwardSpeed, TargetAngle, TargetDistance);

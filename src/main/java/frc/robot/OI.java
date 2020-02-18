@@ -19,9 +19,9 @@ public class OI extends SubsystemBase{
     private Camera camera;
     private MEGAShooter mShooter;
     //Joysticks
-    private Joystick driver_Control;
+    private Joystick driver_Control_Right;
     private Joystick operator_Control;
-    private Joystick joystick2;
+    private Joystick driver_Control_left;
 
 
     public OI(){
@@ -35,8 +35,8 @@ public class OI extends SubsystemBase{
         //index = Index.get_Instance();
         //mShooter = MEGAShooter.get_Instance();
         //joysticks
-        driver_Control = new Joystick(Constants.driver_Control);
-        joystick2 = new Joystick(1);
+        driver_Control_Left = new Joystick(Constants.driver_Control_Right);
+        driver_Control_Right = new Joystick(Constants.driver_Control_Left);
         operator_Control = new Joystick(Constants.operator_Control);
     }
     /**
@@ -44,34 +44,58 @@ public class OI extends SubsystemBase{
      * @param driver_Control joystick 1
      * @param joystick2 joystick 2
      */
-    public void driver_Control(Joystick driver_Control, Joystick joystick2){
-        if(intakeInEnabled()){
-            // Intake In
+    public void driver_Control(Joystick driver_Control_Right, Joystick driver_Control_Left){
+        if(driver_Control_Right.getRawButton(1)){
+            //Climb set position extend
+            climb.setPosition(0);
+        }
+        else if(driver_Control_Right.getRawButton(2)){
+            //climb set position retract
+            climb.setPosition(1);
+        }
+        else if(driver_Control_Right.getRawButton(3)){
+            //index speed in
             index.setSpeed(0.4);
         }
-        else if(intakeOutEnabled()){
-            // Intake Out
+        else if(driver_Control_Right.getRawButton(4)){
+            //index speed out
             index.setSpeed(-0.4);
         }
-        else if(setPivotTrenchHeight()){
-            // set pivot to intake position
-            pivot.setPTargetAngle(Constants.intakePivotAngle);
+        else if(driver_Control_Right.getRawButton(5)){
+            //intake speed in
+            intake.setSpeed(0.4);
         }
-        else if(shootOutEnable()){
-            // shoot the balls
-            mShooter.shoot();
+        else if(driver_Control_Right.getRawButton(6)){
+            //intake speed out
+            intake.setSpeed(-0.4);
         }
-        else if(targetAlignDrive()){
-            // line up the drive train to the target
-            drive.targetLineUp();
+        else if(driver_Control_Right.getRawButton(7)){
+            //pivot speed
+            pivot.SetPivotSpeed(0.4);
         }
-        else if(targetPivotAlign()){
-            // line the pivot up to the target
-            pivot.pivotToTarget();
+        else if(driver_Control_Right.getRawButton(8)){
+            //pivot speed
+            pivot.SetPivotSpeed(-0.4);
+        }
+        else if(driver_Control_Right.getRawButton(9)){
+            //shooter speed
+            shooter.setShooterSpeed(0.4);
+        }
+        else if(driver_Control_Right.getRawButton(10)){
+            //shooter speed
+            shooter.setShooterSpeed(-0.4);
+        }
+        else if(driver_Control_Right.getRawButton(11)){
+            //intake position up
+            intake.setPosition(0);
+        }
+        else if(driver_Control_Right.getRawButton(12)){
+            //intake position down
+            intake.setPosition(1);
         }
         else{
             // drive
-            drive.setSpeed(driver_Control.getRawAxis(1), joystick2.getRawAxis(1));
+            drive.setSpeed(driver_Control_Right.getRawAxis(1), driver_Control_Left.getRawAxis(1));
         }   
     }
 

@@ -169,6 +169,7 @@ public class Pivot extends SubsystemBase{
      * run every time
      */
     public void periodic() {
+      SmartDashboard.putNumber("Encoder Value Degrees", pEncoder.getDistance());
       // This method will be called once per scheduler run
       //enable pivot PID
       double distance = camera.getTargetDistance();
