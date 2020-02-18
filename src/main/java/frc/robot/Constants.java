@@ -122,5 +122,37 @@ public class Constants{
      * The front neutural angle
      */
     public final static double neuturalPosFront = 60;
-    
+    /**
+     * The front neutural angle
+     */
+    public final static double neuturalPosBack = 120;
+    /**
+     * Neutural Pos window
+     */
+    public final static double frontWindowMin = 20;
+    public final static double frontWindowMax = 180;
+    public final static double backWindowMin = 200;
+    public final static double backWindowMax = 270;
+    /**
+     * Pivot angle and speed table in feet
+     * first is distance 
+     * second is angle
+     * third is speed
+     */
+    public final static double pivotTable [] [] = {
+                                                {1, 180, 180, 4000},
+                                                {1.5, 160, 160, 4000},
+                                                {2, 140, 140, 4000},
+                                                {2.5, 120, 120, 4000},
+                                                {3, 100, 100, 4000},
+                                                {3.5, 80, 80, 4000},
+                                                {4, 60, 60, 4000},
+                                                {4.5, 40, 40, 4000},
+                                                {5, 20, 20, 4000}
+
+                                                };
+    public final static double intakeSpeedIn = 0.4;
+    public final static double intakeSpeedOut = -0.4;
+    public final static double intakePivotAngle = 30;
+    public final static double intakeShooterSpeed = -500;
 }

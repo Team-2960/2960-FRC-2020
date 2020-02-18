@@ -21,6 +21,7 @@ public class MEGAShooter extends SubsystemBase {
   public Pivot pivot;
   private Index index;
   private Camera camera;
+
   /** 
    * @return megaShooter
    */
@@ -30,6 +31,7 @@ public class MEGAShooter extends SubsystemBase {
     } 
     return megaShooter;
   }
+
 /**
  * MEGAShooter costructor
  */
@@ -42,22 +44,23 @@ public class MEGAShooter extends SubsystemBase {
     index = Index.get_Instance();
 
   }
+
   public void intakeEnable(){
-      intake.setPosition(down);
-      pivot.setTargetPAngle(intake);
-      shooter.setPIDShooterSpeed(intake);
-      intake.setSpeed(in);
+      intake.setPosition(1);
+      pivot.setPTargetAngle(Constants.intakePivotAngle);
+      shooter.setPIDShooterSpeed(Constants.intakeShooterSpeed);
+      intake.setSpeed(Constants.intakeSpeedIn);
       index.enableIndex(1);
   }
   public void intakeDisable(){
-    intake.setSpeed(off);
-    pivot.setTargetPAngle(neutural);
-    intake.setPosition(up);
+    intake.setSpeed(0);
+    pivot.setPTargetAngle(pivot.frontOrBack());
+    intake.setPosition(0);
     index.disableIndex();
   }
-  public void shoot(boolean forward){
-    shooter.setPIDShooterSpeed();
-    if(shooter.checkAtRate()){
+  public void shoot(){
+    shooter.setPIDShooterSpeed(Constants.pivotTable[2][pivot.i]);
+    if(shooter.readyToShoot(Constants.pivotTable[2][pivot.i])){
       index.enableIndex(-1);
     }
   }

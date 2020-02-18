@@ -7,6 +7,7 @@ import com.ctre.phoenix.motorcontrol.ControlMode;
 
 public class Shooter extends SubsystemBase{
     private static Shooter shooter;
+    
     //shooter motor
     private TalonFX mLeftShooter;
     private TalonFX mRightShooter;
@@ -89,4 +90,15 @@ public class Shooter extends SubsystemBase{
       mRightShooter.set(ControlMode.Velocity, speed);
       mLeftShooter.set(ControlMode.Velocity, speed);
     }
+    public boolean readyToShoot(double targetRate){
+      boolean readyToShoot = false;
+      if(mLeftShooter.getSelectedSensorVelocity() > targetRate){
+        readyToShoot = true;
+      }
+      return readyToShoot;
+    }
+    public void periodic() {
+      
+    }
+
 }

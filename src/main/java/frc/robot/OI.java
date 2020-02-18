@@ -17,6 +17,7 @@ public class OI extends SubsystemBase{
     public Pivot pivot;
     private Index index;
     private Camera camera;
+    private MEGAShooter mShooter;
     //Joysticks
     private Joystick driver_Control;
     private Joystick operator_Control;
@@ -32,7 +33,7 @@ public class OI extends SubsystemBase{
         //shooter = Shooter.get_Instance();
         //pivot = Pivot.get_Instance();
         //index = Index.get_Instance();
-
+        //mShooter = MEGAShooter.get_Instance();
         //joysticks
         driver_Control = new Joystick(Constants.driver_Control);
         joystick2 = new Joystick(1);
@@ -44,65 +45,52 @@ public class OI extends SubsystemBase{
      * @param joystick2 joystick 2
      */
     public void driver_Control(Joystick driver_Control, Joystick joystick2){
-        if(driver_Control.getRawButton(1)){
+        if(intakeInEnabled()){
+            // Intake In
             index.setSpeed(0.4);
         }
-        else if(driver_Control.getRawButton(1)){
-            climb.setPosition(true);
+        else if(intakeOutEnabled()){
+            // Intake Out
+            index.setSpeed(-0.4);
         }
-        else if(driver_Control.getRawButton(2)){
-            climb.setSpeed(0.4);
+        else if(setPivotTrenchHeight()){
+            // set pivot to intake position
+            pivot.setPTargetAngle(Constants.intakePivotAngle);
         }
-        else if(driver_Control.getRawButton(3)){
-            intake.setSpeed(0.4);
+        else if(shootOutEnable()){
+            // shoot the balls
+            mShooter.shoot();
         }
-        else if(driver_Control.getRawButton(4)){
-            intake.setPosition(true);
+        else if(targetAlignDrive()){
+            // line up the drive train to the target
+            drive.targetLineUp();
         }
-        else if(driver_Control.getRawButton(5)){
-            shooter.setShooterSpeed(0.4);
+        else if(targetPivotAlign()){
+            // line the pivot up to the target
+            pivot.pivotToTarget();
         }
-        else if(driver_Control.getRawButton(6)){
-            pivot.SetPivotSpeed(driver_Control.getRawAxis(1));
-        }
-        else if(driver_Control.getRawButton(7)){
-            pivot.DisablePivotPID();
-        } 
         else{
+            // drive
             drive.setSpeed(driver_Control.getRawAxis(1), joystick2.getRawAxis(1));
-        }
-/*         if(driver_Control.getRawButton(1)){
-            //Drive forawrd speed, angle and targetDistance
-            drive.startGoToAngleDistance(0, 90, 0, 2);
-        }     */
-    /*             else if(driver_Control.getRawButton(2)){
-            drive.setDriveToAngle((camera.calcAngle(camera.getCenterX()) +  drive.navXAngle()), joystick2.getRawAxis(1));
-        }
-        else if(driver_Control.getRawButton(3)){
-            drive.setDriveToAngle(0, 0);
-        } 
-        else if(driver_Control.getRawButton(4)){
-            drive.setDrive(-0.5, 0, 75);
-        }
-        else if(driver_Control.getRawButton(5)){
-            drive.setDriveToAngle((camera.calcAngle(camera.getCenterX()) +  drive.navXAngle()), joystick2.getRawAxis(1));
-        }*/
-/*         else if(joystick2.getRawButton(2)){
-            drive.encoderReset();
-        }
-        else if(joystick2.getRawButton(1)){
-            drive.navXReset();
-        }
-        else{
-            drive.setSpeed((driver_Control.getRawAxis(1)), (driver_Control.getRawAxis(5)));
-        }    */       
+        }   
     }
+
     /**
      * Operator control
      * @param operator_Control operator control joystick
      */
     public void operator_Control(Joystick operator_Control){
-        
+        if(operator_Control.getRawButton(4)){
+            pivot.setpivotDirection(true);
+        }
+        else{
+            pivot.setpivotDirection(true);
+        }
+        if(operator_Control.getRawButton(5)){
+            pivot.cameraTrackingEnabled = true;
+        }else{
+            pivot.cameraTrackingEnabled = false;
+        }
         
         
         //pivot.SetPivotSpeed(operator_Control.getRawAxis(1));
@@ -114,6 +102,8 @@ public class OI extends SubsystemBase{
     public void SmartDashboard(){
         SmartDashboard.putNumber("calc angle", (camera.calcAngle(camera.getCenterX()) + drive.getAngle()));
         SmartDashboard.putNumber("togo angle", (camera.calcAngle(camera.getCenterX())));
+        SmartDashboard.putNumber("", (camera.calcAngle(camera.getCenterX())));
+
     }
     /**
      * Run every time
@@ -124,4 +114,27 @@ public class OI extends SubsystemBase{
             driver_Control(driver_Control, joystick2);
         }
     }
+
+    // Driver Control Outline
+    private boolean intakeInEnabled(){
+        return driver_Control.getRawButton(1);
+    }
+    private boolean intakeOutEnabled(){
+        return driver_Control.getRawButton(2);
+    }
+    private boolean setPivotTrenchHeight(){
+        return driver_Control.getRawButton(3);
+    }
+    private boolean shootOutEnable(){
+        return driver_Control.getRawButton(4);
+    }
+    private boolean targetAlignDrive(){
+        return driver_Control.getRawButton(5);
+    }
+    private boolean targetPivotAlign(){
+        return driver_Control.getRawButton(6);
+    }
+
+    // Operator Control Outline
+
 }

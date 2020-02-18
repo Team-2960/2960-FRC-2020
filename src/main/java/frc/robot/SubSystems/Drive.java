@@ -221,7 +221,6 @@ public class Drive extends SubsystemBase {
    */
   public void setArcDriveRate(double rate, double forwardSpeed){
     double speed = drivePidController.calculate(navX.getRawGyroZ(), rate); //calc the speed
-    SmartDashboard.putNumber("speed", speed);
     setSpeed(-speed + forwardSpeed, speed + forwardSpeed);
   }
   public void adjustToTarget(){

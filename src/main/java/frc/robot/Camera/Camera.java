@@ -34,6 +34,8 @@ public class Camera{
 	public double turningSpeed = 0.0;
 	public double targetRatio = 0.0;
 
+	public double distance;
+
 	//camera 
 	public static Camera camera;
 	public static Camera get_Instance(){
@@ -105,6 +107,7 @@ public class Camera{
 			double Lheight = 0.0;
 			double LTurningSpeed = 0.0;
 			double LtargetRatio = 0.0;
+			double lDistance;
 
 			//Run this code as long as the thread is not interrupted
 			while(!Thread.interrupted()){
@@ -149,8 +152,9 @@ public class Camera{
 						
 						lTargetFound = false;
 					}
-					
+					lDistance = distanceCalc(height);
 					synchronized(IMG_LOCK){
+						// TODO get rd of the values we dont use
 						targetFound = lTargetFound;
 						centerX = LcenterX;
 						centerY = LcenterY;
@@ -158,6 +162,7 @@ public class Camera{
 						height = Lheight;
 						turningSpeed = LTurningSpeed;
 						targetRatio = LtargetRatio;
+						distance = lDistance;
 
 					}
 					//Output to smartdash board - It may not like having this inside the thread
@@ -209,6 +214,11 @@ public class Camera{
 			return height;
 		}
 	}
+	public double getTargetDistance(){
+		synchronized(IMG_LOCK){
+			return distance;
+		}
+	}
 	/**
 	 * return synchronized ratio
 	 * @return Ratio
@@ -248,5 +258,11 @@ public class Camera{
         SmartDashboard.putNumber("Constants.hsvThresholdSaturationMax", Constants.hsvThresholdSaturation[1]);
         SmartDashboard.putNumber("Constants.hsvThresholdValueMin", Constants.hsvThresholdValue[0]);
 		SmartDashboard.putNumber("Constants.hsvThresholdValueMax", Constants.hsvThresholdValue[1]);
+		SmartDashboard.getNumber("Constants.hsvThresholdHueMin", Constants.hsvThresholdHue[0]);
+        SmartDashboard.getNumber("Constants.hsvThresholdHueMax", Constants.hsvThresholdHue[1]);
+        SmartDashboard.getNumber("Constants.hsvThresholdSaturationMin", Constants.hsvThresholdSaturation[0]);
+        SmartDashboard.getNumber("Constants.hsvThresholdSaturationMax", Constants.hsvThresholdSaturation[1]);
+        SmartDashboard.getNumber("Constants.hsvThresholdValueMin", Constants.hsvThresholdValue[0]);
+		SmartDashboard.getNumber("Constants.hsvThresholdValueMax", Constants.hsvThresholdValue[1]);
 	}
 }

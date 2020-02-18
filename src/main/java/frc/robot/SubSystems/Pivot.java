@@ -19,6 +19,7 @@ import frc.robot.Camera.*;
 
 public class Pivot extends SubsystemBase{
     public static Pivot pivot;
+    public int i = 0;
     private Camera camera = Camera.get_Instance();
     //Pivot motor
     private CANSparkMax mLeftPivot;
@@ -29,11 +30,11 @@ public class Pivot extends SubsystemBase{
     private ArmFeedforward armfeedforward;
 
     private boolean isPivotEnabled = false;
-
+    public boolean cameraTrackingEnabled =false;
     private Trapezoid trapezoid;  
     private double pivotTarget;
-
-    private boolean isFront = true;
+    public static boolean isPivotFront;
+    public static int lookUpPos;
     //encoder
     private Encoder pEncoder;
     private DutyCycleEncoder pabsEncoder;
@@ -64,6 +65,15 @@ public class Pivot extends SubsystemBase{
         armfeedforward = new ArmFeedforward(Constants.pKs, Constants.pKcos, Constants.pKv, Constants.pKa);
 
         mRightPivot.setInverted(true);
+    }
+    public void setpivotDirection(boolean front){
+      isPivotFront = front;
+      if(front){
+        lookUpPos = 1;
+      }
+      else{
+        lookUpPos = 2;
+      }
     }
     /**
      * Set the motor speed
@@ -97,8 +107,10 @@ public class Pivot extends SubsystemBase{
      */
     public void setPTargetAngle(double target){
       EnablePivotPID();
-      pivotTarget = target;
-      trapezoid = new Trapezoid(1, 325, -100, -2000, 2000, pabsEncoder.getDistance(), target, pEncoder.getRate(), -200, -200);
+      if(pivotTarget != target){
+        pivotTarget = target;
+        trapezoid = new Trapezoid(1, 325, -100, -2000, 2000, pabsEncoder.getDistance(), target, pEncoder.getRate(), -200, -200);
+      }
     }
   
     /**
@@ -114,7 +126,41 @@ public class Pivot extends SubsystemBase{
       double error = pEncoder.getDistance() - pivotTarget;
       return error < Constants.angleTolerance;
     }
-
+    public boolean pivotInWindow(){
+      boolean isInWindow = false;
+      if(isPivotFront){
+        if(pabsEncoder.getDistance() > Constants.frontWindowMin && pabsEncoder.getDistance() < Constants.frontWindowMax){
+          isInWindow = true;
+        }
+      }
+      else{
+        if(pabsEncoder.getDistance() > Constants.backWindowMin && pabsEncoder.getDistance() < Constants.backWindowMax){
+          isInWindow = true;
+        }
+      }
+      return isInWindow;
+    }
+    public double frontOrBack(){
+      double neuturalPos;
+      if(isPivotFront){
+        neuturalPos = Constants.neuturalPosFront;
+      }
+      else{
+        neuturalPos = Constants.neuturalPosBack;
+      }
+      return neuturalPos;
+    }
+    public void pivotToTarget(){
+      if(cameraTrackingEnabled){
+        if(!pivotInWindow() || !camera.isTargetFound()){
+            setPTargetAngle(frontOrBack());
+        }    
+        
+        else{
+          setPTargetAngle(Constants.pivotTable[i][lookUpPos]);
+        }
+      }
+    }
     public void smartdashboard(){
 
     }
@@ -125,14 +171,28 @@ public class Pivot extends SubsystemBase{
     public void periodic() {
       // This method will be called once per scheduler run
       //enable pivot PID
+      double distance = camera.getTargetDistance();
+      if(cameraTrackingEnabled){
+        i=0;
+        while(distance > Constants.pivotTable[i][0] && i < Constants.pivotTable.length){
+          i++; 
+        }
+        double under = distance - Constants.pivotTable[i][0];
+        double above = distance - Constants.pivotTable[i + 1][0];
+        if(above< under){
+          i = i + 1;
+        }
+      }
+  
+      
       if(isPivotEnabled){
           gotoAngle();
       }
-      if(!camera.isTargetFound() || !(pabsEncoder.getDistance() < 100 || pabsEncoder.getDistance() > 180)){
+  /*     if(!camera.isTargetFound() || !(pabsEncoder.getDistance() < 100 || pabsEncoder.getDistance() > 180)){
         //
       }else{
         //pivot to target
-      }
+      } */
     }
 
   /**
@@ -150,10 +210,4 @@ public class Pivot extends SubsystemBase{
     SetPivotSpeed(0);
   }
 
-  public void isFront(){
-    isFront = true;
-  }
-  public void isBack(){
-    isFront = false;
-  }
 }

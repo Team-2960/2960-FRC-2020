@@ -46,14 +46,18 @@ public class Index extends SubsystemBase {
   public void startIndexIn(){
       if(photoeye.get())
         setSpeed(0.5);
-      else
+      else{
         setSpeed(0);
+        balls++;
+      }
   }
   public void startIndexOut(){
     if(!photoeye.get())
       setSpeed(-0.5);
-    else
+    else{
       setSpeed(0);
+      balls--;
+    }
 }
 
   @Override
@@ -66,6 +70,7 @@ public class Index extends SubsystemBase {
     }else{
       setSpeed(0);
     }
+    SmartDashboard.putNumber("Balls in Robot", balls);
   }
 
   public void enableIndex(int dirction){
