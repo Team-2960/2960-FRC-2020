@@ -46,27 +46,75 @@ public class OI extends SubsystemBase{
      * @param joystick2 joystick 2
      */
     public void driver_Control(Joystick driver_Control_Right, Joystick driver_Control_Left){
-        drive.setSpeed(/* joystick */, /* joystick */);
+        if(driver_Control_Right.getRawButton(1)){
+            //Climb set position extend
+            climb.setPosition(0);
+        }
+        else if(driver_Control_Right.getRawButton(2)){
+            //climb set position retract
+            climb.setPosition(1);
+        }
+        else{
+            climb.setPosition(3);
+        }
+        if(driver_Control_Right.getRawButton(3)){
+            //index speed in
+            index.setSpeed(0.4);
+        }
+        else if(driver_Control_Right.getRawButton(4)){
+            //index speed out
+            index.setSpeed(-0.4);
+        }
+        else{
+            index.setSpeed(0);
+        }
+        if(driver_Control_Right.getRawButton(5)){
+            //intake speed in
+            intake.setSpeed(0.4);
+        }
+        else if(driver_Control_Right.getRawButton(6)){
+            //intake speed out
+            intake.setSpeed(-0.4);
+        }
+        else{
+            intake.setSpeed(0);
+        }
 
-        if(/* button */)
-            mShooter.intakeEnable();
-        else if(/* button */)
-            mShooter.intakeDisable();
-        else
-
-        if(/* button */)
-            pivot.setPTargetAngle(/* tranch */);
-        if(/* button */)
-            pivot.setPTargetAngle(/* intake */);
-        if(/* button */)
-            mShooter.shoot();
-        if(/* button */)
-            drive.targetLineUp();
-        if(/* button */)
-            pivot.cameraTrackingEnabled = true;
-        else
-            pivot.cameraTrackingEnabled = false;
-            
+        if(driver_Control_Right.getRawButton(7)){
+            //pivot speed
+            pivot.SetPivotSpeed(0.4);
+        }
+        else if(driver_Control_Right.getRawButton(8)){
+            //pivot speed
+            pivot.SetPivotSpeed(-0.4);
+        }
+        else{
+            pivot.SetPivotSpeed(0);
+        }
+        if(driver_Control_Right.getRawButton(9)){
+            //shooter speed
+            shooter.setShooterSpeed(0.4);
+        }
+        else if(driver_Control_Right.getRawButton(10)){
+            //shooter speed
+            shooter.setShooterSpeed(-0.4);
+        }
+        else{
+            shooter.setShooterSpeed(0);
+        }
+        if(driver_Control_Right.getRawButton(11)){
+            //intake position up
+            intake.setPosition(0);
+        }
+        else if(driver_Control_Right.getRawButton(12)){
+            //intake position down
+            intake.setPosition(1);
+        }
+        else{
+            intake.setPosition(3);
+        }
+            // drive
+            drive.setSpeed(driver_Control_Right.getRawAxis(1), driver_Control_Left.getRawAxis(1));            
     }   
 
     /**
@@ -74,25 +122,7 @@ public class OI extends SubsystemBase{
      * @param operator_Control operator control joystick
      */
     public void operator_Control(Joystick operator_Control){
-        //preset
-        //intake pos climb pos
         
-        
-        if(operator_Control.getRawButton(4)){
-            pivot.setpivotDirection(true);
-        }
-        else{
-            pivot.setpivotDirection(true);
-        }
-        if(/* button */){
-            pivot.cameraTrackingEnabled = true;
-        }else{
-            pivot.cameraTrackingEnabled = false;
-        }
-        
-        
-        //pivot.SetPivotSpeed(operator_Control.getRawAxis(1));
-
     }
     /**
      * put to smartdashboard
@@ -112,27 +142,5 @@ public class OI extends SubsystemBase{
             driver_Control(driver_Control_Left, driver_Control_Right);
         }
     }
-
-    // Driver Control Outline
-    private boolean intakeInEnabled(){
-        return driver_Control.getRawButton(1);
-    }
-    private boolean intakeOutEnabled(){
-        return driver_Control.getRawButton(2);
-    }
-    private boolean setPivotTrenchHeight(){
-        return driver_Control.getRawButton(3);
-    }
-    private boolean shootOutEnable(){
-        return driver_Control.getRawButton(4);
-    }
-    private boolean targetAlignDrive(){
-        return driver_Control.getRawButton(5);
-    }
-    private boolean targetPivotAlign(){
-        return driver_Control.getRawButton(6);
-    }
-
-    // Operator Control Outline
 
 }
