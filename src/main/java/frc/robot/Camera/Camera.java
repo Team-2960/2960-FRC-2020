@@ -6,7 +6,6 @@ import frc.robot.Constants;
 import edu.wpi.cscore.*;
 import org.opencv.core.*;
 import org.opencv.imgproc.Imgproc;
-import frc.robot.Constants;
 import edu.wpi.first.wpilibj.Timer;
 public class Camera{
 	//init code
@@ -28,13 +27,13 @@ public class Camera{
 
 	//the width and the height of the vision type
 	private double  width = 0.0;
-	public double height = 0.0;
+	private double height = 0.0;
 
 	//may be keep
-	public double turningSpeed = 0.0;
-	public double targetRatio = 0.0;
+	
 
 	public double distance;
+
 
 	//camera 
 	public static Camera camera;
@@ -105,8 +104,6 @@ public class Camera{
 			double LcenterY;
 			double Lwidth = 0.0;
 			double Lheight = 0.0;
-			double LTurningSpeed = 0.0;
-			double LtargetRatio = 0.0;
 			double lDistance;
 
 			//Run this code as long as the thread is not interrupted
@@ -138,15 +135,10 @@ public class Camera{
 						//Did we find a target? Record center value
 							LcenterX = (double) tempRec.width/2 + tempRec.x;
 							LcenterY = (double) tempRec.height/2 + tempRec.y;
-								LtargetRatio = (double) tempRec.height/tempRec.width;
 
-								Lwidth = (double) tempRec.width;
-								Lheight = (double) tempRec.height;
-								double distancePixels;
-								double p = 0.005;
-								distancePixels = LcenterX - Constants.cWidth;
-								
-								LTurningSpeed = (distancePixels * p);
+							Lwidth = (double) tempRec.width;
+							Lheight = (double) tempRec.height;
+							
 							lTargetFound = true;
 					}else{
 						
@@ -160,8 +152,6 @@ public class Camera{
 						centerY = LcenterY;
 						width = Lwidth;
 						height = Lheight;
-						turningSpeed = LTurningSpeed;
-						targetRatio = LtargetRatio;
 						distance = lDistance;
 
 					}
@@ -220,24 +210,6 @@ public class Camera{
 		}
 	}
 	/**
-	 * return synchronized ratio
-	 * @return Ratio
-	 */
-	public double getImageResultsTurningSpeed(){
-		synchronized(IMG_LOCK){
-			return turningSpeed;
-		}
-	}
-	/**
-	 * return synchronized ratio
-	 * @return Ratio
-	 */
-	public double getImageResultsTargetRatio(){
-		synchronized(IMG_LOCK){
-			return targetRatio;
-		}
-	}
-	/**
 	 * return synchronized is target found or not
 	 * @return target found or not
 	 */
@@ -258,11 +230,17 @@ public class Camera{
         SmartDashboard.putNumber("Constants.hsvThresholdSaturationMax", Constants.hsvThresholdSaturation[1]);
         SmartDashboard.putNumber("Constants.hsvThresholdValueMin", Constants.hsvThresholdValue[0]);
 		SmartDashboard.putNumber("Constants.hsvThresholdValueMax", Constants.hsvThresholdValue[1]);
-		SmartDashboard.getNumber("Constants.hsvThresholdHueMin", Constants.hsvThresholdHue[0]);
-        SmartDashboard.getNumber("Constants.hsvThresholdHueMax", Constants.hsvThresholdHue[1]);
-        SmartDashboard.getNumber("Constants.hsvThresholdSaturationMin", Constants.hsvThresholdSaturation[0]);
-        SmartDashboard.getNumber("Constants.hsvThresholdSaturationMax", Constants.hsvThresholdSaturation[1]);
-        SmartDashboard.getNumber("Constants.hsvThresholdValueMin", Constants.hsvThresholdValue[0]);
-		SmartDashboard.getNumber("Constants.hsvThresholdValueMax", Constants.hsvThresholdValue[1]);
+	}
+	public void CameraConfig(){
+		Constants.hsvThresholdHue[0] = SmartDashboard.getNumber("Constants.hsvThresholdHueMin", Constants.hsvThresholdHue[0]);
+        Constants.hsvThresholdHue[1] = SmartDashboard.getNumber("Constants.hsvThresholdHueMax", Constants.hsvThresholdHue[1]);
+        Constants.hsvThresholdSaturation[0] = SmartDashboard.getNumber("Constants.hsvThresholdSaturationMin", Constants.hsvThresholdSaturation[0]);
+        Constants.hsvThresholdSaturation[1] = SmartDashboard.getNumber("Constants.hsvThresholdSaturationMax", Constants.hsvThresholdSaturation[1]);
+        Constants.hsvThresholdValue[0] = SmartDashboard.getNumber("Constants.hsvThresholdValueMin", Constants.hsvThresholdValue[0]);
+		Constants.hsvThresholdValue[1] = SmartDashboard.getNumber("Constants.hsvThresholdValueMax", Constants.hsvThresholdValue[1]);
+	}
+	public void update(){
+		SmartDashboard();
+		CameraConfig();
 	}
 }

@@ -14,7 +14,7 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
 public class Robot extends TimedRobot {
   private OI oi;
   private LEDs leds;
-
+  private Camera camera = Camera.get_Instance();
   @Override
   public void robotInit() {
     oi = new OI();
@@ -40,6 +40,7 @@ public class Robot extends TimedRobot {
     // TODO Auto-generated method stub
     super.robotPeriodic();
     CommandScheduler.getInstance().run();
+    camera.update();
     
   }
 

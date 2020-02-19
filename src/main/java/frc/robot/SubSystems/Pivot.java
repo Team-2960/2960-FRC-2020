@@ -84,18 +84,10 @@ public class Pivot extends SubsystemBase{
       mRightPivot.set(speed);
     }
     /**
-     * set the motor voltage
-     * @param Voltage set voltage
-     */
-    public void SetPivotVoltage(double Voltage){
-        mLeftPivot.setVoltage(Voltage);
-        mRightPivot.setVoltage(Voltage);
-    }
-    /**
      * set the motor rate with pid
      * @param rate target rate
      */
-    public void SetPivotPIDRate(double rate){
+    private void SetPivotPIDRate(double rate){
         double pid_output = aPidController.calculate(pEncoder.getRate(), rate);
         double feedforward = armfeedforward.calculate(pabsEncoder.getDistance(), 0) / RobotController.getBatteryVoltage();
         double speed = pid_output + feedforward;

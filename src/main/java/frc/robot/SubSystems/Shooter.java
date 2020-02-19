@@ -1,5 +1,6 @@
 package frc.robot.SubSystems;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import com.ctre.phoenix.motorcontrol.can.*;
@@ -11,6 +12,8 @@ public class Shooter extends SubsystemBase{
     //shooter motor
     private TalonFX mLeftShooter;
     private TalonFX mRightShooter;
+
+    private double targetRate = 0;
 
     //pid value will move to constants later.
     double kp = 0.033,
@@ -90,12 +93,21 @@ public class Shooter extends SubsystemBase{
       mRightShooter.set(ControlMode.Velocity, speed);
       mLeftShooter.set(ControlMode.Velocity, speed);
     }
-    public boolean readyToShoot(double targetRate){
+    public void gotoRate(double rate){
+      targetRate = rate;
+      setPIDShooterSpeed(rate);
+    }
+    public boolean readyToShoot(){
       boolean readyToShoot = false;
-      if(mLeftShooter.getSelectedSensorVelocity() > targetRate){
+      double error = Math.abs((mRightShooter.getSelectedSensorVelocity() + mLeftShooter.getSelectedSensorVelocity()) / 2 - targetRate);
+      if(error < 200){
         readyToShoot = true;
       }
       return readyToShoot;
+    }
+
+    public void SmartDashBoard(){
+      SmartDashboard.putNumber("shooter encoder", mRightShooter.getSelectedSensorVelocity());
     }
     public void periodic() {
       

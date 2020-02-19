@@ -7,8 +7,6 @@
 
 package frc.robot.SubSystems;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import com.ctre.phoenix.motorcontrol.ControlMode;
-import com.ctre.phoenix.motorcontrol.can.TalonFX;
 import frc.robot.SubSystems.*;
 import frc.robot.Constants;
 import frc.robot.Camera.Camera;
@@ -18,7 +16,7 @@ public class MEGAShooter extends SubsystemBase {
   private Intake intake;
   private Drive drive;
   private Shooter shooter;
-  public Pivot pivot;
+  private Pivot pivot;
   private Index index;
   private Camera camera;
 
@@ -60,7 +58,7 @@ public class MEGAShooter extends SubsystemBase {
   }
   public void shoot(){
     shooter.setPIDShooterSpeed(Constants.pivotTable[2][pivot.i]);
-    if(shooter.readyToShoot(Constants.pivotTable[2][pivot.i])){
+    if(shooter.readyToShoot()){
       index.enableIndex(-1);
     }
   }

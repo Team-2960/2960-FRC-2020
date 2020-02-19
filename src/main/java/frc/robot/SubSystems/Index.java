@@ -58,8 +58,12 @@ public class Index extends SubsystemBase {
       setSpeed(0);
       balls--;
     }
-}
+  }
 
+  public void SmartDashboard(){
+    SmartDashboard.putNumber("Balls in Robot", balls);
+    SmartDashboard.putBoolean("indexPhoto", photoeye.get());
+  }
   @Override
   public void periodic() {
     // This method will be called once per scheduler run 
@@ -70,7 +74,6 @@ public class Index extends SubsystemBase {
     }else{
       setSpeed(0);
     }
-    SmartDashboard.putNumber("Balls in Robot", balls);
   }
 
   public void enableIndex(int dirction){
