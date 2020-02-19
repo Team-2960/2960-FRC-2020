@@ -3,7 +3,6 @@ package frc.robot.SubSystems;
 import com.revrobotics.CANEncoder;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
-
 import edu.wpi.first.wpilibj.CounterBase;
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import edu.wpi.first.wpilibj.Encoder;
@@ -19,7 +18,6 @@ import frc.robot.Camera.*;
 
 public class Pivot extends SubsystemBase{
     public static Pivot pivot;
-    public int i = 0;
     private Camera camera = Camera.get_Instance();
     //Pivot motor
     private CANSparkMax mLeftPivot;
@@ -142,50 +140,53 @@ public class Pivot extends SubsystemBase{
       }
       return neuturalPos;
     }
-    public void pivotToTarget(){
+    public void pivotToTarget(int pos){
       if(cameraTrackingEnabled){
         if(!pivotInWindow() || !camera.isTargetFound()){
             setPTargetAngle(frontOrBack());
         }    
         
         else{
-          setPTargetAngle(Constants.pivotTable[i][lookUpPos]);
+          setPTargetAngle(Constants.pivotTable[pos][lookUpPos]);
         }
       }
     }
     public void smartdashboard(){
-
+      SmartDashboard.putNumber("Encoder Value Degrees", pEncoder.getDistance());
     }
     
     /**
      * run every time
      */
     public void periodic() {
-      SmartDashboard.putNumber("Encoder Value Degrees", pEncoder.getDistance());
       // This method will be called once per scheduler run
+      smartdashboard();
       //enable pivot PID
       double distance = camera.getTargetDistance();
       if(cameraTrackingEnabled){
-        i=0;
+        int i = 0;
         while(distance > Constants.pivotTable[i][0] && i < Constants.pivotTable.length){
           i++; 
         }
         double under = distance - Constants.pivotTable[i][0];
-        double above = distance - Constants.pivotTable[i + 1][0];
+        double above = 0;
+        try{
+          above = distance - Constants.pivotTable[i + 1][0];
+        }
+        catch(Exception e){
+          above = under;
+        }
+        
         if(above< under){
           i = i + 1;
         }
+        pivotToTarget(i);
       }
   
       
       if(isPivotEnabled){
           gotoAngle();
       }
-  /*     if(!camera.isTargetFound() || !(pabsEncoder.getDistance() < 100 || pabsEncoder.getDistance() > 180)){
-        //
-      }else{
-        //pivot to target
-      } */
     }
 
   /**
