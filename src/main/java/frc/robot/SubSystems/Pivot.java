@@ -33,6 +33,7 @@ public class Pivot extends SubsystemBase{
     private double pivotTarget;
     public static boolean isPivotFront;
     public static int lookUpPos;
+    public int pivotTablePos = 0;
     //encoder
     private Encoder pEncoder;
     private DutyCycleEncoder pabsEncoder;
@@ -164,23 +165,23 @@ public class Pivot extends SubsystemBase{
       //enable pivot PID
       double distance = camera.getTargetDistance();
       if(cameraTrackingEnabled){
-        int i = 0;
-        while(distance > Constants.pivotTable[i][0] && i < Constants.pivotTable.length){
-          i++; 
+        pivotTablePos = 0;
+        while(distance > Constants.pivotTable[pivotTablePos][0] && Constants.pivotTable[pivotTablePos][0] < Constants.pivotTable.length){
+          pivotTablePos++; 
         }
-        double under = distance - Constants.pivotTable[i][0];
+        double under = distance - Constants.pivotTable[pivotTablePos][0];
         double above = 0;
         try{
-          above = distance - Constants.pivotTable[i + 1][0];
+          above = distance - Constants.pivotTable[pivotTablePos + 1][0];
         }
         catch(Exception e){
           above = under;
         }
         
         if(above< under){
-          i = i + 1;
+          pivotTablePos = pivotTablePos + 1;
         }
-        pivotToTarget(i);
+        pivotToTarget(pivotTablePos);
       }
   
       
