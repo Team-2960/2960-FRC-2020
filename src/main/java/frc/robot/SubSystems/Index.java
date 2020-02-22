@@ -34,15 +34,15 @@ public class Index extends SubsystemBase {
   private Index() {
     mLeftIndex = new CANSparkMax(Constants.mLeftIndex, MotorType.kBrushless);
     mRightIndex = new CANSparkMax(Constants.mRightIndex, MotorType.kBrushless);
-    photoeye = new CANDigitalInput(mRightIndex,  CANDigitalInput.LimitSwitch.kForward,  CANDigitalInput.LimitSwitchPolarity.kNormallyOpen);
+    photoeye = new CANDigitalInput(mLeftIndex,  CANDigitalInput.LimitSwitch.kForward,  CANDigitalInput.LimitSwitchPolarity.kNormallyOpen);
 
   }
   /**
    * Gets the photo eye and prints it
    */
   public void setSpeed(double speed){
-    mLeftIndex.set(-speed);
-    mRightIndex.set(speed);
+    mLeftIndex.set(speed);
+    mRightIndex.set(-speed);
   }
   public void startIndexIn(){
       if(photoeye.get()){

@@ -62,7 +62,7 @@ public class Pivot extends SubsystemBase{
         //Arm PID Setup
         aPidController = new PIDController(Constants.pKp, Constants.pKi, Constants.pKd);
         //armfeedforward = new ArmFeedforward(Constants.pKs, Constants.pKcos, Constants.pKv, Constants.pKa);
-
+        mLeftPivot.setInverted(false);
         mRightPivot.setInverted(true);
     }
     public void setpivotDirection(boolean front){
