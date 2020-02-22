@@ -57,7 +57,7 @@ public class MEGAShooter extends SubsystemBase {
     index.disableIndex();
   }
   public void shoot(){
-    shooter.setPIDShooterSpeed(Constants.pivotTable[2][pivot.i]);
+    shooter.setPIDShooterSpeed(Constants.pivotTable[2][/* pivot.i */]);
     if(shooter.readyToShoot()){
       index.enableIndex(-1);
     }
