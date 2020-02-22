@@ -11,8 +11,8 @@ void setup() {
   pinMode(9, INPUT_PULLUP);
   pinMode(10, INPUT_PULLUP);
   pinMode(11, INPUT_PULLUP);
-  pinMode(13, INPUT);
   pinMode(14, INPUT);
+  pinMode(15, INPUT);
 }
 
 void loop() {
@@ -49,8 +49,9 @@ void loop() {
     Joystick.button(12, !digitalRead(11));
 
   //speed 13 14
-    Joystick.X(analogRead(13));
+  
     Joystick.Y(analogRead(14));
+    Joystick.X(analogRead(15));
 
   //angle 15 16
 }
