@@ -25,7 +25,7 @@ public class Pivot extends SubsystemBase{
 
     //Pivot PID controler
     private PIDController aPidController;
-    private ArmFeedforward armfeedforward;
+    //private ArmFeedforward armfeedforward;
 
     private boolean isPivotEnabled = false;
     public boolean cameraTrackingEnabled =false;
@@ -58,10 +58,10 @@ public class Pivot extends SubsystemBase{
         pEncoder.reset();
 
         pabsEncoder = new DutyCycleEncoder(0);
-        pabsEncoder.setDistancePerRation(360);
+        pabsEncoder.setDistancePerRotation(360);
         //Arm PID Setup
         aPidController = new PIDController(Constants.pKp, Constants.pKi, Constants.pKd);
-        armfeedforward = new ArmFeedforward(Constants.pKs, Constants.pKcos, Constants.pKv, Constants.pKa);
+        //armfeedforward = new ArmFeedforward(Constants.pKs, Constants.pKcos, Constants.pKv, Constants.pKa);
 
         mRightPivot.setInverted(true);
     }
@@ -88,8 +88,8 @@ public class Pivot extends SubsystemBase{
      */
     private void SetPivotPIDRate(double rate){
         double pid_output = aPidController.calculate(pEncoder.getRate(), rate);
-        double feedforward = armfeedforward.calculate(pabsEncoder.getDistance(), 0) / RobotController.getBatteryVoltage();
-        double speed = pid_output + feedforward;
+        //double feedforward = armfeedforward.calculate(pabsEncoder.getDistance(), 0) / RobotController.getBatteryVoltage();
+        double speed = pid_output /* + feedforward */;
         SetPivotSpeed(speed);
     }
     /**
