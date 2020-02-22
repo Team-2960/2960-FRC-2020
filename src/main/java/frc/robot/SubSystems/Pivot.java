@@ -58,7 +58,7 @@ public class Pivot extends SubsystemBase{
         pEncoder.reset();
 
         pabsEncoder = new DutyCycleEncoder(0);
-
+        pabsEncoder.setDistancePerRation(360);
         //Arm PID Setup
         aPidController = new PIDController(Constants.pKp, Constants.pKi, Constants.pKd);
         armfeedforward = new ArmFeedforward(Constants.pKs, Constants.pKcos, Constants.pKv, Constants.pKa);
