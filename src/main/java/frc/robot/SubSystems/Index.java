@@ -20,6 +20,8 @@ public class Index extends SubsystemBase {
   private int isIndexEnabled = 0;
 
   private int balls; // not very important
+  private boolean inBalls = true;
+  private boolean outBalls = true;
 
   /** 
    * @return Index
@@ -44,19 +46,29 @@ public class Index extends SubsystemBase {
     mRightIndex.set(speed);
   }
   public void startIndexIn(){
-      if(photoeye.get())
+      if(photoeye.get()){
         setSpeed(0.5);
+        inBalls = true;
+      }
       else{
         setSpeed(0);
-        balls++;
+        if(inBalls){
+          balls++;
+          inBalls = false;
+        }
       }
   }
   public void startIndexOut(){
-    if(!photoeye.get())
+    if(!photoeye.get()){
       setSpeed(-0.5);
+      outBalls = true;
+    }
     else{
       setSpeed(0);
-      balls--;
+      if(outBalls){
+        balls--;
+        outBalls = false;
+      }
     }
   }
 
