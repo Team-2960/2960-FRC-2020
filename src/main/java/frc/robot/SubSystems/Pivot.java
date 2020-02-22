@@ -12,7 +12,6 @@ import edu.wpi.first.wpilibj.controller.ArmFeedforward;
 import edu.wpi.first.wpilibj.controller.PIDController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import edu.wpi.first.wpiutil.math.MathUtil;
 import frc.robot.Constants;
 import frc.robot.Util.Trapezoid;
 import frc.robot.Camera.*;
@@ -164,8 +163,8 @@ public class Pivot extends SubsystemBase{
       SmartDashboard.putNumber("Encoder Value Degrees", pEncoder.getDistance());
       // This method will be called once per scheduler run
       //enable pivot PID
-      double distance = camera.getTargetDistance();
-      if(cameraTrackingEnabled){
+      //double distance = camera.getTargetDistance();
+      /* if(cameraTrackingEnabled){
         i=0;
         while(distance > Constants.pivotTable[i][0] && i < Constants.pivotTable.length){
           i++; 
@@ -175,7 +174,7 @@ public class Pivot extends SubsystemBase{
         if(above< under){
           i = i + 1;
         }
-      }
+      } */
   
       
       if(isPivotEnabled){

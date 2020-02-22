@@ -5,6 +5,8 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import com.ctre.phoenix.motorcontrol.can.*;
 import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.ctre.phoenix.motorcontrol.FeedbackDevice;
+import com.ctre.phoenix.motorcontrol.StatusFrameEnhanced;
 
 public class Shooter extends SubsystemBase{
     private static Shooter shooter;
@@ -32,11 +34,11 @@ public class Shooter extends SubsystemBase{
     
     private Shooter(){
       //init code
-      //mLeftShooter = new TalonFX(Constants.mLeftShooter);
-      //mRightShooter = new TalonFX(Constants.mRightShooter);
+      mLeftShooter = new TalonFX(Constants.mLeftShooter);
+      mRightShooter = new TalonFX(Constants.mRightShooter);
 
 
-      /* //invert right shooter motor
+      //invert right shooter motor
       mRightShooter.setInverted(true);
 
       //set the rigth motor pid
@@ -75,15 +77,15 @@ public class Shooter extends SubsystemBase{
       mLeftShooter.config_kD(0, kd,30);
       mLeftShooter.config_kF(0, 1023.0/22968.0, 30);
       
-      
-      mLeftShooter.setSelectedSensorPosition(0, 0, 30); */
+      mLeftShooter.setSelectedSensorPosition(0, 0, 30);
     }
     /**
      * Sets the Shooter Speed 
      * @param speed the speed you want the shooter to be set to
      */
-    public void setShooterSpeed(double speed){
-      mRightShooter.set(ControlMode.PercentOutput, speed);
+    public void setShooterSpeed(double right, double left){
+      mRightShooter.set(ControlMode.PercentOutput, right);
+      mLeftShooter.set(ControlMode.PercentOutput, left);
     }
     /**
      * Sets the PID shooter speed 
@@ -108,9 +110,10 @@ public class Shooter extends SubsystemBase{
 
     public void SmartDashBoard(){
       SmartDashboard.putNumber("shooter encoder", mRightShooter.getSelectedSensorVelocity());
+      SmartDashboard.putNumber("shooter encoder2 ", mLeftShooter.getSelectedSensorVelocity());
     }
     public void periodic() {
-      
+      SmartDashBoard();
     }
 
 }

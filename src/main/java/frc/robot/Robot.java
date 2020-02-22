@@ -40,7 +40,7 @@ public class Robot extends TimedRobot {
     // TODO Auto-generated method stub
     super.robotPeriodic();
     CommandScheduler.getInstance().run();
-    camera.update();
+    //camera.update();
     
   }
 

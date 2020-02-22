@@ -93,14 +93,14 @@ public class OI extends SubsystemBase{
         }
         if(driver_Control_Right.getRawButton(9)){
             //shooter speed
-            shooter.setShooterSpeed(0.4);
+            shooter.setPIDShooterSpeed(-10000);
         }
         else if(driver_Control_Right.getRawButton(10)){
             //shooter speed
-            shooter.setShooterSpeed(-0.4);
+            shooter.setPIDShooterSpeed(10000);
         }
         else{
-            shooter.setShooterSpeed(0);
+            shooter.setShooterSpeed(0, 0);
         }
         if(driver_Control_Right.getRawButton(11)){
             //intake position up
