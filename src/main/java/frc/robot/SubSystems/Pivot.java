@@ -153,7 +153,8 @@ public class Pivot extends SubsystemBase{
       }
     }
     public void smartdashboard(){
-      SmartDashboard.putNumber("Encoder Value Degrees", pEncoder.getDistance());
+      SmartDashboard.putNumber("Encoder Value Rate", pEncoder.getRate());
+      SmartDashboard.putNumber("ABS Encoder Value Degrees", pabsEncoder.getDistance());
     }
     
     /**
