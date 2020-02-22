@@ -7,7 +7,6 @@ import com.revrobotics.CANDigitalInput;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
-import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class Index extends SubsystemBase {
@@ -42,7 +41,7 @@ public class Index extends SubsystemBase {
    * Gets the photo eye and prints it
    */
   public void setSpeed(double speed){
-    mLeftIndex.set(speed);
+    mLeftIndex.set(-speed);
     mRightIndex.set(speed);
   }
   public void startIndexIn(){

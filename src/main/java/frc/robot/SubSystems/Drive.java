@@ -254,7 +254,8 @@ public class Drive extends SubsystemBase {
         }
       }
   }
-    cameraAngle = (camera.calcAngle(camera.getCenterX()) +  navX.getAngle());
+    
+  //cameraAngle = (camera.calcAngle(camera.getCenterX()) +  navX.getAngle());
   }
 
   /**
