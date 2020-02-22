@@ -1,7 +1,6 @@
 package frc.robot;
 
 import edu.wpi.first.wpilibj.TimedRobot;
-import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.Sendable;
 import frc.robot.Camera.Camera;
@@ -16,7 +15,6 @@ public class Robot extends TimedRobot {
   private OI oi;
   private LEDs leds;
   private Camera camera = Camera.get_Instance();
-  private Compressor compressor = new Compressor();
   @Override
   public void robotInit() {
     oi = new OI();
@@ -42,8 +40,7 @@ public class Robot extends TimedRobot {
     // TODO Auto-generated method stub
     super.robotPeriodic();
     CommandScheduler.getInstance().run();
-    camera.update();
-    compressor.start();
+    //camera.update();
     
   }
 
