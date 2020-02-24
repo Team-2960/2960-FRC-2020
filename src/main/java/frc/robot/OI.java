@@ -112,16 +112,20 @@ public class OI extends SubsystemBase{
             pivot.isPivotFront = false;
         }
 
-        if(operator_Control.getRawButton(4)){
+        if(isRobotFront()){
             pivot.setpivotDirection(true);
         }
         else{
-            pivot.setpivotDirection(true);
+            pivot.setpivotDirection(false);
         }
-        if(/* button */){
+        if(isCameraTracking()){
             pivot.cameraTrackingEnabled = true;
-        }else{
+        }
+        else{
             pivot.cameraTrackingEnabled = false;
+        }
+        if(isLongPreset()){
+            
         }
         
         

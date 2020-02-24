@@ -73,6 +73,10 @@ public class MEGAShooter extends SubsystemBase {
     index.disableIndex();
     shooter.setPIDShooterSpeed(0);
   }
+  public void longPreset(){
+
+    
+  }
   
   @Override
   public void periodic() {
