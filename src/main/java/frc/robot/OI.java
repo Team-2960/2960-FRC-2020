@@ -46,7 +46,7 @@ public class OI extends SubsystemBase{
      * @param joystick2 joystick 2
      */
     public void driver_Control(Joystick driver_Control_Right, Joystick driver_Control_Left){ 
-        drive.setSpeed(/* joystick */, /* joystick */);
+       
 
         if(/* button */)
             mShooter.intakeEnable();
@@ -64,8 +64,10 @@ public class OI extends SubsystemBase{
             drive.targetLineUp();
         if(/* button */)
             pivot.cameraTrackingEnabled = true;
-        else
+        else{
+            drive.setSpeed(/* joystick */, /* joystick */);
             pivot.cameraTrackingEnabled = false; 
+        }
             
     }   
 

@@ -61,13 +61,13 @@ public class Drive extends SubsystemBase {
     //init code
     camera = Camera.get_Instance();
     //init all the motors
-    mLeftMaster = new CANSparkMax(Constants.mLeftMaster, MotorType.kBrushless);
-    mLeftFollow1 = new CANSparkMax(Constants.mLeftFollow1, MotorType.kBrushless);
-    mLeftFollow2 = new CANSparkMax(Constants.mLeftFollow2, MotorType.kBrushless);
+    mLeftMaster = new CANSparkMax(Constants.mLeftMaster1, MotorType.kBrushless);
+    mLeftFollow1 = new CANSparkMax(Constants.mLeftFollow2, MotorType.kBrushless);
+    mLeftFollow2 = new CANSparkMax(Constants.mLeftFollow3, MotorType.kBrushless);
 
-    mRightMaster = new CANSparkMax(Constants.mRightMaster, MotorType.kBrushless);
-    mRightMfollow1 = new CANSparkMax(Constants.mRightMfollow1, MotorType.kBrushless);
-    mRightMfollow2 = new CANSparkMax(Constants.mRightMfollow2, MotorType.kBrushless);
+    mRightMaster = new CANSparkMax(Constants.mRightMaster1, MotorType.kBrushless);
+    mRightMfollow1 = new CANSparkMax(Constants.mRightMfollow2, MotorType.kBrushless);
+    mRightMfollow2 = new CANSparkMax(Constants.mRightMfollow3, MotorType.kBrushless);
 
     //set master moter and follower motor
     mLeftFollow1.follow(mLeftMaster);

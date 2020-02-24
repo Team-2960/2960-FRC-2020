@@ -32,8 +32,8 @@ public class Index extends SubsystemBase {
     return index;
   }
   private Index() {
-    mLeftIndex = new CANSparkMax(Constants.mLeftIndex, MotorType.kBrushless);
-    mRightIndex = new CANSparkMax(Constants.mRightIndex, MotorType.kBrushless);
+    mLeftIndex = new CANSparkMax(Constants.mIndex1, MotorType.kBrushless);
+    mRightIndex = new CANSparkMax(Constants.mIndex2, MotorType.kBrushless);
     photoeye = new CANDigitalInput(mLeftIndex,  CANDigitalInput.LimitSwitch.kForward,  CANDigitalInput.LimitSwitchPolarity.kNormallyOpen);
 
   }

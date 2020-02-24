@@ -9,12 +9,12 @@ public class Constants{
     /**
      * Drive train motor
      */
-    public final static int mLeftMaster = 1;
-    public final static int mLeftFollow1 = 2;
-    public final static int mLeftFollow2 = 3;
-    public final static int mRightMaster = 4;
-    public final static int mRightMfollow1 = 5;
-    public final static int mRightMfollow2 = 6;
+    public final static int mLeftMaster1 = 1;
+    public final static int mLeftFollow2 = 2;
+    public final static int mLeftFollow3 = 3;
+    public final static int mRightMaster1 = 4;
+    public final static int mRightMfollow2 = 5;
+    public final static int mRightMfollow3 = 6;
 
     /**
      * Shooter motor
@@ -155,4 +155,5 @@ public class Constants{
     public final static double intakeSpeedOut = -0.4;
     public final static double intakePivotAngle = 30;
     public final static double intakeShooterSpeed = -500;
+    public final static double percentOnLowerBelt = 0.85;
 }
