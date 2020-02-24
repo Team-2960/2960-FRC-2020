@@ -42,7 +42,14 @@ public class MEGAShooter extends SubsystemBase {
     index = Index.get_Instance();
 
   }
-
+  public void setOffset(double angle, double speed){
+    shooter.setSpeedOffset(speed);
+    pivot.pivotAngleOffset(angle);
+  }
+  public void disableManual(){
+    shooter.setSpeedOffset(0);
+    pivot.pivotAngleOffset(0);
+  }
   public void intakeEnable(){
       intake.setPosition(1);
       pivot.setPTargetAngle(Constants.intakePivotAngle);

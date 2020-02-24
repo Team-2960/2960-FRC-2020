@@ -16,6 +16,7 @@ public class Shooter extends SubsystemBase{
     private TalonFX mRightShooter;
 
     private double targetRate = 0;
+    private double speedOffset;
 
     //pid value will move to constants later.
     double kp = 0.033,
@@ -95,9 +96,12 @@ public class Shooter extends SubsystemBase{
       mRightShooter.set(ControlMode.Velocity, speed);
       mLeftShooter.set(ControlMode.Velocity, speed);
     }
+    public void setSpeedOffset(double speed){
+      speedOffset = 10000 * speed;
+    }
     public void gotoRate(double rate){
-      targetRate = rate;
-      setPIDShooterSpeed(rate);
+      targetRate = rate + speedOffset;
+      setPIDShooterSpeed(targetRate);
     }
     public boolean readyToShoot(){
       boolean readyToShoot = false;

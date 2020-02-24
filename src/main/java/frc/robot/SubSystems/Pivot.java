@@ -37,6 +37,7 @@ public class Pivot extends SubsystemBase{
     //encoder
     private Encoder pEncoder;
     private DutyCycleEncoder pabsEncoder;
+    private double angleOffset;
     /** 
      * @return Pivot
      */
@@ -100,7 +101,7 @@ public class Pivot extends SubsystemBase{
       EnablePivotPID();
       if(pivotTarget != target){
         pivotTarget = target;
-        trapezoid = new Trapezoid(1, 325, -100, -2000, 2000, pabsEncoder.getDistance(), target, pEncoder.getRate(), -200, -200);
+        trapezoid = new Trapezoid(1, 325, -100, -2000, 2000, pabsEncoder.getDistance(), pivotTarget, pEncoder.getRate(), -200, -200);
       }
     }
   
@@ -151,6 +152,10 @@ public class Pivot extends SubsystemBase{
           setPTargetAngle(Constants.pivotTable[pos][lookUpPos]);
         }
       }
+    }
+    public void pivotAngleOffset(double offset){
+      angleOffset= 100 * offset;
+      setPTargetAngle(pivotTarget + angleOffset);
     }
     public void smartdashboard(){
       SmartDashboard.putNumber("Encoder Value Rate", pEncoder.getRate());

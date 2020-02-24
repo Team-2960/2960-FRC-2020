@@ -77,9 +77,30 @@ public class OI extends SubsystemBase{
      */
     public void operator_Control(Joystick operator_Control){
         //preset
-        //intake pos climb pos
-        
-        
+        //Set Manual Control Offset
+        if(isManualControl()){
+            mShooter.setOffset(operator_Control.getRawAxis(1), operator_Control.getRawAxis(0));
+        }
+        else{
+            mShooter.disableManual();
+        }
+        //Extend the climber
+        if(isClimbExtended()){
+            climb.setPosition(0);
+        }
+        //Retract the climber
+        else if(isClimbRetracted()){
+            climb.setPosition(1);
+        }
+        //Set climber off
+        else{
+            climb.setPosition(2960);
+        }
+        //winch on
+        if(isWinching()){
+
+        }
+
         if(operator_Control.getRawButton(4)){
             pivot.setpivotDirection(true);
         }
@@ -136,5 +157,52 @@ public class OI extends SubsystemBase{
     }
 
     // Operator Control Outline
-
+    //is the robot in manual control
+    private boolean isManualControl(){
+        return operator_Control.getRawButton(1);
+    }
+    //is climb extended
+    private boolean isClimbExtended(){
+        return operator_Control.getRawButton(3);
+    }
+    //is climb retracted
+    private boolean isClimbRetracted(){
+        return operator_Control.getRawButton(2);
+    }
+    //is winch winching
+    private boolean isWinching(){
+        return operator_Control.getRawButton(4);
+    }
+    //is the robot facing front
+    private boolean isRobotFront(){
+        return operator_Control.getRawButton(5);
+    }
+    //is the pivot Camera tracking
+    private boolean isCameraTracking(){
+        return operator_Control.getRawButton(6);
+    }
+    //is the short preset pressed
+    private boolean isShortPreset(){
+        return operator_Control.getRawButton(7);
+    }
+    //is the long pressed
+    private boolean isLongPreset(){
+        return operator_Control.getRawButton(8);
+    }
+    //is the Intake in
+    private boolean isIntakeOut(){
+        return operator_Control.getRawButton(9);
+    }
+    //is the Intake out
+    private boolean isIntakeIn(){
+        return operator_Control.getRawButton(10);
+    }
+    //Is the shoot pressed
+    private boolean isShoot(){
+        return operator_Control.getRawButton(11);
+    }
+    //is the indexer indexing out
+    private boolean isIndexOut(){
+        return operator_Control.getRawButton(12);
+    }
 }
