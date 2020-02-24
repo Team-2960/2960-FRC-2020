@@ -21,6 +21,7 @@ public class Index extends SubsystemBase {
   private int balls; // not very important
   private boolean inBalls = true;
   private boolean outBalls = true;
+ private boolean isAutoIndexEnabled = false;
 
   /** 
    * @return Index
@@ -42,7 +43,7 @@ public class Index extends SubsystemBase {
    */
   public void setSpeed(double speed){
     mLeftIndex.set(speed);
-    mRightIndex.set(-speed);
+    mRightIndex.set(Constants.percentOnLowerBelt * -speed);
   }
   public void startIndexIn(){
       if(photoeye.get()){
@@ -78,19 +79,22 @@ public class Index extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run 
-    if(isIndexEnabled == 1){
-      startIndexIn();
-    }else if(isIndexEnabled == -1){
-      startIndexOut();
-    }else{
-      setSpeed(0);
+    if(isAutoIndexEnabled){
+      if(isIndexEnabled == 1){
+        startIndexIn();
+      }else if(isIndexEnabled == -1){
+        startIndexOut();
+      }
     }
   }
 
   public void enableIndex(int dirction){
+    isAutoIndexEnabled = true;
     isIndexEnabled = dirction;
   }
   public void disableIndex(){
+    isAutoIndexEnabled = false;
+    setSpeed(0);
     isIndexEnabled = 0;
   }
 }
