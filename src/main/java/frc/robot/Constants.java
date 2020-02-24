@@ -41,8 +41,8 @@ public class Constants{
     /**
      * Index Motor
      */
-    public final static int mLeftIndex = 13;
-    public final static int mRightIndex = 14;
+    public final static int mIndex1 = 13;
+    public final static int mIndex2 = 14;
 
     /**
      * Pivot PID and feedForward control
