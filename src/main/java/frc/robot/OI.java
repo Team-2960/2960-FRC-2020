@@ -98,7 +98,18 @@ public class OI extends SubsystemBase{
         }
         //winch on
         if(isWinching()){
+            climb.setSpeed(0.7);
+        }
+        //winch off
+        else{
+            climb.setSpeed(0);
+        }
 
+        if(isRobotFront()){
+            pivot.isPivotFront = true;
+        }
+        else{
+            pivot.isPivotFront = false;
         }
 
         if(operator_Control.getRawButton(4)){

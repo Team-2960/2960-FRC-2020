@@ -31,7 +31,7 @@ public class Pivot extends SubsystemBase{
     public boolean cameraTrackingEnabled =false;
     private Trapezoid trapezoid;  
     private double pivotTarget;
-    public static boolean isPivotFront;
+    public boolean isPivotFront;
     public static int lookUpPos;
     public int pivotTablePos = 0;
     //encoder
@@ -114,6 +114,7 @@ public class Pivot extends SubsystemBase{
       SetPivotPIDRate(rate);
     }
     
+      
     public boolean atPivotTarget(){
       double error = pEncoder.getDistance() - pivotTarget;
       return error < Constants.angleTolerance;
