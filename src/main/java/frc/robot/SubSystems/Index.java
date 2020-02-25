@@ -47,7 +47,7 @@ public class Index extends SubsystemBase {
   }
   private void startIndexIn(){
       if(photoeye.get()){
-        setSpeed(0.5);
+        setSpeed(0.6);
         inBalls = true;
       }
       else{
@@ -60,7 +60,7 @@ public class Index extends SubsystemBase {
   }
   private void startIndexOut(){
     if(!photoeye.get()){
-      setSpeed(-0.5);
+      setSpeed(-0.6);
       outBalls = true;
     }
     else{
@@ -83,6 +83,7 @@ public class Index extends SubsystemBase {
       if(isIndexEnabled == 1){
         startIndexIn();
       }else if(isIndexEnabled == -1){
+        System.out.println("run out");
         startIndexOut();
       }
     }

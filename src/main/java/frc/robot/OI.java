@@ -46,37 +46,31 @@ public class OI extends SubsystemBase{
      * @param joystick2 joystick 2
      */
     public void driver_Control(Joystick driver_Control_Right, Joystick driver_Control_Left){ 
-       
-
-        if(/* button */)
-            mShooter.intakeEnable();
-        else if(/* button */)
-            mShooter.intakeDisable();
-        else
-
-        if(/* button */)
-            pivot.setPTargetAngle(/* tranch */);
-        if(/* button */)
-            pivot.setPTargetAngle(/* intake */);
-        if(/* button */)
-            mShooter.shoot();
-        if(/* button */)
-            drive.targetLineUp();
-        if(/* button */)
-            pivot.cameraTrackingEnabled = true;
-        else{
-            drive.setSpeed(/* joystick */, /* joystick */);
-            pivot.cameraTrackingEnabled = false; 
-        }
-            
-    }   
-
+    if(driver_Control_Right.getRawButton(2)){
+        //in
+        intake.setSpeed(1);
+        index.enableIndex(1);  
+        shooter.setShooterSpeed(0.25, 0.25); 
+    }
+    if(driver_Control_Right.getRawButton(1)){
+        //disable
+        intake.setSpeed(0);
+        index.disableIndex();
+        shooter.setShooterSpeed(0, 0); 
+    }
+    if(driver_Control_Right.getRawButton(3)){
+            //out
+            intake.setSpeed(-1);
+            index.enableIndex(-1);  
+            shooter.setShooterSpeed(-0.2, -0.2); 
+    }
+}
     /**
      * Operator control
      * @param operator_Control operator control joystick
      */
     public void operator_Control(Joystick operator_Control){
-        //preset
+/*         //preset
         //Set Manual Control Offset
         if(isManualControl())
             mShooter.setOffset(operator_Control.getRawAxis(1), operator_Control.getRawAxis(0));
@@ -137,7 +131,7 @@ public class OI extends SubsystemBase{
             index.enableIndex(-1); 
         else
             index.disableIndex();
-
+ */
 
         
         
@@ -169,42 +163,42 @@ public class OI extends SubsystemBase{
      */
     // Driver Control Outline
     private boolean intakeInEnabled(){
-        return driver_Control.getRawButton(1);
+        return driver_Control_Right.getRawButton(1);
     }
     
     /** 
      * @return boolean
      */
     private boolean intakeOutEnabled(){
-        return driver_Control.getRawButton(2);
+        return driver_Control_Right.getRawButton(2);
     }
     
     /** 
      * @return boolean
      */
     private boolean setPivotTrenchHeight(){
-        return driver_Control.getRawButton(3);
+        return driver_Control_Right.getRawButton(3);
     }
     
     /** 
      * @return boolean
      */
     private boolean shootOutEnable(){
-        return driver_Control.getRawButton(4);
+        return driver_Control_Right.getRawButton(4);
     }
     
     /** 
      * @return boolean
      */
     private boolean targetAlignDrive(){
-        return driver_Control.getRawButton(5);
+        return driver_Control_Right.getRawButton(5);
     }
     
     /** 
      * @return boolean
      */
     private boolean targetPivotAlign(){
-        return driver_Control.getRawButton(6);
+        return driver_Control_Right.getRawButton(6);
     }
 
     

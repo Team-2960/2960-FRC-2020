@@ -194,7 +194,7 @@ public class Pivot extends SubsystemBase{
       // This method will be called once per scheduler run
       smartdashboard();
       //enable pivot PID
-      double distance = camera.getTargetDistance();
+/*       double distance = camera.getTargetDistance();
       if(cameraTrackingEnabled){
         pivotTablePos = 0;
         while(distance > Constants.pivotTable[pivotTablePos][0] && Constants.pivotTable[pivotTablePos][0] < Constants.pivotTable.length){
@@ -218,7 +218,7 @@ public class Pivot extends SubsystemBase{
       
       if(isPivotEnabled){
           gotoAngle();
-      }
+      } */
     }
 
   /**
