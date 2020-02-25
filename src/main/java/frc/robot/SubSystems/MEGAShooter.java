@@ -42,6 +42,11 @@ public class MEGAShooter extends SubsystemBase {
     index = Index.get_Instance();
 
   }
+  
+  /** 
+   * @param angle
+   * @param speed
+   */
   public void setOffset(double angle, double speed){
     shooter.setSpeedOffset(speed);
     pivot.pivotAngleOffset(angle);

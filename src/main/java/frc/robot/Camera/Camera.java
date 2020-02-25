@@ -37,6 +37,10 @@ public class Camera{
 
 	//camera 
 	public static Camera camera;
+	
+	/** 
+	 * @return Camera
+	 */
 	public static Camera get_Instance(){
 		if(camera != null){
 			camera = new Camera(Constants.cameraPort);
@@ -204,6 +208,10 @@ public class Camera{
 			return height;
 		}
 	}
+	
+	/** 
+	 * @return double
+	 */
 	public double getTargetDistance(){
 		synchronized(IMG_LOCK){
 			return distance;

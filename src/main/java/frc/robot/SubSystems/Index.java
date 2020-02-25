@@ -45,7 +45,7 @@ public class Index extends SubsystemBase {
     mLeftIndex.set(speed);
     mRightIndex.set(Constants.percentOnLowerBelt * -speed);
   }
-  public void startIndexIn(){
+  private void startIndexIn(){
       if(photoeye.get()){
         setSpeed(0.5);
         inBalls = true;
@@ -58,7 +58,7 @@ public class Index extends SubsystemBase {
         }
       }
   }
-  public void startIndexOut(){
+  private void startIndexOut(){
     if(!photoeye.get()){
       setSpeed(-0.5);
       outBalls = true;
@@ -88,6 +88,10 @@ public class Index extends SubsystemBase {
     }
   }
 
+  
+  /** 
+   * @param dirction
+   */
   public void enableIndex(int dirction){
     isAutoIndexEnabled = true;
     isIndexEnabled = dirction;

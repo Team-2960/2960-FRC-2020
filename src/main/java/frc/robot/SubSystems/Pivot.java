@@ -28,11 +28,11 @@ public class Pivot extends SubsystemBase{
     //private ArmFeedforward armfeedforward;
 
     private boolean isPivotEnabled = false;
-    public boolean cameraTrackingEnabled =false;
+    private boolean cameraTrackingEnabled =false;
     private Trapezoid trapezoid;  
     private double pivotTarget;
-    public boolean isPivotFront;
-    public static int lookUpPos;
+    private boolean isPivotFront;
+    public int lookUpPos;
     public int pivotTablePos = 0;
     //encoder
     private Encoder pEncoder;
@@ -66,6 +66,10 @@ public class Pivot extends SubsystemBase{
         mLeftPivot.setInverted(false);
         mRightPivot.setInverted(true);
     }
+    
+    /** 
+     * @param front
+     */
     public void setpivotDirection(boolean front){
       isPivotFront = front;
       if(front){
@@ -115,10 +119,18 @@ public class Pivot extends SubsystemBase{
     }
     
       
+    
+    /** 
+     * @return boolean
+     */
     public boolean atPivotTarget(){
       double error = pEncoder.getDistance() - pivotTarget;
       return error < Constants.angleTolerance;
     }
+    
+    /** 
+     * @return boolean
+     */
     public boolean pivotInWindow(){
       boolean isInWindow = false;
       if(isPivotFront){
@@ -133,6 +145,10 @@ public class Pivot extends SubsystemBase{
       }
       return isInWindow;
     }
+    
+    /** 
+     * @return double
+     */
     public double frontOrBack(){
       double neuturalPos;
       if(isPivotFront){
@@ -143,6 +159,10 @@ public class Pivot extends SubsystemBase{
       }
       return neuturalPos;
     }
+    
+    /** 
+     * @param pos
+     */
     public void pivotToTarget(int pos){
       if(cameraTrackingEnabled){
         if(!pivotInWindow() || !camera.isTargetFound()){
@@ -154,6 +174,10 @@ public class Pivot extends SubsystemBase{
         }
       }
     }
+    
+    /** 
+     * @param offset
+     */
     public void pivotAngleOffset(double offset){
       angleOffset= 100 * offset;
       setPTargetAngle(pivotTarget + angleOffset);
@@ -210,6 +234,14 @@ public class Pivot extends SubsystemBase{
     isPivotEnabled = false;
     pivotTarget = 0;
     SetPivotSpeed(0);
+  }
+
+  
+  /** 
+   * @param isEnabled
+   */
+  public void isCameraTrackingEnabled(boolean isEnabled){
+    cameraTrackingEnabled = isEnabled;
   }
 
 }

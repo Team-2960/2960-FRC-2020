@@ -96,13 +96,25 @@ public class Shooter extends SubsystemBase{
       mRightShooter.set(ControlMode.Velocity, speed);
       mLeftShooter.set(ControlMode.Velocity, speed);
     }
+    
+    /** 
+     * @param speed
+     */
     public void setSpeedOffset(double speed){
       speedOffset = 10000 * speed;
     }
+    
+    /** 
+     * @param rate
+     */
     public void gotoRate(double rate){
       targetRate = rate + speedOffset;
       setPIDShooterSpeed(targetRate);
     }
+    
+    /** 
+     * @return boolean
+     */
     public boolean readyToShoot(){
       boolean readyToShoot = false;
       double error = Math.abs((mRightShooter.getSelectedSensorVelocity() + mLeftShooter.getSelectedSensorVelocity()) / 2 - targetRate);
