@@ -185,6 +185,9 @@ public class Pivot extends SubsystemBase{
     public void smartdashboard(){
       SmartDashboard.putNumber("Encoder Value Rate", pEncoder.getRate());
       SmartDashboard.putNumber("ABS Encoder Value Degrees", pabsEncoder.getDistance());
+      SmartDashboard.putNumber("Left motor current: ",mLeftPivot.getOutputCurrent());
+      SmartDashboard.putNumber("Right motor current: ",mRightPivot.getOutputCurrent());
+      //SmartDashboard.putNumber("",)
     }
     
     /**
