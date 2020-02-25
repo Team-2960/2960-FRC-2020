@@ -113,9 +113,9 @@ public class OI extends SubsystemBase{
 
         //Shooting presets
         if(isLongPreset())
-            pivot.setPTargetAngle(Constants.longPreset [0]);  //Long
+            pivot.setPTargetAngle(Constants.longPreset[0]);  //Long
         else if (isShortPreset()){
-            pivot.setPTargetAngle(Constants.shortPreset [0]);  //Short
+            pivot.setPTargetAngle(Constants.shortPreset[0]);  //Short
         }
         
         //Intake
