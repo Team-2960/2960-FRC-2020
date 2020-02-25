@@ -125,7 +125,10 @@ public class OI extends SubsystemBase{
             pivot.cameraTrackingEnabled = false;
         }
         if(isLongPreset()){
-            pivot.setPTargetAngle(Constants.longPreset);
+            pivot.setPTargetAngle(Constants.longPreset [0]);
+        }
+        else{
+
         }
         
         
