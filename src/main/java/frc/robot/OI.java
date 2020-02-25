@@ -46,7 +46,7 @@ public class OI extends SubsystemBase{
      * @param joystick2 joystick 2
      */
     public void driver_Control(Joystick driver_Control_Right, Joystick driver_Control_Left){ 
-    if(driver_Control_Right.getRawButton(2)){
+/*     if(driver_Control_Right.getRawButton(2)){
         //in
         intake.setSpeed(1);
         index.enableIndex(1);  
@@ -63,6 +63,12 @@ public class OI extends SubsystemBase{
             intake.setSpeed(-1);
             index.enableIndex(-1);  
             shooter.setShooterSpeed(-0.2, -0.2); 
+    } */
+    if(driver_Control_Right.getRawButton(1)){
+        pivot.SetPivotSpeed(driver_Control_Right.getRawAxis(1));
+    }
+    else{
+        pivot.SetPivotSpeed(0);
     }
 }
     /**
