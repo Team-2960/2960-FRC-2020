@@ -37,7 +37,7 @@ public class Constants{
      * Climb Motor
      */
     public final static int mClimb = 12;
-    
+
 
     /**
      * Index Motor
@@ -94,6 +94,7 @@ public class Constants{
     public final static int pabsEncoder = 0;
     public final static int pEncoder1 = 1;
     public final static int pEncoder2 = 2;
+    public final static int shooterTolerance = 200;
 
 
     /**

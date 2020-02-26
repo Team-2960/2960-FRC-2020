@@ -64,11 +64,11 @@ public class OI extends SubsystemBase{
             index.enableIndex(-1);  
             shooter.setShooterSpeed(-0.2, -0.2); 
     } */
-    if(driver_Control_Right.getRawButton(1)){
-        pivot.SetPivotSpeed(driver_Control_Right.getRawAxis(1));
+    if(true){
+        drive.setDriveRate(20);
     }
     else{
-        pivot.SetPivotSpeed(0);
+        drive.setSpeed(driver_Control_Left.getRawAxis(1), driver_Control_Right.getRawAxis(1));
     }
 }
     /**
