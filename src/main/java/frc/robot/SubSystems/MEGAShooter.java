@@ -76,7 +76,7 @@ public class MEGAShooter extends SubsystemBase {
     }
   }
   public void shootAlways(){
-    shooter.setPIDShooterSpeed(9000);
+    shooter.gotoRate(9000);
     if(shooter.readyToShoot()){
       shoot = true;
     }
@@ -87,10 +87,24 @@ public class MEGAShooter extends SubsystemBase {
       }
     }
   }
+  public void fullSpeedOutake(){
+    shooter.gotoRate(9000);
+    if(shooter.isAboveThreshold()){
+      index.setSpeed(-1, -1);
+    }
+    else{
+      if(!index.getPhotoeyeIndex()){
+        index.setSpeed(-0.8, -0.8);
+      }
+      else{
+        index.setSpeed(0, 0);
+      }
+    }
+  } 
   public void alwaysOnShoot(){
-    shooter.setPIDShooterSpeed(9000);
+    shooter.gotoRate(9000);
     if(shooter.readyToShoot()){
-      index.setSpeed(-1);
+      index.setSpeed(-1, -1);
     }
   }
   public void disableShoot(){

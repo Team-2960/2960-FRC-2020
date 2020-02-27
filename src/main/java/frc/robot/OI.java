@@ -46,7 +46,29 @@ public class OI extends SubsystemBase{
      * @param joystick2 joystick 2
      */
     public void driver_Control(Joystick driver_Control_Right, Joystick driver_Control_Left){ 
-    if(driver_Control_Right.getRawButton(6)){
+        if(driver_Control_Right.getRawButton(1)){
+            climb.setSpeed(driver_Control_Right.getRawAxis(1));
+        }
+        else{
+            climb.setSpeed(0);
+        }
+        if(driver_Control_Right.getRawButton(2)){
+            climb.setPosition(0);
+        }
+        else if(driver_Control_Right.getRawButton(3)){
+            climb.setPosition(1);
+        }
+        else{
+            climb.setPosition(2960);
+        }
+/*     if(driver_Control_Right.getRawButton(1)){
+        drive.setDriveRate(200);
+    }
+    else{
+        drive.setSpeed(driver_Control_Left.getRawAxis(1), driver_Control_Right.getRawAxis(1));
+    } */
+
+/*     if(driver_Control_Right.getRawButton(6)){
         //in
         intake.setSpeed(1);
         index.enableIndex(1);  
@@ -84,7 +106,7 @@ public class OI extends SubsystemBase{
             shooter.gotoRate(0);
             index.disableIndex();
         }
-    }
+    } */
 }
     /**
      * Operator control

@@ -111,7 +111,13 @@ public class Shooter extends SubsystemBase{
       targetRate = rate + speedOffset;
       setPIDShooterSpeed(targetRate);
     }
-    
+    public boolean isAboveThreshold(){
+      if(Math.abs(targetRate) < Math.abs((Math.abs(mRightShooter.getSelectedSensorVelocity()) + Math.abs(mLeftShooter.getSelectedSensorVelocity()))) / 2){
+        return true;
+      }
+      else
+      return false;
+    }
     /** 
      * @return boolean
      */

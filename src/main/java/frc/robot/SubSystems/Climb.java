@@ -12,12 +12,14 @@ import com.ctre.phoenix.motorcontrol.can.TalonFX;
 
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
 public class Climb extends SubsystemBase {
   private static Climb climb;
   private TalonFX mClimb;
+  private TalonFX mClimb2;
   private DoubleSolenoid sClimb;
   
   /** 
@@ -32,6 +34,7 @@ public class Climb extends SubsystemBase {
 
   private Climb() {
     mClimb = new TalonFX(Constants.mClimb);
+    mClimb2 = new TalonFX(Constants.mClimb2);
     sClimb = new DoubleSolenoid(Constants.ClimbSolenoid1, Constants.ClimbSolenoid2);
   }
 
@@ -41,6 +44,8 @@ public class Climb extends SubsystemBase {
    */
   public void setSpeed(double speed){
     mClimb.set(ControlMode.PercentOutput, speed);
+   mClimb2.set(ControlMode.PercentOutput, speed); 
+
   }
   
   /** 
@@ -54,10 +59,14 @@ public class Climb extends SubsystemBase {
       else
         sClimb.set(Value.kOff);
     }
-
+  private void SmartDashboard(){
+    SmartDashboard.putNumber("winch motor", mClimb.getSupplyCurrent());
+    SmartDashboard.putNumber("winch motor2", mClimb2.getSupplyCurrent());
+  }
   @Override
   public void periodic() {
-    // This method will be called once per scheduler run
+   SmartDashboard();
+   // This method will be called once per scheduler run
 
   }
 }

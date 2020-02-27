@@ -37,6 +37,7 @@ public class Constants{
      * Climb Motor
      */
     public final static int mClimb = 12;
+    public final static int mClimb2 = 20;
 
 
     /**
@@ -61,9 +62,9 @@ public class Constants{
     /**
      * The PID for the rate on the drive train
     */
-    public final static double dKp = 0.0008;
-    public final static double dKi = 0.000007;
-    public final static double dKd = 0.000025;
+    public final static double dKp = 0.003;
+    public final static double dKi = 0.00000/*7*/;
+    public final static double dKd = 0.0000/*25*/;
     
 
     /**

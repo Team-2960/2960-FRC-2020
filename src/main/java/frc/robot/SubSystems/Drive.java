@@ -81,10 +81,10 @@ public class Drive extends SubsystemBase {
     gyro.calibrate();
 
     //init encoder
-    rightEncoder = mRightMfollow2.getAlternateEncoder(AlternateEncoderType.kQuadrature, Constants.pulsePerRev);
+    rightEncoder = mRightMaster.getAlternateEncoder(AlternateEncoderType.kQuadrature, Constants.pulsePerRev);
     rightEncoder.setPositionConversionFactor(Constants.wheelcircumference);
     rightEncoder.setPosition(0);
-    leftEncoder = mRightMfollow2.getAlternateEncoder(AlternateEncoderType.kQuadrature, Constants.pulsePerRev);
+    leftEncoder = mRightMaster.getAlternateEncoder(AlternateEncoderType.kQuadrature, Constants.pulsePerRev);
     leftEncoder.setPositionConversionFactor(Constants.wheelcircumference);
     leftEncoder.setPosition(0);
 
@@ -132,7 +132,7 @@ public class Drive extends SubsystemBase {
    * @param rate is the target angle rate we want to be going
    */
   public void setDriveRate(double rate){
-    double speed = drivePidController.calculate(navX.getRawGyroZ(), rate); //calc the speed
+    double speed = drivePidController.calculate(navX.getRawGyroX(), rate); //calc the speed
     SmartDashboard.putNumber("speed", speed);
     setSpeed(-speed, speed);
   }
@@ -220,7 +220,7 @@ public class Drive extends SubsystemBase {
    * @param forwardSpeed sets the forward speed we should be going
    */
   public void setArcDriveRate(double rate, double forwardSpeed){
-    double speed = drivePidController.calculate(navX.getRawGyroZ(), rate); //calc the speed
+    double speed = drivePidController.calculate(navX.getRawGyroX(), rate); //calc the speed
     setSpeed(-speed + forwardSpeed, speed + forwardSpeed);
   }
   public void adjustToTarget(){
@@ -232,7 +232,7 @@ public class Drive extends SubsystemBase {
   public void periodic() {
     SmartDashboard.putNumber("Right Encoder", rightEncoder.getPosition());
     SmartDashboard.putNumber("Left Encoder", leftEncoder.getPosition());
-    SmartDashboard.putNumber("Angle", navX.getRawGyroZ());
+    SmartDashboard.putNumber("Angle", navX.getRawGyroX());
 
     if(isDrivePIDEnabled){
       if(PIDCheck == 1){

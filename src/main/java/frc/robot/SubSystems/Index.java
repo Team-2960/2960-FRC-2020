@@ -75,6 +75,7 @@ public class Index extends SubsystemBase {
       }
     }
   }
+
 public boolean getPhotoeyeIndex(){
   return photoeye.get();
 }
