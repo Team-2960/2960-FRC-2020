@@ -25,7 +25,7 @@ public class Pivot extends SubsystemBase{
 
     //Pivot PID controler
     private PIDController aPidController;
-    //private ArmFeedforward armfeedforward;
+    private ArmFeedforward armfeedforward;
 
     private boolean isPivotEnabled = false;
     private boolean cameraTrackingEnabled =false;
@@ -62,7 +62,7 @@ public class Pivot extends SubsystemBase{
         pabsEncoder.setDistancePerRotation(360);
         //Arm PID Setup
         aPidController = new PIDController(Constants.pKp, Constants.pKi, Constants.pKd);
-        //armfeedforward = new ArmFeedforward(Constants.pKs, Constants.pKcos, Constants.pKv, Constants.pKa);
+        armfeedforward = new ArmFeedforward(Constants.pKs, Constants.pKcos, Constants.pKv, Constants.pKa);
         mLeftPivot.setInverted(false);
         mRightPivot.setInverted(true);
     }
@@ -91,10 +91,10 @@ public class Pivot extends SubsystemBase{
      * set the motor rate with pid
      * @param rate target rate
      */
-    private void SetPivotPIDRate(double rate){
+    public void SetPivotPIDRate(double rate){
         double pid_output = aPidController.calculate(pEncoder.getRate(), rate);
-        //double feedforward = armfeedforward.calculate(pabsEncoder.getDistance(), 0) / RobotController.getBatteryVoltage();
-        double speed = pid_output /* + feedforward */;
+        double feedforward = armfeedforward.calculate(pabsEncoder.getDistance(), 0) / RobotController.getBatteryVoltage();
+        double speed = pid_output  + feedforward ;
         SetPivotSpeed(speed);
     }
     /**
@@ -187,6 +187,12 @@ public class Pivot extends SubsystemBase{
       SmartDashboard.putNumber("ABS Encoder Value Degrees", pabsEncoder.getDistance());
       SmartDashboard.putNumber("Left motor current: ",mLeftPivot.getOutputCurrent());
       SmartDashboard.putNumber("Right motor current: ",mRightPivot.getOutputCurrent());
+      SmartDashboard.putNumber("Left motor Speed: ", mLeftPivot.get());
+      SmartDashboard.putNumber("Right motor Speed: ", mRightPivot.get());
+      SmartDashboard.putNumber("Left motor Temp: ", mLeftPivot.getMotorTemperature());
+      SmartDashboard.putNumber("Right motor Temp: ", mRightPivot.getMotorTemperature());
+      SmartDashboard.putNumber("Left motor Current: ", mLeftPivot.getOutputCurrent());
+      SmartDashboard.putNumber("RIght motor Current: ", mRightPivot.getOutputCurrent());
       //SmartDashboard.putNumber("",)
     }
     
@@ -219,11 +225,11 @@ public class Pivot extends SubsystemBase{
       }
   
       
+       */
+    
       if(isPivotEnabled){
-          gotoAngle();
-      } */
+      gotoAngle();}
     }
-
   /**
    * enable the pivot pid
    */
