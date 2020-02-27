@@ -117,9 +117,10 @@ public class Shooter extends SubsystemBase{
      */
     public boolean readyToShoot(){
       boolean readyToShoot = false;
-      double error = Math.abs((mRightShooter.getSelectedSensorVelocity() + mLeftShooter.getSelectedSensorVelocity()) / 2 - targetRate);
-      if(error < 200){
-        readyToShoot = true;
+      double error = Math.abs((mRightShooter.getSelectedSensorVelocity()) + mLeftShooter.getSelectedSensorVelocity()) / 2 - targetRate;
+      if(error < Constants.shooterTolerance){
+        
+        readyToShoot = true;    
       }
       return readyToShoot;
     }
