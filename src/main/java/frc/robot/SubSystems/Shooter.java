@@ -19,8 +19,8 @@ public class Shooter extends SubsystemBase{
     private double speedOffset;
 
     //pid value will move to constants later.
-    double kp = 0.033,
-           ki = 0.000045,
+    double kp = 0.034,
+           ki = 0.000046,
            kd = 0.01;
     
     /** 
@@ -92,7 +92,7 @@ public class Shooter extends SubsystemBase{
      * Sets the PID shooter speed 
      * @param speed the PID shooter speed
      */
-    public void setPIDShooterSpeed(double speed){
+    private void setPIDShooterSpeed(double speed){
       mRightShooter.set(ControlMode.Velocity, speed);
       mLeftShooter.set(ControlMode.Velocity, speed);
     }
@@ -117,17 +117,17 @@ public class Shooter extends SubsystemBase{
      */
     public boolean readyToShoot(){
       boolean readyToShoot = false;
-      double error = Math.abs((mRightShooter.getSelectedSensorVelocity()) + mLeftShooter.getSelectedSensorVelocity()) / 2 - targetRate;
-      if(error < Constants.shooterTolerance){
-        
-        readyToShoot = true;    
+      double error = Math.abs((Math.abs(mRightShooter.getSelectedSensorVelocity()) + Math.abs(mLeftShooter.getSelectedSensorVelocity())) / 2 - Math.abs(targetRate));
+      System.out.println(error);
+      if(error < 50){
+        readyToShoot = true;
       }
       return readyToShoot;
     }
 
     public void SmartDashBoard(){
-      SmartDashboard.putNumber("shooter encoder", mRightShooter.getSelectedSensorVelocity());
-      SmartDashboard.putNumber("shooter encoder2 ", mLeftShooter.getSelectedSensorVelocity());
+      SmartDashboard.putNumber("Right shooter encoder", mRightShooter.getSelectedSensorVelocity());
+      SmartDashboard.putNumber("Left shooter encoder ", mLeftShooter.getSelectedSensorVelocity());
     }
     public void periodic() {
       SmartDashBoard();
