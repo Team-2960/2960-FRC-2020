@@ -37,7 +37,7 @@ public class Constants{
      * Climb Motor
      */
     public final static int mClimb = 12;
-    
+
 
     /**
      * Index Motor
@@ -48,16 +48,16 @@ public class Constants{
     /**
      * Pivot PID and feedForward control
      */
-    public final static double pKp = 0.0002;
-    public final static double pKi = 0.00002;
-    public final static double pKd = 0.00001;
+    public final static double pKp = 0.0004;
+    public final static double pKi = 0.0000;
+    public final static double pKd = 0.000;
     /**
      * The feedforward PID
      */
-    public final static double pKs = 0.28;
-    public final static double pKcos = -0.421;
-    public final static double pKv = 0.0462;
-    public final static double pKa = 0.001;
+    public final static double pKs = 0.988;
+    public final static double pKcos = 0.0148;
+    public final static double pKv = 0.0268;
+    public final static double pKa = 0.00261;
     /**
      * The PID for the rate on the drive train
     */
@@ -94,6 +94,7 @@ public class Constants{
     public final static int pabsEncoder = 0;
     public final static int pEncoder1 = 1;
     public final static int pEncoder2 = 2;
+    public final static int shooterTolerance = 200;
 
 
     /**

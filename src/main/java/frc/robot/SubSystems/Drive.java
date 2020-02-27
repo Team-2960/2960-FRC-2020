@@ -232,7 +232,7 @@ public class Drive extends SubsystemBase {
   public void periodic() {
     SmartDashboard.putNumber("Right Encoder", rightEncoder.getPosition());
     SmartDashboard.putNumber("Left Encoder", leftEncoder.getPosition());
-    SmartDashboard.putNumber("Angle", navX.getAngle());
+    SmartDashboard.putNumber("Angle", navX.getRawGyroZ());
 
     if(isDrivePIDEnabled){
       if(PIDCheck == 1){

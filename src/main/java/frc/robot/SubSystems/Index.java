@@ -41,17 +41,17 @@ public class Index extends SubsystemBase {
   /**
    * Gets the photo eye and prints it
    */
-  public void setSpeed(double speed){
-    mLeftIndex.set(speed);
-    mRightIndex.set(Constants.percentOnLowerBelt * -speed);
+  public void setSpeed(double right, double left){
+    mLeftIndex.set(left);
+    mRightIndex.set(-right);
   }
   private void startIndexIn(){
       if(photoeye.get()){
-        setSpeed(0.6);
+        setSpeed(0.6, 0.25);
         inBalls = true;
       }
       else{
-        setSpeed(0);
+        setSpeed(0, 0);
         if(inBalls){
           balls++;
           inBalls = false;
@@ -60,11 +60,11 @@ public class Index extends SubsystemBase {
   }
   private void startIndexOut(){
     if(!photoeye.get()){
-      setSpeed(-0.6);
+      setSpeed(-1, -1);
       outBalls = true;
     }
     else{
-      setSpeed(0);
+      setSpeed(0, 0);
       if(outBalls){
         balls--;
         outBalls = false;
@@ -83,7 +83,6 @@ public class Index extends SubsystemBase {
       if(isIndexEnabled == 1){
         startIndexIn();
       }else if(isIndexEnabled == -1){
-        System.out.println("run out");
         startIndexOut();
       }
     }
@@ -97,9 +96,10 @@ public class Index extends SubsystemBase {
     isAutoIndexEnabled = true;
     isIndexEnabled = dirction;
   }
+  
   public void disableIndex(){
     isAutoIndexEnabled = false;
-    setSpeed(0);
+    setSpeed(0, 0);
     isIndexEnabled = 0;
   }
 }

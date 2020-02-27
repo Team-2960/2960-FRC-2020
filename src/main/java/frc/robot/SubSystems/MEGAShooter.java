@@ -58,7 +58,7 @@ public class MEGAShooter extends SubsystemBase {
   public void intakeEnable(){
       intake.setPosition(1);
       pivot.setPTargetAngle(Constants.intakePivotAngle);
-      shooter.setPIDShooterSpeed(Constants.intakeShooterSpeed);
+      shooter.gotoRate(Constants.intakeShooterSpeed);
       intake.setSpeed(Constants.intakeSpeedIn);
       index.enableIndex(1);
   }
@@ -69,14 +69,14 @@ public class MEGAShooter extends SubsystemBase {
     index.disableIndex();
   }
   public void shoot(){
-    shooter.setPIDShooterSpeed(Constants.pivotTable[2][pivot.pivotTablePos]);
+    shooter.gotoRate(Constants.pivotTable[2][pivot.pivotTablePos]);
     if(shooter.readyToShoot()){
       index.enableIndex(-1);
     }
   }
   public void disableShoot(){
     index.disableIndex();
-    shooter.setPIDShooterSpeed(0);
+    shooter.gotoRate(0);
   }
   public void longPreset(){
 
