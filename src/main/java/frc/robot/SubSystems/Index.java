@@ -21,7 +21,8 @@ public class Index extends SubsystemBase {
   private int balls; // not very important
   private boolean inBalls = true;
   private boolean outBalls = true;
- private boolean isAutoIndexEnabled = false;
+  private boolean isAutoIndexEnabled = false;
+  public boolean lostBalls = false;
 
   /** 
    * @return Index
@@ -59,19 +60,24 @@ public class Index extends SubsystemBase {
       }
   }
   private void startIndexOut(){
+    
     if(!photoeye.get()){
       setSpeed(-1, -1);
       outBalls = true;
+      lostBalls = false;
     }
     else{
       setSpeed(0, 0);
       if(outBalls){
         balls--;
         outBalls = false;
+        lostBalls = true;
       }
     }
   }
-
+public boolean getPhotoeyeIndex(){
+  return photoeye.get();
+}
   public void SmartDashboard(){
     SmartDashboard.putNumber("Balls in Robot", balls);
     SmartDashboard.putBoolean("indexPhoto", photoeye.get());

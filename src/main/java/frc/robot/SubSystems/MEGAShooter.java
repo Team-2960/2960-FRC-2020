@@ -19,6 +19,7 @@ public class MEGAShooter extends SubsystemBase {
   private Pivot pivot;
   private Index index;
   private Camera camera;
+  private boolean shoot = false;
 
   /** 
    * @return megaShooter
@@ -72,6 +73,24 @@ public class MEGAShooter extends SubsystemBase {
     shooter.gotoRate(Constants.pivotTable[2][pivot.pivotTablePos]);
     if(shooter.readyToShoot()){
       index.enableIndex(-1);
+    }
+  }
+  public void shootAlways(){
+    shooter.setPIDShooterSpeed(9000);
+    if(shooter.readyToShoot()){
+      shoot = true;
+    }
+    if(shoot){
+      index.enableIndex(-1);
+      if(!index.lostBalls){
+        shoot = false;
+      }
+    }
+  }
+  public void alwaysOnShoot(){
+    shooter.setPIDShooterSpeed(9000);
+    if(shooter.readyToShoot()){
+      index.setSpeed(-1);
     }
   }
   public void disableShoot(){
