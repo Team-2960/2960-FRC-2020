@@ -46,7 +46,7 @@ public class OI extends SubsystemBase{
      * @param joystick2 joystick 2
      */
     public void driver_Control(Joystick driver_Control_Right, Joystick driver_Control_Left){ 
-        if(driver_Control_Right.getRawButton(1)){
+        /* if(driver_Control_Right.getRawButton(1)){
             climb.setSpeed(driver_Control_Right.getRawAxis(1));
         }
         else{
@@ -60,7 +60,7 @@ public class OI extends SubsystemBase{
         }
         else{
             climb.setPosition(2960);
-        }
+        } */
 /*     if(driver_Control_Right.getRawButton(1)){
         drive.setDriveRate(200);
     }
@@ -68,7 +68,7 @@ public class OI extends SubsystemBase{
         drive.setSpeed(driver_Control_Left.getRawAxis(1), driver_Control_Right.getRawAxis(1));
     } */
 
-/*     if(driver_Control_Right.getRawButton(6)){
+    if(driver_Control_Right.getRawButton(6)){
         //in
         intake.setSpeed(1);
         index.enableIndex(1);  
@@ -90,10 +90,10 @@ public class OI extends SubsystemBase{
         pivot.SetPivotSpeed(driver_Control_Right.getRawAxis(1));
     }else if(driver_Control_Right.getRawButton(4)){
         pivot.DisablePivotPID();
-    }else{
-        pivot.SetPivotPIDRate(0);
+    }else if(driver_Control_Right.getRawButton(3)){
+        pivot.setPTargetAngle(200);;
     }
-    if(driver_Control_Right.getRawButton(11)){
+    /* if(driver_Control_Right.getRawButton(11)){
         if(driver_Control_Right.getRawButton(10)){
             shooter.gotoRate(-9000);
             if(shooter.readyToShoot()){

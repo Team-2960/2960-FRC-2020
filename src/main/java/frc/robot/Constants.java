@@ -47,9 +47,9 @@ public class Constants{
     public final static int mIndex2 = 14;
 
     /**
-     * Pivot PID and feedForward control
+     * Pivot PID control
      */
-    public final static double pKp = 0.0004;
+    public final static double pKp = 0.00026;
     public final static double pKi = 0.0000;
     public final static double pKd = 0.000;
     /**

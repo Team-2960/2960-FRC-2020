@@ -105,7 +105,7 @@ public class Pivot extends SubsystemBase{
       EnablePivotPID();
       if(pivotTarget != target){
         pivotTarget = target;
-        trapezoid = new Trapezoid(1, 325, -100, -2000, 2000, pabsEncoder.getDistance(), pivotTarget, pEncoder.getRate(), -200, -200);
+        trapezoid = new Trapezoid(5, -200, 200, -600, 600, pabsEncoder.getDistance(), pivotTarget, pEncoder.getRate(), -10, -10);
       }
     }
   
@@ -185,8 +185,6 @@ public class Pivot extends SubsystemBase{
     public void smartdashboard(){
       SmartDashboard.putNumber("Encoder Value Rate", pEncoder.getRate());
       SmartDashboard.putNumber("ABS Encoder Value Degrees", pabsEncoder.getDistance());
-      SmartDashboard.putNumber("Left motor current: ",mLeftPivot.getOutputCurrent());
-      SmartDashboard.putNumber("Right motor current: ",mRightPivot.getOutputCurrent());
       SmartDashboard.putNumber("Left motor Speed: ", mLeftPivot.get());
       SmartDashboard.putNumber("Right motor Speed: ", mRightPivot.get());
       SmartDashboard.putNumber("Left motor Temp: ", mLeftPivot.getMotorTemperature());
