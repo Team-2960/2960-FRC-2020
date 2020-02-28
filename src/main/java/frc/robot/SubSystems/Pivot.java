@@ -105,7 +105,7 @@ public class Pivot extends SubsystemBase{
       EnablePivotPID();
       if(pivotTarget != target){
         pivotTarget = target;
-        trapezoid = new Trapezoid(5, -200, 200, -600, 600, pabsEncoder.getDistance(), pivotTarget, pEncoder.getRate(), -10, -10);
+        trapezoid = new Trapezoid(1, -200, 200, -600, 600, pabsEncoder.getDistance(), pivotTarget, pEncoder.getRate(), -10, -10);
       }
     }
   
