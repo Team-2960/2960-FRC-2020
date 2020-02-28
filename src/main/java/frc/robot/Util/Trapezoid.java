@@ -1,5 +1,6 @@
 package frc.robot.Util;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpiutil.math.MathUtil;
 
 public class Trapezoid{
@@ -49,7 +50,7 @@ public class Trapezoid{
         double PTotal = PEnd - PStart;              // Total travel distance
         double PCur = PRaw - PStart;                // Distance from start position
         double PErr = PTotal - PCur;                // Distance to target
-        double VLead = ALead * PCur + VStart;       // Leadin speed
+        double VLead = ALead * PCur;       // Leadin speed
         double VTail = ATail * PErr;                // Tail speed
         
         // Find the speed that is closest to 0
@@ -59,10 +60,9 @@ public class Trapezoid{
         else{
             VOut = VTail;
         }
-
-        // Set dead-band speed
-        VOut = (PRaw < PEnd) ? (VStartMinNeg) : (VStartMinPos);
-
+        if(Math.abs(VOut) < Math.abs(VStartMinPos)){
+            VOut = (PRaw > PEnd) ? (VStartMinNeg) : (VStartMinPos);
+        }
         // Ensure speed is within limits
         VOut = MathUtil.clamp(VOut, VMin, VMax);
 
@@ -71,5 +71,6 @@ public class Trapezoid{
             VOut = 0;
         }
         return VOut;
+        
     }
 }

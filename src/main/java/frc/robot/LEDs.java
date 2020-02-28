@@ -8,8 +8,8 @@ public class LEDs{
      * LEDS
      */
     public LEDs(){
-        LEDStrip = new AddressableLED(1);
-        LEDBuffer = new AddressableLEDBuffer(25);
+        LEDStrip = new AddressableLED(0);
+        LEDBuffer = new AddressableLEDBuffer(24);
         LEDStrip.setLength(LEDBuffer.getLength());
         for(int i = 0; i < LEDBuffer.getLength(); i++){
             LEDBuffer.setRGB(i, 0, 255, 0);

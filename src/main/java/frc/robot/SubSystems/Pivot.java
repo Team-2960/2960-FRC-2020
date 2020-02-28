@@ -18,7 +18,7 @@ import frc.robot.Camera.*;
 
 public class Pivot extends SubsystemBase{
     public static Pivot pivot;
-    private Camera camera = Camera.get_Instance();
+    private Camera camera;
     //Pivot motor
     private CANSparkMax mLeftPivot;
     private CANSparkMax mRightPivot;
@@ -52,6 +52,8 @@ public class Pivot extends SubsystemBase{
         //init code
         mLeftPivot = new CANSparkMax(Constants.mLeftPivot, MotorType.kBrushless);
         mRightPivot = new CANSparkMax(Constants.mRightPivot, MotorType.kBrushless);
+        //init camera
+        camera = Camera.get_Instance();
   
         //encoder 
         pEncoder = new Encoder(Constants.pEncoder1, Constants.pEncoder2, false, CounterBase.EncodingType.k4X);
@@ -97,6 +99,7 @@ public class Pivot extends SubsystemBase{
         double speed = pid_output  + feedforward ;
         SetPivotSpeed(speed);
     }
+
     /**
      * set the target
      * @param target set target
@@ -105,7 +108,7 @@ public class Pivot extends SubsystemBase{
       EnablePivotPID();
       if(pivotTarget != target){
         pivotTarget = target;
-        trapezoid = new Trapezoid(1, -200, 200, -600, 600, pabsEncoder.getDistance(), pivotTarget, pEncoder.getRate(), -10, -10);
+        trapezoid = new Trapezoid(1, 200, -200, -800, 800, pabsEncoder.getDistance(), pivotTarget, pEncoder.getRate(), 40, 40);
       }
     }
   
@@ -115,6 +118,8 @@ public class Pivot extends SubsystemBase{
      */
     private void gotoAngle(){
       double rate = trapezoid.trapezoidCalc(pabsEncoder.getDistance());
+      SmartDashboard.putNumber("Vout", rate);
+
       SetPivotPIDRate(rate);
     }
     
@@ -201,7 +206,8 @@ public class Pivot extends SubsystemBase{
       // This method will be called once per scheduler run
       smartdashboard();
       //enable pivot PID
-/*       double distance = camera.getTargetDistance();
+      double distance = camera.getTargetDistance();
+      SmartDashboard.putNumber("Distance", distance);
       if(cameraTrackingEnabled){
         pivotTablePos = 0;
         while(distance > Constants.pivotTable[pivotTablePos][0] && Constants.pivotTable[pivotTablePos][0] < Constants.pivotTable.length){
@@ -223,7 +229,7 @@ public class Pivot extends SubsystemBase{
       }
   
       
-       */
+       
     
       if(isPivotEnabled){
       gotoAngle();}

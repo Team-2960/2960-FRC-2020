@@ -42,7 +42,7 @@ public class Camera{
 	 * @return Camera
 	 */
 	public static Camera get_Instance(){
-		if(camera != null){
+		if(camera == null){
 			camera = new Camera(Constants.cameraPort);
 		}
 		return camera;

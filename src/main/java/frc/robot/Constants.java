@@ -90,7 +90,7 @@ public class Constants{
     public final static int ClimbSolenoid1 = 2;
     public final static int ClimbSolenoid2 = 3;
 
-    public final static int cameraPort = 0;
+    public final static int cameraPort = 1;
 
     public final static int pabsEncoder = 0;
     public final static int pEncoder1 = 1;

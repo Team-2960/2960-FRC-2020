@@ -46,7 +46,7 @@ public class OI extends SubsystemBase{
      * @param joystick2 joystick 2
      */
     public void driver_Control(Joystick driver_Control_Right, Joystick driver_Control_Left){ 
-        /* if(driver_Control_Right.getRawButton(1)){
+/*          if(driver_Control_Right.getRawButton(1)){
             climb.setSpeed(driver_Control_Right.getRawAxis(1));
         }
         else{
@@ -60,7 +60,7 @@ public class OI extends SubsystemBase{
         }
         else{
             climb.setPosition(2960);
-        } */
+        }  */
 /*     if(driver_Control_Right.getRawButton(1)){
         drive.setDriveRate(200);
     }
@@ -68,31 +68,33 @@ public class OI extends SubsystemBase{
         drive.setSpeed(driver_Control_Left.getRawAxis(1), driver_Control_Right.getRawAxis(1));
     } */
 
-    if(driver_Control_Right.getRawButton(6)){
+/*     if(driver_Control_Right.getRawButton(3)){
         //in
         intake.setSpeed(1);
         index.enableIndex(1);  
         shooter.setShooterSpeed(0.25, 0.25); 
     }
-    if(driver_Control_Right.getRawButton(7)){
+    if(driver_Control_Right.getRawButton(4)){
         //disable
         intake.setSpeed(0);
         index.disableIndex();
         shooter.setShooterSpeed(0, 0); 
     }
-    if(driver_Control_Right.getRawButton(8)){
+    if(driver_Control_Right.getRawButton(5)){
             //out
             intake.setSpeed(-1);
             index.enableIndex(-1);  
-            shooter.setShooterSpeed(-0.2, -0.2); 
+            shooter.setShooterSpeed(-0.35, -0.35); 
     }
-    if(driver_Control_Right.getRawButton(1)){
+  */if(driver_Control_Right.getRawButton(1)){
         pivot.SetPivotSpeed(driver_Control_Right.getRawAxis(1));
-    }else if(driver_Control_Right.getRawButton(4)){
+    } else if(driver_Control_Right.getRawButton(4)){
         pivot.DisablePivotPID();
     }else if(driver_Control_Right.getRawButton(3)){
-        pivot.setPTargetAngle(200);;
+        pivot.setPTargetAngle(260);
     }
+    drive.setSpeed(driver_Control_Left.getRawAxis(1), driver_Control_Left.getRawAxis(5));
+
     /* if(driver_Control_Right.getRawButton(11)){
         if(driver_Control_Right.getRawButton(10)){
             shooter.gotoRate(-9000);
