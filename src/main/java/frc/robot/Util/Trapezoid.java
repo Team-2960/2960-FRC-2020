@@ -14,8 +14,10 @@ public class Trapezoid{
     private double VStartMinPos;
     private double tolerance;
     private double VStartMinNeg;
+    private double minGoingRateNeg;
+    private double minGoingRatePos;
     
-    public Trapezoid(double tolerance, double VStartMinPos, double VStartMinNeg, double VMin, double VMax, double PStart, double PEnd, double VStart, double ALead, double ATail){
+    public Trapezoid(double minGoingRatePos, double minGoingRateNeg, double tolerance, double VStartMinPos, double VStartMinNeg, double VMin, double VMax, double PStart, double PEnd, double VStart, double ALead, double ATail){
         this.PStart = PStart;
         this.PEnd = PEnd;
         this.VStart = VStart;
@@ -25,6 +27,8 @@ public class Trapezoid{
         this.VMax = VMax;
         this.VStartMinPos = VStartMinPos;
         this.VStartMinNeg = VStartMinNeg;
+        this.minGoingRateNeg = minGoingRateNeg;
+        this.minGoingRatePos = minGoingRatePos;
         
         this.tolerance = tolerance;
     }
@@ -45,14 +49,14 @@ public class Trapezoid{
      * @param PRaw raw value
      * @return calculaed velocity
      */
-    public double trapezoidCalc(double PRaw){
+    public double trapezoidCalc(double PRaw, double PRate){
         double VOut;
         double PTotal = PEnd - PStart;              // Total travel distance
         double PCur = PRaw - PStart;                // Distance from start position
         double PErr = PTotal - PCur;                // Distance to target
         double VLead = ALead * PCur;       // Leadin speed
         double VTail = ATail * PErr;                // Tail speed
-        
+
         // Find the speed that is closest to 0
         if(Math.abs(VLead) < Math.abs(VTail)){
             VOut = VLead;
@@ -60,16 +64,21 @@ public class Trapezoid{
         else{
             VOut = VTail;
         }
-        if(Math.abs(VOut) < Math.abs(VStartMinPos)){
-            VOut = (PRaw > PEnd) ? (VStartMinNeg) : (VStartMinPos);
+        if(Math.abs(VOut) < Math.abs(minGoingRatePos)){
+            VOut = (PRaw > PEnd) ? (minGoingRateNeg) : (minGoingRatePos);
         }
         // Ensure speed is within limits
+        
+        if(Math.abs(PRate)< 15){
+            VOut = (PRaw > PEnd) ? (VStartMinNeg) : (VStartMinPos);
+        }
         VOut = MathUtil.clamp(VOut, VMin, VMax);
 
         // Stop moing if the error is outside of 
         if(Math.abs(PErr) < tolerance){
             VOut = 0;
         }
+        
         return VOut;
         
     }
