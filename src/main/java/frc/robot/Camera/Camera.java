@@ -232,12 +232,18 @@ public class Camera{
 	public void SmartDashboard(){
 		SmartDashboard.putNumber("CenterX", getCenterX());
 		SmartDashboard.putNumber("CenterY", getCenterY());
-        SmartDashboard.putNumber("Constants.hsvThresholdHueMin", Constants.hsvThresholdHue[0]);
+		SmartDashboard.putBoolean("Target Found", isTargetFound());
+		
+		SmartDashboard.putNumber("Distance away From Target", getTargetDistance());
+		
+		
+		SmartDashboard.putNumber("Constants.hsvThresholdHueMin", Constants.hsvThresholdHue[0]);
         SmartDashboard.putNumber("Constants.hsvThresholdHueMax", Constants.hsvThresholdHue[1]);
         SmartDashboard.putNumber("Constants.hsvThresholdSaturationMin", Constants.hsvThresholdSaturation[0]);
         SmartDashboard.putNumber("Constants.hsvThresholdSaturationMax", Constants.hsvThresholdSaturation[1]);
         SmartDashboard.putNumber("Constants.hsvThresholdValueMin", Constants.hsvThresholdValue[0]);
 		SmartDashboard.putNumber("Constants.hsvThresholdValueMax", Constants.hsvThresholdValue[1]);
+
 	}
 	public void CameraConfig(){
 		Constants.hsvThresholdHue[0] = SmartDashboard.getNumber("Constants.hsvThresholdHueMin", Constants.hsvThresholdHue[0]);

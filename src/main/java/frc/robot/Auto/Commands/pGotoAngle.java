@@ -2,19 +2,23 @@ package frc.robot.Auto.Commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.SubSystems.Drive;
+import frc.robot.SubSystems.Pivot;
 
 public class pGotoAngle extends CommandBase{
     //this will adjust the shooting angle
 
-    Drive drive = Drive.get_Instance();
+    Pivot pivot = Pivot.get_Instance();
     private boolean isFinish = false;
+    private double angle;
 
-    public pGotoAngle(){
+    public pGotoAngle(double angle){
+        this.angle = angle;
     }
 
     @Override
     public void initialize() {
         super.initialize();
+        pivot.setPTargetAngle(angle);
     }
     
     /**
@@ -40,6 +44,7 @@ public class pGotoAngle extends CommandBase{
 
     @Override
     public void execute() {
+        isFinish = pivot.atPivotTarget();
     }
 
     
@@ -49,5 +54,6 @@ public class pGotoAngle extends CommandBase{
     @Override
     public void end(boolean interrupt) {
         //WILL CHANGE TO THIS NAME LATER
+        pivot.DisablePivotPID();
     }
 }

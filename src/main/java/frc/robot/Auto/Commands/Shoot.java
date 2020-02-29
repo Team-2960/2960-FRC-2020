@@ -8,13 +8,16 @@ public class Shoot extends CommandBase{
     
     Shooter shooter = Shooter.get_Instance();
     private boolean isFinish = false;
+    private double rate;
 
-    public Shoot(){
+    public Shoot(double rate){
+        this.rate = rate;
     }
 
     @Override
     public void initialize() {
         super.initialize();
+        shooter.gotoRate(rate);
     }
     
     /**
@@ -40,6 +43,7 @@ public class Shoot extends CommandBase{
 
     @Override
     public void execute() {
+        isFinish = shooter.readyToShoot();
     }
 
     
@@ -48,5 +52,6 @@ public class Shoot extends CommandBase{
      */
     @Override
     public void end(boolean interrupt) {
+        shooter.setShooterSpeed(0, 0);
     }
 }
