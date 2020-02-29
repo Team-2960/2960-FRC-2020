@@ -108,7 +108,7 @@ public class Pivot extends SubsystemBase{
       EnablePivotPID();
       if(pivotTarget != target){
         pivotTarget = target;
-        trapezoid = new Trapezoid(1, 200, -200, -800, 800, pabsEncoder.getDistance(), pivotTarget, pEncoder.getRate(), 40, 40);
+        trapezoid = new Trapezoid(150, -150, 2, 300, -300, -800, 800, pabsEncoder.getDistance(), pivotTarget, pEncoder.getRate(), 28, 28);
       }
     }
   
@@ -117,7 +117,8 @@ public class Pivot extends SubsystemBase{
      * @param angle
      */
     private void gotoAngle(){
-      double rate = trapezoid.trapezoidCalc(pabsEncoder.getDistance());
+   
+      double rate = trapezoid.trapezoidCalc(pabsEncoder.getDistance(), mLeftPivot.getEncoder().getVelocity());
       SmartDashboard.putNumber("Vout", rate);
 
       SetPivotPIDRate(rate);
@@ -231,8 +232,9 @@ public class Pivot extends SubsystemBase{
       
        
     
-      if(isPivotEnabled){
-      gotoAngle();}
+    if(isPivotEnabled){
+      gotoAngle();
+    }
     }
   /**
    * enable the pivot pid

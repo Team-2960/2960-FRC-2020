@@ -156,6 +156,7 @@ public class Constants{
                                                 };
     public final static double longPreset [] ={20, 4000};
     public final static double shortPreset [] ={20, 4000};
+    public final static double autonPreset [] ={-6000, 147, 100};
 
     public final static double intakeSpeedIn = 0.4;
     public final static double intakeSpeedOut = -0.4;

@@ -6,6 +6,8 @@
 /*----------------------------------------------------------------------------*/
 
 package frc.robot.SubSystems;
+
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.SubSystems.*;
 import frc.robot.Constants;
@@ -20,6 +22,7 @@ public class MEGAShooter extends SubsystemBase {
   private Index index;
   private Camera camera;
   private boolean shoot = false;
+  public double speed = -6000;
 
   /** 
    * @return megaShooter
@@ -41,6 +44,7 @@ public class MEGAShooter extends SubsystemBase {
     shooter = Shooter.get_Instance();
     pivot = Pivot.get_Instance();
     index = Index.get_Instance();
+  
 
   }
   
@@ -76,16 +80,23 @@ public class MEGAShooter extends SubsystemBase {
     }
   }
   public void shootAlways(){
-    shooter.gotoRate(9000);
+    shooter.gotoRate(speed);
     if(shooter.readyToShoot()){
       shoot = true;
     }
+    else{
+      shoot = false;
+    }
     if(shoot){
       index.enableIndex(-1);
-      if(!index.lostBalls){
+  /*     if(index.lostBalls){
         shoot = false;
-      }
+      } */
     }
+    else{
+      index.disableIndex();
+    }
+
   }
   public void fullSpeedOutake(){
     shooter.gotoRate(9000);
@@ -111,13 +122,15 @@ public class MEGAShooter extends SubsystemBase {
     index.disableIndex();
     shooter.gotoRate(0);
   }
-  public void longPreset(){
-
+  public void SmartDashBoard(){
+    speed = SmartDashboard.getNumber("Speed", speed);
+    SmartDashboard.putNumber("Speed", speed);
     
   }
   
   @Override
   public void periodic() {
+    SmartDashBoard();
     // This method will be called once per scheduler run
 
   }

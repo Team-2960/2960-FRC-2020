@@ -60,21 +60,28 @@ public class Index extends SubsystemBase {
       }
   }
   private void startIndexOut(){
-    
+    boolean seeBalls = false;
     if(!photoeye.get()){
       setSpeed(-1, -1);
+      seeBalls = false;
       outBalls = true;
       lostBalls = false;
     }
     else{
-      setSpeed(0, 0);
-      if(outBalls){
-        balls--;
+      seeBalls = true;
+      setSpeed(-1, -1);
+      lostBalls = false;
+    }
+    if(seeBalls){
+       if(!photoeye.get()){
+        setSpeed(0,0);
         outBalls = false;
+        seeBalls = false;
         lostBalls = true;
       }
-    }
+     }
   }
+  
 
 public boolean getPhotoeyeIndex(){
   return photoeye.get();
@@ -86,6 +93,7 @@ public boolean getPhotoeyeIndex(){
   @Override
   public void periodic() {
     // This method will be called once per scheduler run 
+    SmartDashboard();
     if(isAutoIndexEnabled){
       if(isIndexEnabled == 1){
         startIndexIn();
