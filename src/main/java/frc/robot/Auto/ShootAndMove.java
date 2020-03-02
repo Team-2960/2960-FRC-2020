@@ -6,9 +6,10 @@ import frc.robot.Auto.Commands.*;
 public class ShootAndMove extends SequentialCommandGroup{
     public ShootAndMove(){
         addCommands(
-        new pGotoAngle(150),
-        new Shoot(-6000),
+            new pGotoAngle(150),
+            new Shoot(-6000),
+            new DriveWithTime(0.5,0.5, 4)
+        );
 
-        new MoveDistance(40, 0, 0.5)   );
     }
 }
