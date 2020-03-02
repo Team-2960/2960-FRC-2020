@@ -5,6 +5,7 @@ import frc.robot.Auto.Commands.*;
 
 public class ShootandTrench extends SequentialCommandGroup{
     public ShootandTrench(){
+        
         new AdjustToTarget();
         //shoot not done yet
 

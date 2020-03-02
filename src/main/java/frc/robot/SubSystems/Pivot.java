@@ -130,7 +130,7 @@ public class Pivot extends SubsystemBase{
      * @return boolean
      */
     public boolean atPivotTarget(){
-      double error = pEncoder.getDistance() - pivotTarget;
+      double error = Math.abs(pabsEncoder.getDistance() - pivotTarget);
       return error < Constants.angleTolerance;
     }
     

@@ -79,8 +79,8 @@ public class MEGAShooter extends SubsystemBase {
       index.enableIndex(-1);
     }
   }
-  public void shootAlways(){
-    shooter.gotoRate(speed);
+  public void shootAlways(double rate){
+    shooter.gotoRate(rate);
     if(shooter.readyToShoot()){
       shoot = true;
     }

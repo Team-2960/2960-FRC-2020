@@ -1,27 +1,27 @@
 package frc.robot.Auto.Commands;
 
-import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.SubSystems.*;
-
-public class Shoot extends CommandBase{
+import edu.wpi.first.wpilibj2.command. CommandBase;
+import edu.wpi.first.wpilibj.Timer;
+public  class Delay extends CommandBase{
     //shoot the ball
-    
-    MEGAShooter mShooter = MEGAShooter.get_Instance();
-    Index index = Index.get_Instance();
-    Shooter shooter = Shooter.get_Instance();
+    private Timer timer;
+    private double delay;
+ 
     private boolean isFinish = false;
-    private double rate;
+   
 
-    public Shoot(double rate){
-        this.rate = rate;
+	
+    public Delay(double delayTime){
+        delay = delayTime;
     }
 
     @Override
     public void initialize() {
         super.initialize();
-        
+        timer = new Timer();
+        timer.start();
     }
-    
+
     /**
      * Returns true if all the commands in this group have been started and have
      * finished.
@@ -41,21 +41,17 @@ public class Shoot extends CommandBase{
             return false;
     }
 
-
-
     @Override
     public void execute() {
-        isFinish = index.indexBeltsGoneDistance(57);
-        mShooter.shootAlways(rate);
+        isFinish = timer.get() >= delay;
     }
 
     
     /** 
-     * @param interrupt
+     * @param interrupte
      */
     @Override
-    public void end(boolean interrupt) {
-        shooter.setShooterSpeed(0, 0);
-        index.disableIndex();
+    public void end(boolean interrupte) {
+        timer.stop();
     }
 }

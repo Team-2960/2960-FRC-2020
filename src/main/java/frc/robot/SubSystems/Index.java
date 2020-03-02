@@ -18,11 +18,12 @@ public class Index extends SubsystemBase {
 
   private int isIndexEnabled = 0;
 
-  private int balls; // not very important
+  public int balls = 3; // not very important
   private boolean inBalls = true;
   private boolean outBalls = true;
   private boolean isAutoIndexEnabled = false;
   public boolean lostBalls = false;
+  public boolean seeBalls = false;
 
   /** 
    * @return Index
@@ -37,7 +38,7 @@ public class Index extends SubsystemBase {
     mLeftIndex = new CANSparkMax(Constants.mIndex1, MotorType.kBrushless);
     mRightIndex = new CANSparkMax(Constants.mIndex2, MotorType.kBrushless);
     photoeye = new CANDigitalInput(mLeftIndex,  CANDigitalInput.LimitSwitch.kForward,  CANDigitalInput.LimitSwitchPolarity.kNormallyOpen);
-
+    mRightIndex.getEncoder().setPosition(0);
   }
   /**
    * Gets the photo eye and prints it
@@ -54,13 +55,21 @@ public class Index extends SubsystemBase {
       else{
         setSpeed(0, 0);
         if(inBalls){
-          balls++;
+          
           inBalls = false;
         }
       }
   }
   private void startIndexOut(){
-    boolean seeBalls = false;
+    if(seeBalls){
+      if(!photoeye.get()){
+       
+       setSpeed(0,0);
+       outBalls = false;
+       seeBalls = false;
+       lostBalls = true;
+     }
+   }
     if(!photoeye.get()){
       setSpeed(-1, -1);
       seeBalls = false;
@@ -72,17 +81,13 @@ public class Index extends SubsystemBase {
       setSpeed(-1, -1);
       lostBalls = false;
     }
-    if(seeBalls){
-       if(!photoeye.get()){
-        setSpeed(0,0);
-        outBalls = false;
-        seeBalls = false;
-        lostBalls = true;
-      }
-     }
-  }
   
-
+  
+    System.out.println(balls);
+  }
+  public boolean indexBeltsGoneDistance(double distance){
+    return distance < getEncoderDistance();
+  }
 public boolean getPhotoeyeIndex(){
   return photoeye.get();
 }
@@ -93,7 +98,9 @@ public boolean getPhotoeyeIndex(){
   @Override
   public void periodic() {
     // This method will be called once per scheduler run 
+    System.out.println(getEncoderDistance());
     SmartDashboard();
+    System.out.println(balls);
     if(isAutoIndexEnabled){
       if(isIndexEnabled == 1){
         startIndexIn();
@@ -116,5 +123,8 @@ public boolean getPhotoeyeIndex(){
     isAutoIndexEnabled = false;
     setSpeed(0, 0);
     isIndexEnabled = 0;
+  }
+  public double getEncoderDistance(){
+    return mRightIndex.getEncoder().getPosition();
   }
 }

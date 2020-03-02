@@ -121,7 +121,7 @@ public class Constants{
     /**
      * The tolerance for the target angle
      */
-    public final static double angleTolerance = 1;
+    public final static double angleTolerance = 3;
     /**
      * The front neutural angle
      */

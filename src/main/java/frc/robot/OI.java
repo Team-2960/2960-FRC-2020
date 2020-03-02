@@ -83,7 +83,7 @@ public class OI extends SubsystemBase{
             //out
             //intake.setSpeed(-1);
             index.enableIndex(-1);  
-            mShooter.shootAlways();
+            mShooter.shootAlways(-6000);
     }
     if(driver_Control_Right.getRawButton(1)){
         pivot.SetPivotSpeed(driver_Control_Right.getRawAxis(1));

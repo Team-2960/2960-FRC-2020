@@ -13,12 +13,15 @@ public class pGotoAngle extends CommandBase{
 
     public pGotoAngle(double angle){
         this.angle = angle;
+        System.out.println("constructor");
     }
 
     @Override
     public void initialize() {
         super.initialize();
         pivot.setPTargetAngle(angle);
+        System.out.println("init");
+
     }
     
     /**
@@ -34,6 +37,8 @@ public class pGotoAngle extends CommandBase{
      */
     @Override
     public boolean isFinished() {
+        System.out.println("isfinished");
+
         if (isFinish)
             return true;
         else
@@ -45,6 +50,9 @@ public class pGotoAngle extends CommandBase{
     @Override
     public void execute() {
         isFinish = pivot.atPivotTarget();
+        System.out.println(isFinish);
+        System.out.println("exceute");
+
     }
 
     
@@ -54,6 +62,5 @@ public class pGotoAngle extends CommandBase{
     @Override
     public void end(boolean interrupt) {
         //WILL CHANGE TO THIS NAME LATER
-        pivot.DisablePivotPID();
     }
 }

@@ -5,16 +5,19 @@ import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.Sendable;
 import frc.robot.Camera.Camera;
 import frc.robot.OI;
+import frc.robot.Auto.ShootAndMove;
 import frc.robot.Constants;
 import frc.robot.SubSystems.*;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 
 public class Robot extends TimedRobot {
   private OI oi;
   private LEDs leds;
   private Camera camera = Camera.get_Instance();
+  private Command autonCommand = null;
   @Override
   public void robotInit() {
     oi = new OI();
@@ -23,6 +26,8 @@ public class Robot extends TimedRobot {
 
   @Override
   public void autonomousInit() {
+    autonCommand = new ShootAndMove();
+    if(autonCommand != null) autonCommand.schedule();
   }
 
   @Override
