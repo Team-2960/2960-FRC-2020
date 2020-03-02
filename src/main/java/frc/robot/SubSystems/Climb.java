@@ -36,6 +36,8 @@ public class Climb extends SubsystemBase {
     mClimb = new TalonFX(Constants.mClimb);
     mClimb2 = new TalonFX(Constants.mClimb2);
     sClimb = new DoubleSolenoid(Constants.ClimbSolenoid1, Constants.ClimbSolenoid2);
+    setPosition(1);
+    setPosition(2960);
   }
 
   

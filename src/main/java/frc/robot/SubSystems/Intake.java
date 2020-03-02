@@ -32,6 +32,8 @@ public class Intake extends SubsystemBase {
   private Intake() {
     sIntake = new DoubleSolenoid(Constants.IntakeSolenoid1, Constants.IntakeSolenoid2);
     mIntake = new CANSparkMax(Constants.mIntake, MotorType.kBrushless);
+    setPosition(0);
+    setPosition(2960);
   }
 
   

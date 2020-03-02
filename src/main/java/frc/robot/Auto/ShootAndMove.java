@@ -8,7 +8,7 @@ public class ShootAndMove extends SequentialCommandGroup{
         addCommands(
             new pGotoAngle(150),
             new Shoot(-6000),
-            new DriveWithTime(0.5,0.5, 4)
+            new DriveWithTime(-0.25,-0.25, 0.5)
         );
 
     }

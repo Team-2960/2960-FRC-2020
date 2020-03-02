@@ -69,19 +69,20 @@ public class OI extends SubsystemBase{
     } */
     if(driver_Control_Right.getRawButton(7)){
         //in
-        //intake.setSpeed(1);
+        intake.setSpeed(1);
         index.enableIndex(1);  
         shooter.setShooterSpeed(0.25, 0.25); 
     }
     if(driver_Control_Right.getRawButton(8)){
         //disable
-        //intake.setSpeed(0);
+        
+        intake.setSpeed(0);
         index.disableIndex();
         shooter.setShooterSpeed(0, 0); 
     }
     if(driver_Control_Right.getRawButton(9)){
             //out
-            //intake.setSpeed(-1);
+            intake.setSpeed(-1);
             index.enableIndex(-1);  
             mShooter.shootAlways(-6000);
     }
@@ -96,6 +97,7 @@ public class OI extends SubsystemBase{
     }else if(driver_Control_Right.getRawButton(6)){
         pivot.setPTargetAngle(300);
     }
+
 
 
     /* if(driver_Control_Right.getRawButton(11)){
