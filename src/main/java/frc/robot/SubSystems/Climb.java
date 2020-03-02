@@ -37,7 +37,6 @@ public class Climb extends SubsystemBase {
     mClimb2 = new TalonFX(Constants.mClimb2);
     sClimb = new DoubleSolenoid(Constants.ClimbSolenoid1, Constants.ClimbSolenoid2);
     setPosition(1);
-    setPosition(2960);
   }
 
   
@@ -58,9 +57,7 @@ public class Climb extends SubsystemBase {
         sClimb.set(Value.kForward);
       else if(state == 1)
         sClimb.set(Value.kReverse);
-      else
-        sClimb.set(Value.kOff);
-    }
+     }
   private void SmartDashboard(){
     SmartDashboard.putNumber("winch motor", mClimb.getSupplyCurrent());
     SmartDashboard.putNumber("winch motor2", mClimb2.getSupplyCurrent());

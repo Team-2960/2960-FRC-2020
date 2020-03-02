@@ -60,17 +60,32 @@ public class MEGAShooter extends SubsystemBase {
     shooter.setSpeedOffset(0);
     pivot.pivotAngleOffset(0);
   }
+  public void outakeEnable(){
+    intake.setSpeed(-1);
+    index.enableIndex(-1);  
+    shootAlways(-6000);
+  }
   public void intakeEnable(){
+    if(Constants.pivotOutOfReach > pivot.getPivotPos()){
       intake.setPosition(1);
+    }
+    else{
+      pivot.setPTargetAngle(pivot.frontOrBack());
+    }
+    if(intake.isIntakeOut()){
       pivot.setPTargetAngle(Constants.intakePivotAngle);
       shooter.gotoRate(Constants.intakeShooterSpeed);
       intake.setSpeed(Constants.intakeSpeedIn);
       index.enableIndex(1);
+    }
   }
   public void intakeDisable(){
     intake.setSpeed(0);
+    shooter.setShooterSpeed(0, 0);
+    if(Constants.pivotOutOfReach > pivot.getPivotPos()){
+      intake.setPosition(1);
+    }
     pivot.setPTargetAngle(pivot.frontOrBack());
-    intake.setPosition(0);
     index.disableIndex();
   }
   public void shoot(){

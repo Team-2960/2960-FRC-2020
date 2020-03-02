@@ -46,7 +46,16 @@ public class OI extends SubsystemBase{
      * @param joystick2 joystick 2
      */
     public void driver_Control(Joystick driver_Control_Right, Joystick driver_Control_Left){ 
-/*          if(driver_Control_Right.getRawButton(1)){
+/*         //intake and outake
+        if(intakeInEnabled()){
+            mShooter.intakeEnable();
+        }else if(intakeOutEnabled()){
+            mShooter.outakeEnable();
+        }else if(intakeDisable()){
+            mShooter.intakeDisable();
+        }
+ */
+         if(driver_Control_Right.getRawButton(1)){
             climb.setSpeed(driver_Control_Right.getRawAxis(1));
         }
         else{
@@ -60,14 +69,14 @@ public class OI extends SubsystemBase{
         }
         else{
             climb.setPosition(2960);
-        }  */
+        } 
 /*     if(driver_Control_Right.getRawButton(1)){
         drive.setDriveRate(200);
     }
     else{
-        drive.setSpeed(driver_Control_Left.getRawAxis(1), driver_Control_Right.getRawAxis(1));
+        */drive.setSpeed(driver_Control_Left.getRawAxis(1), driver_Control_Right.getRawAxis(1));/*
     } */
-    if(driver_Control_Right.getRawButton(7)){
+/*     if(driver_Control_Right.getRawButton(7)){
         //in
         intake.setSpeed(1);
         index.enableIndex(1);  
@@ -96,7 +105,7 @@ public class OI extends SubsystemBase{
         pivot.setPTargetAngle(200);
     }else if(driver_Control_Right.getRawButton(6)){
         pivot.setPTargetAngle(300);
-    }
+    } */
 
 
 
@@ -134,13 +143,13 @@ public class OI extends SubsystemBase{
             climb.setPosition(1);
         else
             climb.setPosition(2960);  //Set climber off
-       
+       */
         //Winch
         if(isWinching())  //winch on
             climb.setSpeed(1);
         else
             climb.setSpeed(0);  //winch off
-        
+        /*
         //Is pivot front
         if(isPivotFront()){
             pivot.setpivotDirection(true);
@@ -221,6 +230,10 @@ public class OI extends SubsystemBase{
      */
     private boolean intakeOutEnabled(){
         return driver_Control_Right.getRawButton(2);
+    }
+
+    private boolean intakeDisable(){
+        return driver_Control_Right.getRawButton(17);
     }
     
     /** 

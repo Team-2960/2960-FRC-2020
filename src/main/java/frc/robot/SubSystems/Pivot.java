@@ -151,6 +151,9 @@ public class Pivot extends SubsystemBase{
       }
       return isInWindow;
     }
+    public double getPivotPos(){
+      return pabsEncoder.getDistance();
+    }
     
     /** 
      * @return double

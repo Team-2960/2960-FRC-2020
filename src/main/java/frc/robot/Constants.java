@@ -163,4 +163,5 @@ public class Constants{
     public final static double intakePivotAngle = 30;
     public final static double intakeShooterSpeed = -500;
     public final static double percentOnLowerBelt = 0.85;
+    public final static double pivotOutOfReach = 290;
 }

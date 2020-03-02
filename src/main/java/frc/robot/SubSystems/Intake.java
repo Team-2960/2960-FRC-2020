@@ -33,7 +33,6 @@ public class Intake extends SubsystemBase {
     sIntake = new DoubleSolenoid(Constants.IntakeSolenoid1, Constants.IntakeSolenoid2);
     mIntake = new CANSparkMax(Constants.mIntake, MotorType.kBrushless);
     setPosition(0);
-    setPosition(2960);
   }
 
   
@@ -46,14 +45,25 @@ public class Intake extends SubsystemBase {
   
   /** 
    * @param setPosition
+ * @return 
    */
+  //not sure need to test
   public void setPosition(int state){
-    if(state == 0)
+    if(state == 0){
       sIntake.set(Value.kForward);
-    else if(state == 1)
+    }
+    else if(state == 1){
       sIntake.set(Value.kReverse);
-    else
-      sIntake.set(Value.kOff);
+    }
+    //els      
+  }
+  public boolean isIntakeOut(){
+    if( DoubleSolenoid.Value.kForward == sIntake.get()){
+      return true;
+    }
+    else{
+      return false;
+    }
   }
   @Override
   public void periodic() {
