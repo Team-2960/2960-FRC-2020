@@ -12,6 +12,9 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.SubSystems.*;
 import frc.robot.Constants;
 import frc.robot.Camera.Camera;
+import edu.wpi.first.wpilibj.Timer;
+
+
 
 public class MEGAShooter extends SubsystemBase {
   private static MEGAShooter megaShooter;
@@ -22,6 +25,7 @@ public class MEGAShooter extends SubsystemBase {
   private Camera camera;
   private boolean shoot = false;
   public double speed = -6000;
+  public Timer timer = new Timer();
 
   /** 
    * @return megaShooter
@@ -63,18 +67,53 @@ public class MEGAShooter extends SubsystemBase {
     index.enableIndex(-1);  
     shootAlways(-6000);
   }
-  public void intakeEnable(){
-    if(Constants.pivotOutOfReach > pivot.getPivotPos()){
-      intake.setPosition(1);
+  //Driver Controls for the intake and shooter speeds
+  public void intakeEnableDr(){
+    index.enableIndex(1);
+    intake.setSpeed(1);
+    shooter.setPIDShooterSpeed(4000);
+  }
+  public void intakeOutEnableDr(){
+    intake.setSpeed(-1);
+  }
+  //Operator control on the position for the intake and pivot positions
+  public void intakeEnableOp(){
+    boolean pivotOutOfIntake = false;
+    if(Constants.pivotOutOfReach < pivot.getPivotPos()){    
+      intake.setPosition(0);
+      pivotOutOfIntake = true;
     }
     else{
-      pivot.setPTargetAngle(pivot.frontOrBack());
+      timer.start();
+      if(timer.get() > 1){
+        pivot.setPTargetAngle(pivot.frontOrBack());
+        pivotOutOfIntake = true;
+      }
+      
     }
-    if(intake.isIntakeOut()){
-      pivot.setPTargetAngle(Constants.intakePivotAngle);
-      shooter.gotoRate(Constants.intakeShooterSpeed);
-      intake.setSpeed(Constants.intakeSpeedIn);
-      index.enableIndex(1);
+    if(pivotOutOfIntake){
+      pivot.setPTargetAngle(Constants.intakePivotAngle);      
+    }
+  }
+  //Operator Outake with pivot and index and shooter
+  public void outakeEnableOp(){
+    boolean pivotOutOfIntake = false;
+    if(Constants.pivotOutOfReach < pivot.getPivotPos()){    
+      intake.setPosition(1);
+      pivotOutOfIntake = true;
+    }
+    else{
+      timer.start();
+      if(timer.get() > 1){
+        pivot.setPTargetAngle(pivot.frontOrBack());
+        pivotOutOfIntake = true;
+      }
+      
+    }
+    if(pivotOutOfIntake){
+      intake.setPosition(1);
+      index.setSpeed(-1, -0.85);
+      shooter.setShooterSpeed(-0.2, -0.2);
     }
   }
   public void intakeDisable(){
@@ -102,9 +141,9 @@ public class MEGAShooter extends SubsystemBase {
     }
     if(shoot){
       index.enableIndex(-1);
-  /*     if(index.lostBalls){
-        shoot = false;
-      } */
+    /*    if(index.lostBalls){
+        shoot = false;*/
+      } 
     }
     else{
       index.disableIndex();
