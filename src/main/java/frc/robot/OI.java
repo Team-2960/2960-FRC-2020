@@ -22,6 +22,7 @@ public class OI extends SubsystemBase{
     private Joystick driver_Control_Right;
     private Joystick driver_Control_Left;
     private Joystick operator_Control;
+    public boolean winchback = false;
 
 
     public OI(){
@@ -55,49 +56,65 @@ public class OI extends SubsystemBase{
             mShooter.intakeDisable();
         }
  */
-         if(driver_Control_Right.getRawButton(1)){
-            climb.setSpeed(driver_Control_Right.getRawAxis(1));
-        }
-        else{
-            climb.setSpeed(0);
-        }
-        if(driver_Control_Right.getRawButton(2)){
-            climb.setPosition(0);
-        }
-        else if(driver_Control_Right.getRawButton(3)){
-            climb.setPosition(1);
-        }
-        else{
-            climb.setPosition(2960);
-        } 
+         
 /*     if(driver_Control_Right.getRawButton(1)){
         drive.setDriveRate(200);
     }
     else{
-        */drive.setSpeed(driver_Control_Left.getRawAxis(1), driver_Control_Right.getRawAxis(1));/*
+        */
+    if(Math.abs(driver_Control_Left.getRawAxis(1)) > 0.08 || Math.abs(driver_Control_Right.getRawAxis(1)) > 0.08){
+        drive.setSpeed(driver_Control_Left.getRawAxis(1), driver_Control_Right.getRawAxis(1));
+    }
+    else{
+        drive.setSpeed(0 , 0);
+    }
+            
+            /*[]\
+            []\
+
+        }
     } */
-/*     if(driver_Control_Right.getRawButton(7)){
+    if(winchback){
+        if(driver_Control_Left.getRawButton(11) && driver_Control_Right.getRawButton(11)){
+            climb.setSpeed(0.2);
+        }
+        else{
+            climb.setSpeed(0);
+        }
+    }
+    else{
+        winchback = false;
+    }
+
+    if(driver_Control_Right.getRawButton(7)){
         //in
-        intake.setSpeed(1);
+        intake.setPosition(1);
         index.enableIndex(1);  
-        shooter.setShooterSpeed(0.25, 0.25); 
-    }
-    if(driver_Control_Right.getRawButton(8)){
-        //disable
-        
-        intake.setSpeed(0);
-        index.disableIndex();
-        shooter.setShooterSpeed(0, 0); 
-    }
-    if(driver_Control_Right.getRawButton(9)){
-            //out
-            intake.setSpeed(-1);
-            index.enableIndex(-1);  
-            mShooter.shootAlways(-6000);
     }
     if(driver_Control_Right.getRawButton(1)){
+        shooter.gotoRate(4000);
+        intake.setSpeed(1);
+    }
+    else if(driver_Control_Right.getRawButton(9)){
+        intake.setPosition(0);
+    }
+    else{
+        shooter.setShooterSpeed(0, 0); 
+        intake.setSpeed(0);
+    }
+
+    if(driver_Control_Right.getRawButton(8)){
+
+        //disable
+        
+        shooter.setShooterSpeed(0, 0); 
+        intake.setSpeed(0);
+        index.disableIndex();
+    }
+
+    if(driver_Control_Left.getRawButton(1)){
         pivot.SetPivotSpeed(driver_Control_Right.getRawAxis(1));
-    } else if(driver_Control_Right.getRawButton(4)){
+    } /* else if(driver_Control_Right.getRawButton(4)){
         pivot.DisablePivotPID();
     }else if(driver_Control_Right.getRawButton(3)){
         pivot.setPTargetAngle(150);
@@ -105,7 +122,8 @@ public class OI extends SubsystemBase{
         pivot.setPTargetAngle(200);
     }else if(driver_Control_Right.getRawButton(6)){
         pivot.setPTargetAngle(300);
-    } */
+    }  */
+    
 
 
 
@@ -128,27 +146,30 @@ public class OI extends SubsystemBase{
      * @param operator_Control operator control joystick
      */
     public void operator_Control(Joystick operator_Control){
-    drive.setSpeed(operator_Control.getRawAxis(1), operator_Control.getRawAxis(5));
 /*         //preset
         //Set Manual Control Offset
         if(isManualControl())
             mShooter.setOffset(operator_Control.getRawAxis(1), operator_Control.getRawAxis(0));
         else
             mShooter.disableManual();
-
+*/
         //piston for climber
         if(isClimbExtended())  //Extend the climber
             climb.setPosition(0);
         else if(isClimbRetracted())  //Retract the climber
             climb.setPosition(1);
-        else
-            climb.setPosition(2960);  //Set climber off
-       */
+        if(isWinching()){  //winch on
+            winchback = false;
+        }
         //Winch
-        if(isWinching())  //winch on
-            climb.setSpeed(1);
-        else
-            climb.setSpeed(0);  //winch off
+        if(!winchback){}
+            if(isWinching()){  //winch on
+                climb.setSpeed(-0.2);
+            }
+            else{
+                climb.setSpeed(0);  //winch off
+                winchback = true;
+            }
         /*
         //Is pivot front
         if(isPivotFront()){
@@ -362,3 +383,57 @@ public class OI extends SubsystemBase{
         return operator_Control.getRawButton(12);
     }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* 
+Driver:
+    drive
+    intake: in / out (balls)
+    shoot
+
+
+
+Operator:
+    intake out:
+        -intake down
+        -pivot too there(need wait)
+
+    intake in:
+        -
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+*/

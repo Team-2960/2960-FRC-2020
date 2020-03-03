@@ -16,7 +16,6 @@ import frc.robot.Camera.Camera;
 public class MEGAShooter extends SubsystemBase {
   private static MEGAShooter megaShooter;
   private Intake intake;
-  private Drive drive;
   private Shooter shooter;
   private Pivot pivot;
   private Index index;
@@ -39,7 +38,6 @@ public class MEGAShooter extends SubsystemBase {
  */
   private MEGAShooter() {
     camera = Camera.get_Instance();
-    drive = Drive.get_Instance();
     intake = Intake.get_Instance();
     shooter = Shooter.get_Instance();
     pivot = Pivot.get_Instance();

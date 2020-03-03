@@ -69,13 +69,6 @@ public class Drive extends SubsystemBase {
     mRightMfollow1 = new CANSparkMax(Constants.mRightMfollow2, MotorType.kBrushless);
     mRightMfollow2 = new CANSparkMax(Constants.mRightMfollow3, MotorType.kBrushless);
 
-    mLeftMaster.setIdleMode(CANSparkMax.IdleMode.kCoast);
-    mLeftFollow1.setIdleMode(CANSparkMax.IdleMode.kCoast);
-    mLeftFollow2.setIdleMode(CANSparkMax.IdleMode.kCoast);
-    mRightMaster.setIdleMode(CANSparkMax.IdleMode.kCoast);
-    mRightMfollow1.setIdleMode(CANSparkMax.IdleMode.kCoast);
-    mRightMfollow2.setIdleMode(CANSparkMax.IdleMode.kCoast);
-
     //set master moter and follower motor
     mLeftFollow1.follow(mLeftMaster);
     mLeftFollow2.follow(mLeftMaster);

@@ -49,7 +49,7 @@ public class Index extends SubsystemBase {
   }
   private void startIndexIn(){
       if(photoeye.get()){
-        setSpeed(1, 0.45);
+        setSpeed(1, 0.85);
         inBalls = true;
       }
       else{
