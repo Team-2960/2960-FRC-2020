@@ -47,6 +47,72 @@ public class OI extends SubsystemBase{
      * @param joystick2 joystick 2
      */
     public void driver_Control(Joystick driver_Control_Right, Joystick driver_Control_Left){ 
+        mShooter.setOffset(operator_Control.getRawAxis(1), operator_Control.getRawAxis(1));
+        if(isPivotFront()){
+            pivot.setpivotDirection(true);
+        }
+        else{
+            pivot.setpivotDirection(false);
+        }
+        //pivot stuff
+        if(isIntakeIn() || setPivotTrenchHeight()){
+            mShooter.intakeEnableOp();
+        }
+        
+        if(isShortPreset()){
+            pivot.setPTargetAngle(Constants.shortPreset[1]);
+        }
+        if(isLongPreset()){
+            pivot.setPTargetAngle(Constants.longPreset[1]);
+        }
+        if(isIntakeOut()){
+            mShooter.intakeDisable();
+        }
+        //index and shooter and intake stuff
+        if(isIndexOut()){
+            shooter.setShooterSpeed(0.2, 0.2);
+        }
+        else if(intakeInEnabled()){
+            mShooter.intakeEnableDr();
+        }
+        else if(intakeOutEnabled()){
+            intake.setSpeed(-1);
+        }
+        else if(shootOutEnable() && isShortPreset()){
+            mShooter.shootAlways(Constants.shortPreset[0]);
+        }
+        else if(shootOutEnable() && isLongPreset()){
+            mShooter.shootAlways(Constants.longPreset[0]);
+        }
+        //climbing Stuff
+        if(isClimbExtended())  //Extend the climber
+         climb.setPosition(0);
+        else if(isClimbRetracted())  //Retract the climber
+            climb.setPosition(1);
+        if(isWinching()){  //winch on
+            winchback = false;
+        }
+        //Winch
+        if(winchback){
+            if(driver_Control_Left.getRawButton(11) && driver_Control_Right.getRawButton(11)){
+                climb.setSpeed(0.2);
+            }
+            else{
+                climb.setSpeed(0);
+            }
+        }
+        else{
+            winchback = false;
+        }
+        if(!winchback){
+            if(isWinching()){  //winch on
+                climb.setSpeed(-0.2);
+        }
+    }
+        else{
+            climb.setSpeed(0);  //winch off
+            winchback = true;
+        }
 /*         //intake and outake
         if(intakeInEnabled()){
             mShooter.intakeEnable();
@@ -74,17 +140,7 @@ public class OI extends SubsystemBase{
 
         }
     } */
-    if(winchback){
-        if(driver_Control_Left.getRawButton(11) && driver_Control_Right.getRawButton(11)){
-            climb.setSpeed(0.2);
-        }
-        else{
-            climb.setSpeed(0);
-        }
-    }
-    else{
-        winchback = false;
-    }
+
 
     if(driver_Control_Right.getRawButton(7)){
         //in
@@ -154,22 +210,7 @@ public class OI extends SubsystemBase{
             mShooter.disableManual();
 */
         //piston for climber
-        if(isClimbExtended())  //Extend the climber
-            climb.setPosition(0);
-        else if(isClimbRetracted())  //Retract the climber
-            climb.setPosition(1);
-        if(isWinching()){  //winch on
-            winchback = false;
-        }
-        //Winch
-        if(!winchback){}
-            if(isWinching()){  //winch on
-                climb.setSpeed(-0.2);
-            }
-            else{
-                climb.setSpeed(0);  //winch off
-                winchback = true;
-            }
+ 
         /*
         //Is pivot front
         if(isPivotFront()){

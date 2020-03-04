@@ -144,7 +144,7 @@ public class MEGAShooter extends SubsystemBase {
     /*    if(index.lostBalls){
         shoot = false;*/
       } 
-    }
+    
     else{
       index.disableIndex();
     }

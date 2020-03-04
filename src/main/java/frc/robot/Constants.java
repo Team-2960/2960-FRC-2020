@@ -154,8 +154,8 @@ public class Constants{
                                                     {4.5, 40, 40, 4000},
                                                     {5, 20, 20, 4000}
                                                 };
-    public final static double longPreset [] ={20, 4000};
-    public final static double shortPreset [] ={20, 4000};
+    public final static double longPreset [] ={-3500, 182, 150};
+    public final static double shortPreset [] ={-6000, 147, 100};
     public final static double autonPreset [] ={-6000, 147, 100};
 
     public final static double intakeSpeedIn = 0.4;
