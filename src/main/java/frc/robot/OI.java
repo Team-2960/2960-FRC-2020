@@ -22,6 +22,7 @@ public class OI extends SubsystemBase{
     private Joystick driver_Control_Right;
     private Joystick driver_Control_Left;
     private Joystick operator_Control;
+    private Joystick backUp_Control;
     public boolean winchback = false;
 
 
@@ -40,13 +41,18 @@ public class OI extends SubsystemBase{
         driver_Control_Right = new Joystick(Constants.driver_Control_Left);
         
         operator_Control = new Joystick(Constants.operator_Control);
+        backUp_Control = new Joystick(Constants.backUp_Control);
     }
     /**
      * Commands for the joysticks
      * @param driver_Control joystick 1
      * @param joystick2 joystick 2
      */
-    public void driver_Control(Joystick driver_Control_Right, Joystick driver_Control_Left){ 
+    public void driver_Control(Joystick driver_Control_Right, Joystick backUp_Control){ 
+        if(isManualControl()){
+            pivot.SetPivotSpeed(backUp_Control.getRawAxis(1));
+            shooter.setShooterSpeed(backUp_Control.getRawAxis(1), backUp_Control.getRawAxis(5));
+        }
         mShooter.setOffset(operator_Control.getRawAxis(1), operator_Control.getRawAxis(1));
         if(isPivotFront()){
             pivot.setpivotDirection(true);
@@ -57,6 +63,7 @@ public class OI extends SubsystemBase{
         //pivot stuff
         if(isIntakeIn() || setPivotTrenchHeight()){
             mShooter.intakeEnableOp();
+            intake.setPosition(1);
         }
         
         if(isShortPreset()){
@@ -67,6 +74,7 @@ public class OI extends SubsystemBase{
         }
         if(isIntakeOut()){
             mShooter.intakeDisable();
+            intake.setPosition(0);
         }
         //index and shooter and intake stuff
         if(isIndexOut()){
@@ -113,150 +121,6 @@ public class OI extends SubsystemBase{
             climb.setSpeed(0);  //winch off
             winchback = true;
         }
-/*         //intake and outake
-        if(intakeInEnabled()){
-            mShooter.intakeEnable();
-        }else if(intakeOutEnabled()){
-            mShooter.outakeEnable();
-        }else if(intakeDisable()){
-            mShooter.intakeDisable();
-        }
- */
-         
-/*     if(driver_Control_Right.getRawButton(1)){
-        drive.setDriveRate(200);
-    }
-    else{
-        */
-    if(Math.abs(driver_Control_Left.getRawAxis(1)) > 0.08 || Math.abs(driver_Control_Right.getRawAxis(1)) > 0.08){
-        drive.setSpeed(driver_Control_Left.getRawAxis(1), driver_Control_Right.getRawAxis(1));
-    }
-    else{
-        drive.setSpeed(0 , 0);
-    }
-            
-            /*[]\
-            []\
-
-        }
-    } */
-
-
-    if(driver_Control_Right.getRawButton(7)){
-        //in
-        intake.setPosition(1);
-        index.enableIndex(1);  
-    }
-    if(driver_Control_Right.getRawButton(1)){
-        shooter.gotoRate(4000);
-        intake.setSpeed(1);
-    }
-    else if(driver_Control_Right.getRawButton(9)){
-        intake.setPosition(0);
-    }
-    else{
-        shooter.setShooterSpeed(0, 0); 
-        intake.setSpeed(0);
-    }
-
-    if(driver_Control_Right.getRawButton(8)){
-
-        //disable
-        
-        shooter.setShooterSpeed(0, 0); 
-        intake.setSpeed(0);
-        index.disableIndex();
-    }
-
-    if(driver_Control_Left.getRawButton(1)){
-        pivot.SetPivotSpeed(driver_Control_Right.getRawAxis(1));
-    } /* else if(driver_Control_Right.getRawButton(4)){
-        pivot.DisablePivotPID();
-    }else if(driver_Control_Right.getRawButton(3)){
-        pivot.setPTargetAngle(150);
-    }else if(driver_Control_Right.getRawButton(5)){
-        pivot.setPTargetAngle(200);
-    }else if(driver_Control_Right.getRawButton(6)){
-        pivot.setPTargetAngle(300);
-    }  */
-    
-
-
-
-    /* if(driver_Control_Right.getRawButton(11)){
-            shooter.gotoRate(-9000);
-            if(shooter.readyToShoot()){
-                index.enableIndex(-1);
-            }
-            else{
-                index.disableIndex();
-            }
-        }else{
-            shooter.gotoRate(0);
-            index.disableIndex();
-        }
-    } */
-}
-    /**
-     * Operator control
-     * @param operator_Control operator control joystick
-     */
-    public void operator_Control(Joystick operator_Control){
-/*         //preset
-        //Set Manual Control Offset
-        if(isManualControl())
-            mShooter.setOffset(operator_Control.getRawAxis(1), operator_Control.getRawAxis(0));
-        else
-            mShooter.disableManual();
-*/
-        //piston for climber
- 
-        /*
-        //Is pivot front
-        if(isPivotFront()){
-            pivot.setpivotDirection(true);
-        }
-        else{
-            pivot.setpivotDirection(false);
-        }
-
-        //Is camera tracking enabled
-        if(isCameraTracking())
-            pivot.isCameraTrackingEnabled(true);
-        else 
-            pivot.isCameraTrackingEnabled(false);
-
-        //Shooting presets
-        if(isLongPreset())
-            pivot.setPTargetAngle(Constants.longPreset[0]);  //Long
-        else if (isShortPreset()){
-            pivot.setPTargetAngle(Constants.shortPreset[0]);  //Short
-        }
-        
-        //Intake
-        if (isIntakeOut())
-            intake.setSpeed(-1);  //Intake out
-        else if (isIntakeIn())
-            intake.setSpeed(1);  //Intake in
-        else 
-            intake.setSpeed(0);  //Intake stop
-
-        //Shoot
-        if (isShoot())
-            mShooter.shoot();
-        else
-            shooter.setShooterSpeed(0, 0);
-
-        //Index
-        if (isIndexOut())
-            index.enableIndex(-1); 
-        else
-            index.disableIndex();
- */
-
-        
-        
-        //pivot.SetPivotSpeed(operator_Control.getRawAxis(1));
 
     }
     /**
@@ -273,7 +137,6 @@ public class OI extends SubsystemBase{
      */
     public void periodic(){
         if(DriverStation.getInstance().isOperatorControl()){
-            operator_Control(operator_Control);
             driver_Control(driver_Control_Left, driver_Control_Right);
         }
     }
