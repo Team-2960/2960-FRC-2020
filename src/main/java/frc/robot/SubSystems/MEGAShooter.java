@@ -55,6 +55,8 @@ public class MEGAShooter extends SubsystemBase {
    * @param speed
    */
   public void setOffset(double angle, double speed){
+    speed = (speed - 0.50) * 2;
+    angle = (angle - 0.50) * 2;
     shooter.setSpeedOffset(speed);
     pivot.pivotAngleOffset(angle);
   }
@@ -72,6 +74,10 @@ public class MEGAShooter extends SubsystemBase {
     index.enableIndex(1);
     intake.setSpeed(1);
     shooter.setPIDShooterSpeed(4000);
+  }
+  public void intakeFeederEnableDr(){
+    index.enableIndex(1);
+    shooter.setPIDShooterSpeed(Constants.feederPreset[0]);
   }
   public void intakeOutEnableDr(){
     intake.setSpeed(-1);
@@ -115,6 +121,17 @@ public class MEGAShooter extends SubsystemBase {
       index.setSpeed(-1, -0.85);
       shooter.setShooterSpeed(-0.2, -0.2);
     }
+  }
+  public void pivotToPosition(double position){
+    if(Constants.pivotOutOfReach > position){
+    intake.setSpeed(0);
+    shooter.setShooterSpeed(0, 0);
+    if(Constants.pivotOutOfReach > pivot.getPivotPos()){
+      intake.setPosition(1);
+    }
+    pivot.setPTargetAngle(position);
+    index.disableIndex();
+  }
   }
   public void intakeDisable(){
     intake.setSpeed(0);

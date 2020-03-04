@@ -19,7 +19,7 @@ public class OI extends SubsystemBase{
     private Camera camera;
     private MEGAShooter mShooter;
     //Joysticks
-    private Joystick driver_Control_Right;
+    private Joystick driver_Control;
     private Joystick driver_Control_Left;
     private Joystick operator_Control;
     private Joystick backUp_Control;
@@ -37,8 +37,7 @@ public class OI extends SubsystemBase{
         index = Index.get_Instance();
         mShooter = MEGAShooter.get_Instance();
         //joysticks
-        driver_Control_Left = new Joystick(Constants.driver_Control_Right);
-        driver_Control_Right = new Joystick(Constants.driver_Control_Left);
+        driver_Control = new Joystick(Constants.driver_Control_Left);
         
         operator_Control = new Joystick(Constants.operator_Control);
         backUp_Control = new Joystick(Constants.backUp_Control);
@@ -65,24 +64,33 @@ public class OI extends SubsystemBase{
         }
         
         //pivot and intake stuff
-        if(isIntakeIn() || setPivotTrenchHeight()){
-            mShooter.intakeEnableOp();
-            intake.setPosition(1);
+        if(isIntakeOut()){
+            mShooter.intakeDisable();
+            intake.setPosition(0);
         }
         
         if(isShortPreset()){
             pivot.setPTargetAngle(Constants.shortPreset[1]);
         }
-        if(isLongPreset()){
+        else if(isLongPreset()){
             pivot.setPTargetAngle(Constants.longPreset[1]);
         }
-        if(isIntakeOut()){
-            mShooter.intakeDisable();
-            intake.setPosition(0);
+        if(targetPivotAlign()){
+            pivot.isCameraTrackingEnabled(true);
+        }
+        if(isFeederStation()){
+            mShooter.pivotToPosition(Constants.feederPreset[1]);
+        }
+        else if(isIntakeIn() || setPivotTrenchHeight()){
+            mShooter.intakeEnableOp();
+            intake.setPosition(1);
         }
         //index and shooter and intake stuff
         if(isIndexOut()){
             shooter.setShooterSpeed(0.2, 0.2);
+        }
+        else if(intakeInEnabled() && isFeederStation()){
+            mShooter.intakeFeederEnableDr();
         }
         else if(intakeInEnabled()){
             mShooter.intakeEnableDr();
@@ -110,7 +118,7 @@ public class OI extends SubsystemBase{
         //Winch
         
         if(winchback){
-            if(driver_Control_Left.getRawButton(11) && driver_Control_Right.getRawButton(11)){
+            if(isBackWinching()){
                 climb.setSpeed(0.2);
             }
             else{
@@ -129,8 +137,14 @@ public class OI extends SubsystemBase{
             climb.setSpeed(0);  //winch off
             winchback = true;
         }
-
+        if(targetAlignDrive()){
+            drive.adjustToTarget();
+        }
+        else{
+            drive.setSpeed(driver_Control.getRawAxis(1), driver_Control.getRawAxis(5));
+        }
     }
+    
     /**
      * put to smartdashboard
      */
@@ -166,46 +180,46 @@ public class OI extends SubsystemBase{
      */
     // Driver Control Outline
     private boolean intakeInEnabled(){
-        return driver_Control_Right.getRawButton(1);
+        return driver_Control.getRawButton(1);
     }
     
     /** 
      * @return boolean
      */
     private boolean intakeOutEnabled(){
-        return driver_Control_Right.getRawButton(2);
+        return driver_Control.getRawButton(2);
     }
 
     private boolean intakeDisable(){
-        return driver_Control_Right.getRawButton(17);
+        return driver_Control.getRawButton(17);
     }
     
     /** 
      * @return boolean
      */
     private boolean setPivotTrenchHeight(){
-        return driver_Control_Right.getRawButton(3);
+        return driver_Control.getRawButton(3);
     }
     
     /** 
      * @return boolean
      */
     private boolean shootOutEnable(){
-        return driver_Control_Right.getRawButton(4);
+        return driver_Control.getRawButton(4);
     }
     
     /** 
      * @return boolean
      */
     private boolean targetAlignDrive(){
-        return driver_Control_Right.getRawButton(5);
+        return driver_Control.getRawButton(5);
     }
     
     /** 
      * @return boolean
      */
     private boolean targetPivotAlign(){
-        return driver_Control_Right.getRawButton(6);
+        return driver_Control.getRawButton(6);
     }
 
     
@@ -240,6 +254,9 @@ public class OI extends SubsystemBase{
     //is winch winching
     private boolean isWinching(){
         return operator_Control.getRawButton(4);
+    }
+    private boolean isBackWinching(){
+        return driver_Control.getRawButton(11) && driver_Control.getRawButton(11);
     }
     
     /** 
@@ -288,6 +305,9 @@ public class OI extends SubsystemBase{
     //is the Intake out
     private boolean isIntakeIn(){
         return operator_Control.getRawButton(10);
+    }
+    private boolean isFeederStation(){
+        return (!isIntakeIn() && (!isIndexOut()));
     }
     
     /** 
