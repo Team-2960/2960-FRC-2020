@@ -48,19 +48,23 @@ public class OI extends SubsystemBase{
      * @param driver_Control joystick 1
      * @param joystick2 joystick 2
      */
-    public void driver_Control(Joystick driver_Control_Right, Joystick backUp_Control){ 
+    public void Controller(){ 
+        //Operater control
         if(isManualControl()){
             pivot.SetPivotSpeed(backUp_Control.getRawAxis(1));
             shooter.setShooterSpeed(backUp_Control.getRawAxis(1), backUp_Control.getRawAxis(5));
         }
+
         mShooter.setOffset(operator_Control.getRawAxis(1), operator_Control.getRawAxis(1));
+        
         if(isPivotFront()){
             pivot.setpivotDirection(true);
         }
         else{
             pivot.setpivotDirection(false);
         }
-        //pivot stuff
+        
+        //pivot and intake stuff
         if(isIntakeIn() || setPivotTrenchHeight()){
             mShooter.intakeEnableOp();
             intake.setPosition(1);
@@ -100,7 +104,11 @@ public class OI extends SubsystemBase{
         if(isWinching()){  //winch on
             winchback = false;
         }
+
+
+        //driver control
         //Winch
+        
         if(winchback){
             if(driver_Control_Left.getRawButton(11) && driver_Control_Right.getRawButton(11)){
                 climb.setSpeed(0.2);
@@ -137,11 +145,22 @@ public class OI extends SubsystemBase{
      */
     public void periodic(){
         if(DriverStation.getInstance().isOperatorControl()){
-            driver_Control(driver_Control_Left, driver_Control_Right);
+            Controller();
         }
     }
 
     
+
+
+
+
+
+
+
+
+
+
+
     /** 
      * @return boolean
      */
