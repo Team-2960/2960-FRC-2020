@@ -126,11 +126,11 @@ public class Constants{
     /**
      * The front neutural angle
      */
-    public final static double neuturalPosFront = 60;
+    public final static double neuturalPosFront = 160;
     /**
      * The front neutural angle
      */
-    public final static double neuturalPosBack = 120;
+    public final static double neuturalPosBack = 200;
     /**
      * Neutural Pos window
      */

@@ -25,6 +25,8 @@ public class MEGAShooter extends SubsystemBase {
   private Camera camera;
   private boolean shoot = false;
   public double speed = -6000;
+  public boolean startIntakeTimer = true;
+
   public Timer timer = new Timer();
 
   /** 
@@ -71,6 +73,7 @@ public class MEGAShooter extends SubsystemBase {
   }
   //Driver Controls for the intake and shooter speeds
   public void intakeEnableDr(){
+    //intake in
     index.enableIndex(1);
     intake.setSpeed(1);
     shooter.setPIDShooterSpeed(4000);
@@ -83,22 +86,23 @@ public class MEGAShooter extends SubsystemBase {
     intake.setSpeed(-1);
   }
   //Operator control on the position for the intake and pivot positions
-  public void intakeEnableOp(){
+  public void intakeOutOp(){
     boolean pivotOutOfIntake = false;
+    if(startIntakeTimer){
+      timer.start();
+      startIntakeTimer = false;
+    }
     if(Constants.pivotOutOfReach < pivot.getPivotPos()){    
       intake.setPosition(0);
-      pivotOutOfIntake = true;
     }
     else{
-      timer.start();
       if(timer.get() > 1){
         pivot.setPTargetAngle(pivot.frontOrBack());
         pivotOutOfIntake = true;
+        if(pivotOutOfIntake){
+          pivot.setPTargetAngle(Constants.intakePivotAngle);
+        }
       }
-      
-    }
-    if(pivotOutOfIntake){
-      pivot.setPTargetAngle(Constants.intakePivotAngle);      
     }
   }
   //Operator Outake with pivot and index and shooter
@@ -135,12 +139,12 @@ public class MEGAShooter extends SubsystemBase {
   }
   public void intakeDisable(){
     intake.setSpeed(0);
-    shooter.setShooterSpeed(0, 0);
+    //shooter.setShooterSpeed(0, 0);
     if(Constants.pivotOutOfReach > pivot.getPivotPos()){
       intake.setPosition(1);
     }
     pivot.setPTargetAngle(pivot.frontOrBack());
-    index.disableIndex();
+    //index.disableIndex();
   }
   public void shoot(){
     shooter.gotoRate(Constants.pivotTable[2][pivot.pivotTablePos]);
