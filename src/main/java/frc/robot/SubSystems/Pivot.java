@@ -49,6 +49,9 @@ public class Pivot extends SubsystemBase{
     }
 
     private Pivot(){
+        SmartDashboard.putNumber("Vout", 0);
+
+
         //init code
         mLeftPivot = new CANSparkMax(Constants.mLeftPivot, MotorType.kBrushless);
         mRightPivot = new CANSparkMax(Constants.mRightPivot, MotorType.kBrushless);
@@ -193,6 +196,7 @@ public class Pivot extends SubsystemBase{
     }
     public void smartdashboard(){
       SmartDashboard.putNumber("Encoder Value Rate", pEncoder.getRate());
+      SmartDashboard.putNumber("target position pivot", pivotTarget);
       SmartDashboard.putNumber("ABS Encoder Value Degrees", pabsEncoder.getDistance());
       SmartDashboard.putNumber("Left motor Speed: ", mLeftPivot.get());
       SmartDashboard.putNumber("Right motor Speed: ", mRightPivot.get());
@@ -250,7 +254,6 @@ public class Pivot extends SubsystemBase{
    */
   public void DisablePivotPID(){
     isPivotEnabled = false;
-    pivotTarget = 0;
     SetPivotSpeed(0);
   }
 

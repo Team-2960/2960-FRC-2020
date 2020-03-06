@@ -92,7 +92,7 @@ public class Shooter extends SubsystemBase{
      * Sets the PID shooter speed 
      * @param speed the PID shooter speed
      */
-    public void setPIDShooterSpeed(double speed){
+    private void setPIDShooterSpeed(double speed){
       mRightShooter.set(ControlMode.Velocity, speed);
       mLeftShooter.set(ControlMode.Velocity, speed);
     }

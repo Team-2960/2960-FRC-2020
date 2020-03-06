@@ -11,6 +11,7 @@ import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.wpilibj.DoubleSolenoid;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
@@ -19,6 +20,7 @@ public class Intake extends SubsystemBase {
   private static Intake intake;
   private CANSparkMax mIntake;
   private DoubleSolenoid sIntake;
+  private Timer IntakeTimer = new Timer();
   
   /** 
    * @return Intake
@@ -32,6 +34,7 @@ public class Intake extends SubsystemBase {
   private Intake() {
     sIntake = new DoubleSolenoid(Constants.IntakeSolenoid1, Constants.IntakeSolenoid2);
     mIntake = new CANSparkMax(Constants.mIntake, MotorType.kBrushless);
+    IntakeTimer.start();
     setPosition(0);
   }
 
@@ -45,7 +48,7 @@ public class Intake extends SubsystemBase {
   
   /** 
    * @param setPosition
- * @return 
+   * @return 
    */
   //not sure need to test
   public void setPosition(int state){
@@ -54,20 +57,22 @@ public class Intake extends SubsystemBase {
     }
     else if(state == 1){
       sIntake.set(Value.kReverse);
-    }
-    //els      
+      IntakeTimer.reset();
+    }     
   }
   public boolean isIntakeOut(){
-    if( DoubleSolenoid.Value.kForward == sIntake.get()){
-      return true;
-    }
-    else{
+    if(DoubleSolenoid.Value.kForward == sIntake.get()){
       return false;
     }
+    else{
+      return true;
+    }
   }
-  @Override
+  public double getTime(){
+    return IntakeTimer.get();
+  }
+  @Override 
   public void periodic() {
     // This method will be called once per scheduler run
-
   }
 }

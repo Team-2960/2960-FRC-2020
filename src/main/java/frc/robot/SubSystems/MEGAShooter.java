@@ -12,7 +12,6 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.SubSystems.*;
 import frc.robot.Constants;
 import frc.robot.Camera.Camera;
-import edu.wpi.first.wpilibj.Timer;
 
 
 
@@ -25,10 +24,7 @@ public class MEGAShooter extends SubsystemBase {
   private Camera camera;
   private boolean shoot = false;
   public double speed = -6000;
-  public boolean startIntakeTimer = true;
-
-  public Timer timer = new Timer();
-
+  public boolean setMotorToIntake = false;
   /** 
    * @return megaShooter
    */
@@ -48,8 +44,6 @@ public class MEGAShooter extends SubsystemBase {
     shooter = Shooter.get_Instance();
     pivot = Pivot.get_Instance();
     index = Index.get_Instance();
-  
-
   }
   
   /** 
@@ -76,55 +70,53 @@ public class MEGAShooter extends SubsystemBase {
     //intake in
     index.enableIndex(1);
     intake.setSpeed(1);
-    shooter.setPIDShooterSpeed(4000);
+    shooter.gotoRate(4000);
   }
+
   public void intakeFeederEnableDr(){
     index.enableIndex(1);
-    shooter.setPIDShooterSpeed(Constants.feederPreset[0]);
+    shooter.gotoRate(Constants.feederPreset[0]);
   }
+
+  //new function to review
+  public boolean pivotToBumper(){
+    if(pivot.getPivotPos() < 280 - Constants.angleTolerance){
+      pivot.setPTargetAngle(280);     // TODO: Move PID stop position to constants
+      return false;
+    }else if(pivot.getPivotPos() < 319 - Constants.angleTolerance){ // TODO: Move hardstop position to constants
+      pivot.DisablePivotPID();
+      pivot.SetPivotSpeed(0.2);
+      return false;
+    }else{
+      pivot.DisablePivotPID();
+      pivot.SetPivotSpeed(0);
+      return true;
+    }
+  }
+
+
   public void intakeOutEnableDr(){
     intake.setSpeed(-1);
   }
   //Operator control on the position for the intake and pivot positions
-  public void intakeOutOp(){
-    boolean pivotOutOfIntake = false;
-    if(startIntakeTimer){
-      timer.start();
-      startIntakeTimer = false;
-    }
-    if(Constants.pivotOutOfReach < pivot.getPivotPos()){    
-      intake.setPosition(0);
-    }
-    else{
-      if(timer.get() > 1){
-        pivot.setPTargetAngle(pivot.frontOrBack());
-        pivotOutOfIntake = true;
-        if(pivotOutOfIntake){
-          pivot.setPTargetAngle(Constants.intakePivotAngle);
+  public void intakePosition(){
+    if(intake.isIntakeOut()){
+      if(intake.getTime() > 0.5){   // TODO: Move Intake Delay to constants        
+        if(pivotToBumper()){ //new edit review
+          pivot.DisablePivotPID();
         }
       }
+    }else{
+      intake.setPosition(1);
     }
   }
-  //Operator Outake with pivot and index and shooter
-  public void outakeEnableOp(){
-    boolean pivotOutOfIntake = false;
-    if(Constants.pivotOutOfReach < pivot.getPivotPos()){    
-      intake.setPosition(1);
-      pivotOutOfIntake = true;
+  //sets to neutural position
+  public void toNeuturalPosition(){
+    pivot.setPTargetAngle(Constants.neuturalPosFront);
+    if(pivot.getPivotPos() < Constants.pivotOutOfReach){
+      intake.setPosition(0);
     }
-    else{
-      timer.start();
-      if(timer.get() > 1){
-        pivot.setPTargetAngle(pivot.frontOrBack());
-        pivotOutOfIntake = true;
-      }
-      
-    }
-    if(pivotOutOfIntake){
-      intake.setPosition(1);
-      index.setSpeed(-1, -0.85);
-      shooter.setShooterSpeed(-0.2, -0.2);
-    }
+
   }
   public void pivotToPosition(double position){
     if(Constants.pivotOutOfReach > position){
@@ -171,6 +163,7 @@ public class MEGAShooter extends SubsystemBase {
     }
 
   }
+
   public void fullSpeedOutake(){
     shooter.gotoRate(9000);
     if(shooter.isAboveThreshold()){
@@ -185,26 +178,39 @@ public class MEGAShooter extends SubsystemBase {
       }
     }
   } 
+
   public void alwaysOnShoot(){
     shooter.gotoRate(9000);
     if(shooter.readyToShoot()){
       index.setSpeed(-1, -1);
     }
   }
+
   public void disableShoot(){
     index.disableIndex();
     shooter.gotoRate(0);
   }
+
   public void SmartDashBoard(){
     speed = SmartDashboard.getNumber("Speed", speed);
     SmartDashboard.putNumber("Speed", speed);
     
+  }
+
+  public void ShortShoot(){
+    pivot.setPTargetAngle(Constants.shortPreset[1]);
+    shooter.gotoRate(Constants.shortPreset[0]);
+    if(!pivot.atPivotTarget() && !shooter.readyToShoot()){
+      index.setSpeed(0, 0);
+    }
+  }
+  public void dShortShoot(){
+    index.enableIndex(-1);
   }
   
   @Override
   public void periodic() {
     SmartDashBoard();
     // This method will be called once per scheduler run
-
   }
 }

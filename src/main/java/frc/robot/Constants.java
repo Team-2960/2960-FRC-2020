@@ -126,11 +126,11 @@ public class Constants{
     /**
      * The front neutural angle
      */
-    public final static double neuturalPosFront = 160;
+    public final static double neuturalPosFront = 230;
     /**
      * The front neutural angle
      */
-    public final static double neuturalPosBack = 200;
+    public final static double neuturalPosBack = 160;
     /**
      * Neutural Pos window
      */
@@ -165,5 +165,5 @@ public class Constants{
     public final static double intakePivotAngle = 30;
     public final static double intakeShooterSpeed = -500;
     public final static double percentOnLowerBelt = 0.85;
-    public final static double pivotOutOfReach = 290;
+    public final static double pivotOutOfReach = 260;
 }
