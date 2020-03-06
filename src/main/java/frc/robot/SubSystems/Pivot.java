@@ -254,7 +254,6 @@ public class Pivot extends SubsystemBase{
    */
   public void DisablePivotPID(){
     isPivotEnabled = false;
-    SetPivotSpeed(0);
   }
 
   
@@ -264,5 +263,7 @@ public class Pivot extends SubsystemBase{
   public void isCameraTrackingEnabled(boolean isEnabled){
     cameraTrackingEnabled = isEnabled;
   }
-
+  public double pivotTarget(){
+    return pivotTarget;
+  }
 }

@@ -55,6 +55,7 @@ public class OI extends SubsystemBase{
 
 
         if(isManualControl()){ //this may change
+            pivot.DisablePivotPID();
             pivot.SetPivotSpeed(backUp_Control.getRawAxis(1));
         }
         else{
@@ -101,9 +102,17 @@ public class OI extends SubsystemBase{
         }
         else if(oShortPreset()){
             mShooter.ShortShoot();
-        }else if(oIntakeIn()) {
+        }
+        else if(oLongPreset()){
+            mShooter.longShoot();
+        }
+        else{
             mShooter.toNeuturalPosition();
         }
+        if(oIntakeIn()) {
+            mShooter.intakeUp();
+        }
+ 
         
 
         
@@ -234,6 +243,7 @@ public class OI extends SubsystemBase{
         SmartDashboard.putNumber("calc angle", (camera.calcAngle(camera.getCenterX()) + drive.getAngle()));
         SmartDashboard.putNumber("togo angle", (camera.calcAngle(camera.getCenterX())));
         SmartDashboard.putNumber("", (camera.calcAngle(camera.getCenterX())));
+        SmartDashboard.putNumber("battery volt", RobotController.getBatteryVoltage());
 
     }
     /**
@@ -287,7 +297,7 @@ public class OI extends SubsystemBase{
      * @return boolean
      */
     private boolean dShootOut(){
-        return driver_Control.getRawButton(1);
+        return driver_Control.getRawButton(1) || operator_Control.getRawButton(11);
     }
     
     /** 

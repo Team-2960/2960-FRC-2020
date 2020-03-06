@@ -226,14 +226,17 @@ public class Drive extends SubsystemBase {
   public void adjustToTarget(){
     startGoToAngleDistance(0, cameraAngle, 0, 2);
   }
+  public void SmartDashboard(){
+    SmartDashboard.putNumber("Right Encoder", rightEncoder.getPosition());
+    SmartDashboard.putNumber("Left Encoder", leftEncoder.getPosition());
+    SmartDashboard.putNumber("Right current", mRightMaster.getOutputCurrent());
+    SmartDashboard.putNumber("Left current", mRightMaster.getOutputCurrent());
+    SmartDashboard.putNumber("Angle", navX.getRawGyroX());
 
+  }
   @Override
   // This method will be called once per scheduler run
   public void periodic() {
-    SmartDashboard.putNumber("Right Encoder", rightEncoder.getPosition());
-    SmartDashboard.putNumber("Left Encoder", leftEncoder.getPosition());
-    SmartDashboard.putNumber("Angle", navX.getRawGyroX());
-
     if(isDrivePIDEnabled){
       if(PIDCheck == 1){
         drive.setDriveAuton(forwardSpeed, TargetAngle, TargetDistance);

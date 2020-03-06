@@ -91,7 +91,7 @@ public class Constants{
     public final static int ClimbSolenoid1 = 2;
     public final static int ClimbSolenoid2 = 3;
 
-    public final static int cameraPort = 1;
+    public final static int cameraPort = 0;
 
     public final static int pabsEncoder = 0;
     public final static int pEncoder1 = 1;
@@ -155,7 +155,7 @@ public class Constants{
                                                     {4.5, 40, 40, 4000},
                                                     {5, 20, 20, 4000}
                                                 };
-    public final static double longPreset [] ={-6000, 182, 150};
+    public final static double longPreset [] ={-6000, 147, 150};
     public final static double shortPreset [] ={-3500, 182, 150};
     public final static double autonPreset [] ={-6000, 147, 100};
     public final static double feederPreset [] = {2000, 290, 100};

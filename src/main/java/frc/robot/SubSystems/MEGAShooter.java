@@ -111,12 +111,13 @@ public class MEGAShooter extends SubsystemBase {
     }
   }
   //sets to neutural position
-  public void toNeuturalPosition(){
-    pivot.setPTargetAngle(Constants.neuturalPosFront);
+  public void intakeUp(){
+    if(pivot.pivotTarget() > 260){
+      toNeuturalPosition();
+    }
     if(pivot.getPivotPos() < Constants.pivotOutOfReach){
       intake.setPosition(0);
     }
-
   }
   public void pivotToPosition(double position){
     if(Constants.pivotOutOfReach > position){
@@ -203,6 +204,16 @@ public class MEGAShooter extends SubsystemBase {
     if(!pivot.atPivotTarget() && !shooter.readyToShoot()){
       index.setSpeed(0, 0);
     }
+  }
+  public void longShoot(){
+    pivot.setPTargetAngle(Constants.longPreset[1]);
+    shooter.gotoRate(Constants.longPreset[0]);
+    if(!pivot.atPivotTarget() && !shooter.readyToShoot()){
+      index.setSpeed(0, 0);
+    }
+  }
+  public void toNeuturalPosition(){
+    pivot.setPTargetAngle(Constants.neuturalPosFront);
   }
   public void dShortShoot(){
     index.enableIndex(-1);
