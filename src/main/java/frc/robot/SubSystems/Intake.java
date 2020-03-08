@@ -13,6 +13,7 @@ import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
@@ -74,5 +75,9 @@ public class Intake extends SubsystemBase {
   @Override 
   public void periodic() {
     // This method will be called once per scheduler run
+    //Timer time = new Timer();
+    //time.start();
+    // This method will be called once per scheduler run
+    //SmartDashboard.putNumber("intakeTimer",  time.get());
   }
 }

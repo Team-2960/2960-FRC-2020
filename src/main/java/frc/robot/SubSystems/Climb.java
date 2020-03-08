@@ -45,10 +45,8 @@ public class Climb extends SubsystemBase {
    */
   public void setSpeed(double speed){
     mClimb.set(ControlMode.PercentOutput, speed);
-   mClimb2.set(ControlMode.PercentOutput, speed); 
-
+   mClimb2.set(ControlMode.PercentOutput, speed);
   }
-  
   /** 
    * @param state
    */
@@ -59,8 +57,11 @@ public class Climb extends SubsystemBase {
         sClimb.set(Value.kReverse);
      }
   private void SmartDashboard(){
-    SmartDashboard.putNumber("winch motor", mClimb.getSupplyCurrent());
-    SmartDashboard.putNumber("winch motor2", mClimb2.getSupplyCurrent());
+    SmartDashboard.putNumber("winch motor1 current", mClimb.getSupplyCurrent());
+    SmartDashboard.putNumber("winch motor2 current", mClimb2.getSupplyCurrent());
+    SmartDashboard.putNumber("winch motor1 encoder", mClimb.getSelectedSensorPosition());
+    SmartDashboard.putNumber("winch motor2 encoder", mClimb2.getSelectedSensorPosition());
+
   }
   @Override
   public void periodic() {

@@ -45,7 +45,8 @@ public class gotoAngle extends CommandBase {
 
     @Override
     public void execute() {
-        isFinish = drive.checkAngle();
+        //UNCOMMENT CODE
+        //isFinish = drive.checkAngle();
     }
 
     

@@ -16,18 +16,15 @@ public class OI extends SubsystemBase{
     private Shooter shooter;
     public Pivot pivot;
     private Index index;
-    private Camera camera;
+    //private Camera camera;
     private MEGAShooter mShooter;
     //Joysticks
     private Joystick driver_Control;
-    private Joystick driver_Control_Left;
     private Joystick operator_Control;
     private Joystick backUp_Control;
-
-
     public OI(){
         //Init Classes
-        camera = Camera.get_Instance();
+        //camera = Camera.get_Instance();
         drive = Drive.get_Instance();
         climb = Climb.get_Instance();
         intake = Intake.get_Instance();
@@ -47,202 +44,98 @@ public class OI extends SubsystemBase{
      * @param joystick2 joystick 2
      */
     public void Controller(){ 
-        if(driver_Control.getRawButton(4)){
-            pivot.DisablePivotPID();
+        //manual intake control
+        if(backUp_Control.getRawButton(11)){
+            intake.setPosition(0);
+        }else if(backUp_Control.getRawButton(12)){
+            intake.setPosition(1);
         }
 
-
-
-
+        /*****************************/
+        /*    manual pivot control   */
+        /*****************************/
+        
         if(isManualControl()){ //this may change
             pivot.DisablePivotPID();
             pivot.SetPivotSpeed(backUp_Control.getRawAxis(1));
-        }
-        else{
+        }else{
+            if(dTrenchHeight() || oIntakeOut()){// driver intake posistion and operator posistion
+                //sets intake down ready to intake
+                mShooter.intakePosition();  // this will move the intake down and pivot down
+            }else if(oShortPreset()){ // short preset
+                mShooter.ShortShoot(); // go to target angle and rate
+            }else if(oLongPreset()){ //long preset
+                mShooter.longShoot(); // go to target angle and rate   
+             }/*else if(oCameraTracking()){
+                mShooter.wheelOfFortunePreset(); //go to target angle for wof
+            } */else{ 
+                mShooter.toNeuturalPosition(); // go to netural position
+                shooter.setShooterSpeed(0, 0); // stop shooter
+            }
 
+            if(oIntakeIn()) {  
+                mShooter.intakeUp();  //move the intake up
+            }
         }
         //Driver Control
+        //TODO: May be need a deadband
         drive.setSpeed(driver_Control.getRawAxis(5), driver_Control.getRawAxis(1)); //drive
 
-        if(dintakeIn()){ //in
+        if(dintakeIn()){ //start intake
             mShooter.intakeEnableDr();
-        }else if(oIndexOut()){
+        }else if(oIndexOut()){ //index out take
             index.setSpeed(-1, -1);
-        }else if(dintakeOut()){//may be shoooter
+        }else if(dintakeOut()){ //intake and shooter out take
             intake.setSpeed(-1); //out
-            shooter.setShooterSpeed(-0.2, -0.2); 
-        }else if(oShortPreset() && dShootOut()){
+            shooter.setShooterSpeed(-0.4, -0.4); 
+        }else if(oShortPreset() && dShootOut()){ //auto shoot ball
             mShooter.dShortShoot();
+        }else if(oLongPreset() && dShootOut()){ // auto shoot ball
+            mShooter.dLongShoot();
+        }else if(backUp_Control.getRawButton(4)){
+            shooter.gotoRate(Constants.shortPreset[0]);
+        }/* else if(oCameraTracking()&& dShootOut()){
+            shooter.setShooterSpeed(0.1, -0.1); //run the shooter wof
+        } */
+        
+        
+        
+        else if(backUp_Control.getRawButton(3)){
+            shooter.gotoRate(-6000);
         }
-        else{
+        
+        
+        
+        else{//stop intake and index
             intake.setSpeed(0);
             index.disableIndex();
-            shooter.setShooterSpeed(0, 0);
-        }/*else{
-            mShooter.intakeDisable(); //why this bring the intake up/down 
-            //isn't this should be stop intake speed?
-        
-
-        if(dShootOut()){
-            mShooter.shoot();
         }
 
-        //winch*/
+        //winch
         if(oWinching()) { //winch in
-            climb.setSpeed(-0.5);
+            climb.setSpeed(-0.9);
         }else if(dBackWinching()) { // winch out
             climb.setSpeed(0.2);
         }else{
             climb.setSpeed(0); //off
-        }/*
-        */
-        if(dTrenchHeight() || oIntakeOut()){
-            //sets intake down ready to intake
-            mShooter.intakePosition();
         }
-        else if(oShortPreset()){
-            mShooter.ShortShoot();
-        }
-        else if(oLongPreset()){
-            mShooter.longShoot();
-        }
-        else{
-            mShooter.toNeuturalPosition();
-        }
-        if(oIntakeIn()) {
-            mShooter.intakeUp();
-        }
- 
-        
-
-        
-        
-        /*
-        
     
-        if (oIndexOut()) { 
-            shooter.setShooterSpeed(-0.2, -0.2);
-            index.setSpeed(-1, -1);
-        }
-
-        // todo back and front
-        if (oShortPreset()) {
-            pivot.setPTargetAngle(Constants.shortPreset[1]);
-        } else if (oLongPreset()) {
-            pivot.setPTargetAngle(Constants.longPreset[1]);
-        }
-        if(oShoot()){
-            mShooter.shoot();
-        }
-        //pivot front or back
-        if(isPivotFront()){
-            pivot.setpivotDirection(true);
-        }else{
-            pivot.setpivotDirection(false);
-        }
-        //climbing Stuff
-        if(oClimbExtended()) // Extend the climber
+        if(oClimbExtended()){
             climb.setPosition(0);
-        else if(oClimbRetracted()) // Retract the climber
+        }
+        else if(oClimbRetracted()){
             climb.setPosition(1);
- */
-
-
-
-
-
-
-
-
-
-
-
-
-        /* //Operater control
-        if(isManualControl()){
-            pivot.SetPivotSpeed(backUp_Control.getRawAxis(1));
-            //shooter.setShooterSpeed(backUp_Control.getRawAxis(1), backUp_Control.getRawAxis(5));
         }
-
-        //mShooter.setOffset(operator_Control.getRawAxis(1), operator_Control.getRawAxis(1));
-        
-        //dirction of pivot
-        if(isPivotFront()){
-            pivot.setpivotDirection(true);
-        }else{
-            pivot.setpivotDirection(false);
-        }
-        
-        //pivot and intake stuff
-        if(dintakeIn()) { // intake up
-            mShooter.intakeDisable();
-        }
-
-        // todo back and front
-        if (oShortPreset()) {
-            pivot.setPTargetAngle(Constants.shortPreset[1]);
-        } else if (oLongPreset()) {
-            pivot.setPTargetAngle(Constants.longPreset[1]);
-        }
-
-        if (dPivotAlign()) {
-            pivot.isCameraTrackingEnabled(true);
-        }
-
-        
-         if(isFeederStation()){ mShooter.pivotToPosition(Constants.feederPreset[1]); }
-         
-        if (dintakeIn() || dTrenchHeight()) {
-            mShooter.intakePosition();
-            intake.setPosition(1);
-        }
-        // index and shooter and intake stuff
-        if (oIndexOut()) {
-            shooter.setShooterSpeed(0.2, 0.2);
-            index.setSpeed(-1, -1);
-        } else if ((dintakeIn()) && oFeederStation()) {
-            mShooter.intakeFeederEnableDr();
-        } else if (dintakeIn()) {
-            mShooter.intakeEnableDr();
-        } else if (dintakeOut()) {// may need to run the shooter
-            intake.setSpeed(-1);
-        } else if (dShootOut() && oShortPreset()) { //why driver need press shoot button
-            mShooter.shootAlways(Constants.shortPreset[0]);
-        } else if (dShootOut() && oLongPreset()) {  //why driver need press shoot button
-            mShooter.shootAlways(Constants.longPreset[0]);
-        }
-        //climbing Stuff
-        if(oClimbExtended()) // Extend the climber
-            climb.setPosition(0);
-        else if(oClimbRetracted()) // Retract the climber
-            climb.setPosition(1);
-
-        //driver control
-        //Winch
-        
-        if(dShootOut()){
-
-        }
-       
-        if(dAlignDrive()) {
-            drive.adjustToTarget();
-        }else{
-            drive.setSpeed(driver_Control.getRawAxis(1), driver_Control.getRawAxis(5));
-        }
-
-        if(dintakeIn()) {
-            mShooter.intakeEnableDr();
-        } 
-        */
     }
     
     /**
      * put to smartdashboard
      */
     public void SmartDashboard(){
-        SmartDashboard.putNumber("calc angle", (camera.calcAngle(camera.getCenterX()) + drive.getAngle()));
-        SmartDashboard.putNumber("togo angle", (camera.calcAngle(camera.getCenterX())));
-        SmartDashboard.putNumber("", (camera.calcAngle(camera.getCenterX())));
+        //UNCOMMENT FUNCTION
+        //SmartDashboard.putNumber("calc angle", (camera.calcAngle(camera.getCenterX()) + drive.getAngle()));
+        //SmartDashboard.putNumber("togo angle", (camera.calcAngle(camera.getCenterX())));
+        //SmartDashboard.putNumber("", (camera.calcAngle(camera.getCenterX())));
         SmartDashboard.putNumber("battery volt", RobotController.getBatteryVoltage());
 
     }
@@ -363,7 +256,7 @@ public class OI extends SubsystemBase{
      * @return boolean
      */
     //is the pivot Camera tracking
-    private boolean dCameraTracking(){
+    private boolean oCameraTracking(){
         return operator_Control.getRawButton(6);
     }
     

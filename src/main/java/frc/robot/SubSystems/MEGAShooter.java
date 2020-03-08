@@ -7,6 +7,7 @@
 
 package frc.robot.SubSystems;
 
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.SubSystems.*;
@@ -39,7 +40,7 @@ public class MEGAShooter extends SubsystemBase {
  * MEGAShooter costructor
  */
   private MEGAShooter() {
-    camera = Camera.get_Instance();
+    //camera = Camera.get_Instance();
     intake = Intake.get_Instance();
     shooter = Shooter.get_Instance();
     pivot = Pivot.get_Instance();
@@ -54,11 +55,11 @@ public class MEGAShooter extends SubsystemBase {
     speed = (speed - 0.50) * 2;
     angle = (angle - 0.50) * 2;
     shooter.setSpeedOffset(speed);
-    pivot.pivotAngleOffset(angle);
-  }
+/*     pivot.pivotAngleOffset(angle);
+ */  }
   public void disableManual(){
     shooter.setSpeedOffset(0);
-    pivot.pivotAngleOffset(0);
+    /* pivot.pivotAngleOffset(0); */
   }
   public void outakeEnable(){
     intake.setSpeed(-1);
@@ -140,7 +141,6 @@ public class MEGAShooter extends SubsystemBase {
     //index.disableIndex();
   }
   public void shoot(){
-    shooter.gotoRate(Constants.pivotTable[2][pivot.pivotTablePos]);
     if(shooter.readyToShoot()){
       index.enableIndex(-1);
     }
@@ -205,9 +205,12 @@ public class MEGAShooter extends SubsystemBase {
       index.setSpeed(0, 0);
     }
   }
+  /* public void wheelOfFortunePreset(){
+    pivot.setPTargetAngle(Constants.wheelOfFortunePreset[1]);
+  } */
   public void longShoot(){
-    pivot.setPTargetAngle(Constants.longPreset[1]);
-    shooter.gotoRate(Constants.longPreset[0]);
+    pivot.setPTargetAngle(Constants.autonPreset[1]);
+    shooter.gotoRate(Constants.autonPreset[0]);
     if(!pivot.atPivotTarget() && !shooter.readyToShoot()){
       index.setSpeed(0, 0);
     }
@@ -216,12 +219,17 @@ public class MEGAShooter extends SubsystemBase {
     pivot.setPTargetAngle(Constants.neuturalPosFront);
   }
   public void dShortShoot(){
-    index.enableIndex(-1);
+    shootAlways(Constants.shortPreset[0]);
   }
-  
+  public void dLongShoot(){
+    shootAlways(Constants.autonPreset[0]);
+  }
   @Override
   public void periodic() {
-    SmartDashBoard();
+    //Timer time = new Timer();
+    //time.start();
     // This method will be called once per scheduler run
+   // SmartDashBoard();
+    //SmartDashboard.putNumber("megaTimer",  time.get());
   }
 }

@@ -7,6 +7,7 @@ import edu.wpi.first.wpilibj.CounterBase;
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.RobotController;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.controller.ArmFeedforward;
 import edu.wpi.first.wpilibj.controller.PIDController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -18,7 +19,7 @@ import frc.robot.Camera.*;
 
 public class Pivot extends SubsystemBase{
     public static Pivot pivot;
-    private Camera camera;
+    //private Camera camera;
     //Pivot motor
     private CANSparkMax mLeftPivot;
     private CANSparkMax mRightPivot;
@@ -56,7 +57,7 @@ public class Pivot extends SubsystemBase{
         mLeftPivot = new CANSparkMax(Constants.mLeftPivot, MotorType.kBrushless);
         mRightPivot = new CANSparkMax(Constants.mRightPivot, MotorType.kBrushless);
         //init camera
-        camera = Camera.get_Instance();
+        //camera = Camera.get_Instance();
   
         //encoder 
         pEncoder = new Encoder(Constants.pEncoder1, Constants.pEncoder2, false, CounterBase.EncodingType.k4X);
@@ -69,7 +70,9 @@ public class Pivot extends SubsystemBase{
         aPidController = new PIDController(Constants.pKp, Constants.pKi, Constants.pKd);
         armfeedforward = new ArmFeedforward(Constants.pKs, Constants.pKcos, Constants.pKv, Constants.pKa);
         mLeftPivot.setInverted(false);
-        mRightPivot.setInverted(true);
+        mRightPivot.setInverted(true);//THIS IS FALSE IF THEY ARE FIGHTING REVERT THIS ONE
+
+        //System.out.println("Pivot Class created");
     }
     
     /** 
@@ -175,7 +178,8 @@ public class Pivot extends SubsystemBase{
     /** 
      * @param pos
      */
-    public void pivotToTarget(int pos){
+    //UNCOMMENT FOR CAMERA FUNCTION
+/*     public void pivotToTarget(int pos){
       if(cameraTrackingEnabled){
         if(!pivotInWindow() || !camera.isTargetFound()){
             setPTargetAngle(frontOrBack());
@@ -185,15 +189,15 @@ public class Pivot extends SubsystemBase{
           setPTargetAngle(Constants.pivotTable[pos][lookUpPos]);
         }
       }
-    }
+    } */
     
     /** 
      * @param offset
      */
-    public void pivotAngleOffset(double offset){
+    /* public void pivotAngleOffset(double offset){
       angleOffset= 100 * offset;
       setPTargetAngle(pivotTarget + angleOffset);
-    }
+    } */
     public void smartdashboard(){
       SmartDashboard.putNumber("Encoder Value Rate", pEncoder.getRate());
       SmartDashboard.putNumber("target position pivot", pivotTarget);
@@ -211,15 +215,18 @@ public class Pivot extends SubsystemBase{
      * run every time
      */
     public void periodic() {
+      //Timer time = new Timer();
+      //time.start();
       // This method will be called once per scheduler run
       smartdashboard();
       //enable pivot PID
-      double distance = camera.getTargetDistance();
-      SmartDashboard.putNumber("Distance", distance);
-      if(cameraTrackingEnabled){
-        pivotTablePos = 0;
-        while(distance > Constants.pivotTable[pivotTablePos][0] && Constants.pivotTable[pivotTablePos][0] < Constants.pivotTable.length){
-          pivotTablePos++; 
+      //UNCOMMENT FOR CAMERA
+     /*  double distance = camera.getTargetDistance();
+     SmartDashboard.putNumber("Distance", distance);
+     if(cameraTrackingEnabled){
+       pivotTablePos = 0;
+       while(distance > Constants.pivotTable[pivotTablePos][0] && Constants.pivotTable[pivotTablePos][0] < Constants.pivotTable.length){
+         pivotTablePos++; 
         }
         double under = distance - Constants.pivotTable[pivotTablePos][0];
         double above = 0;
@@ -235,13 +242,14 @@ public class Pivot extends SubsystemBase{
         }
         pivotToTarget(pivotTablePos);
       }
-  
       
-       
-    
-    if(isPivotEnabled){
-      gotoAngle();
-    }
+      
+      */
+      
+      if(isPivotEnabled){
+        gotoAngle();
+      }
+      //SmartDashboard.putNumber("Pivot Timer",  time.get());
     }
   /**
    * enable the pivot pid

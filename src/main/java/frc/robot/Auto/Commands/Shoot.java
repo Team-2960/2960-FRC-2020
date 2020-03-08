@@ -1,5 +1,6 @@
 package frc.robot.Auto.Commands;
 
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.SubSystems.*;
 
@@ -11,6 +12,7 @@ public class Shoot extends CommandBase{
     Shooter shooter = Shooter.get_Instance();
     private boolean isFinish = false;
     private double rate;
+    private Timer time;
 
     public Shoot(double rate){
         this.rate = rate;
@@ -19,6 +21,8 @@ public class Shoot extends CommandBase{
     @Override
     public void initialize() {
         super.initialize();
+        time = new Timer();
+        time.start();
         
     }
     
@@ -45,8 +49,11 @@ public class Shoot extends CommandBase{
 
     @Override
     public void execute() {
-        isFinish = index.indexBeltsGoneDistance(57);
+        isFinish = index.indexBeltsGoneDistance(57) || time.get() > 7;
         mShooter.shootAlways(rate);
+        if(time.get() > 5){
+            index.setSpeed(-1, -1);
+        }
     }
 
     
@@ -56,6 +63,7 @@ public class Shoot extends CommandBase{
     @Override
     public void end(boolean interrupt) {
         shooter.setShooterSpeed(0, 0);
+        index.setSpeed(0, 0);
         index.disableIndex();
     }
 }

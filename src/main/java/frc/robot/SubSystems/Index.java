@@ -7,6 +7,7 @@ import com.revrobotics.CANDigitalInput;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class Index extends SubsystemBase {
@@ -83,7 +84,6 @@ public class Index extends SubsystemBase {
     }
   
   
-    System.out.println(balls);
   }
   public boolean indexBeltsGoneDistance(double distance){
     return distance < getEncoderDistance();
@@ -97,10 +97,11 @@ public boolean getPhotoeyeIndex(){
   }
   @Override
   public void periodic() {
+    //Timer time = new Timer();
+    //time.start();
+    // This method will be called once per scheduler run
     // This method will be called once per scheduler run 
-    System.out.println(getEncoderDistance());
-    SmartDashboard();
-    System.out.println(balls);
+    //SmartDashboard();
     if(isAutoIndexEnabled){
       if(isIndexEnabled == 1){
         startIndexIn();
@@ -108,6 +109,7 @@ public boolean getPhotoeyeIndex(){
         startIndexOut();
       }
     }
+    //SmartDashboard.putNumber("IndexTimer",  time.get());
   }
 
   

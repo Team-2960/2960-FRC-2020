@@ -44,7 +44,8 @@ public class AdjustToTarget extends CommandBase{
 
     @Override
     public void execute() {
-        isFinish = drive.checkAngle();
+        //UNCOMMENT CODE
+        //isFinish = drive.checkAngle();
     }
 
     

@@ -4,13 +4,15 @@ import edu.wpi.first.wpilibj.AnalogGyro;
 import edu.wpi.first.wpilibj.controller.PIDController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import com.kauailabs.navx.frc.AHRS;
+//UMCOMMENT CODE
+//import com.kauailabs.navx.frc.AHRS;
 import com.revrobotics.AlternateEncoderType;
 import com.revrobotics.CANEncoder;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import frc.robot.Constants;
 import edu.wpi.first.wpilibj.SPI;
+import edu.wpi.first.wpilibj.Timer;
 import frc.robot.Camera.Camera;
 
 
@@ -31,7 +33,7 @@ public class Drive extends SubsystemBase {
 
   //Gyro Sensor
   private AnalogGyro gyro;
-  private AHRS navX;
+  //private AHRS navX;
   //Encoders
   private CANEncoder rightEncoder;
   private CANEncoder leftEncoder;
@@ -42,7 +44,7 @@ public class Drive extends SubsystemBase {
   public double forwardSpeed;
   public int PIDCheck = 0;
   public boolean isDrivePIDEnabled = false;
-  private static Camera camera;
+  //private static Camera camera;
   public double cameraAngle = 0;
   
   
@@ -59,7 +61,7 @@ public class Drive extends SubsystemBase {
 
   private Drive() {
     //init code
-    camera = Camera.get_Instance();
+    //camera = Camera.get_Instance();
     //init all the motors
     mLeftMaster = new CANSparkMax(Constants.mLeftMaster1, MotorType.kBrushless);
     mLeftFollow1 = new CANSparkMax(Constants.mLeftFollow2, MotorType.kBrushless);
@@ -77,7 +79,8 @@ public class Drive extends SubsystemBase {
 
     //init gyro
     gyro = new AnalogGyro(0);
-    navX = new AHRS(SPI.Port.kMXP);
+    //UNCOMMENT CODE
+    //navX = new AHRS(SPI.Port.kMXP);
     gyro.calibrate();
 
     //init encoder
@@ -112,7 +115,9 @@ public class Drive extends SubsystemBase {
    * Checks to see if we are at the target distance
    * @return true if we are at the target angle
    */
-  public boolean checkAngle(){
+  //UNCOMMENT FUNCTION
+
+/*   public boolean checkAngle(){
     boolean isAtAngle;
     double error = Math.abs(getAngle() - TargetAngle);
     if(error < Constants.angleTolerance){
@@ -126,16 +131,17 @@ public class Drive extends SubsystemBase {
   public void targetLineUp(){
     setDriveToAngle(camera.calcAngle(camera.getCenterX()) +  navX.getAngle(), 0);
   }
-
+ */
   /**
    * Use the PID to set the rate we are going
    * @param rate is the target angle rate we want to be going
    */
-  public void setDriveRate(double rate){
+  //UNCOMMENT FUNCTION
+/*   public void setDriveRate(double rate){
     double speed = drivePidController.calculate(navX.getRawGyroX(), rate); //calc the speed
     SmartDashboard.putNumber("speed", speed);
     setSpeed(-speed, speed);
-  }
+  } */
   /**
    * gives the PID the numbers that we want to be going
    * Resets the Encoders
@@ -149,7 +155,8 @@ public class Drive extends SubsystemBase {
     TargetAngle = angle;
     this.forwardSpeed = forwardSpeed;
     encoderReset();
-    navXReset();
+    //UNCOMMENT CODE
+    //navXReset();
     enableDrivePID();
     this.PIDCheck = PIDCheck;
 
@@ -160,7 +167,8 @@ public class Drive extends SubsystemBase {
    * @param angle sets the target angle the we should be going
    * @param distance sets the target distance we should be going
    */
-  public void setDriveAuton(double forwardSpeed, double angle, double distance){
+  //UNCOMMENT FUNCTION
+/*   public void setDriveAuton(double forwardSpeed, double angle, double distance){
     int negative = (distance < 0) ? -1 : 1;
 
     double abscurrentposition = Math.abs(encoderPosition());
@@ -179,13 +187,14 @@ public class Drive extends SubsystemBase {
     else{
       setDriveRate(0);
     }
-  }
+  } */
   /**
    * Sets the drive to go to certain angle with forward speed
    * @param angle the target angle we should be going
    * @param forwardspeed Sets the forward speed we are going
    */
-  public void setDriveToAngle(double angle, double forwardspeed){
+  //UNCOMMENT FUNCTION
+ /*  public void setDriveToAngle(double angle, double forwardspeed){
     double error =  angle - navX.getAngle();
     double absError = Math.abs(error);
     int negative;
@@ -213,16 +222,17 @@ public class Drive extends SubsystemBase {
       double rate = 70;
       setArcDriveRate(negative * rate, forwardspeed);
     }
-  }
+  } */
   /**
    * Sets the rate of the arc aswell as the speeds
    * @param rate taret rate we should be going
    * @param forwardSpeed sets the forward speed we should be going
    */
-  public void setArcDriveRate(double rate, double forwardSpeed){
+  //UNCOMMENT FUNCTION
+/*   public void setArcDriveRate(double rate, double forwardSpeed){
     double speed = drivePidController.calculate(navX.getRawGyroX(), rate); //calc the speed
     setSpeed(-speed + forwardSpeed, speed + forwardSpeed);
-  }
+  } */
   public void adjustToTarget(){
     startGoToAngleDistance(0, cameraAngle, 0, 2);
   }
@@ -231,13 +241,16 @@ public class Drive extends SubsystemBase {
     SmartDashboard.putNumber("Left Encoder", leftEncoder.getPosition());
     SmartDashboard.putNumber("Right current", mRightMaster.getOutputCurrent());
     SmartDashboard.putNumber("Left current", mRightMaster.getOutputCurrent());
-    SmartDashboard.putNumber("Angle", navX.getRawGyroX());
+    //UNCOMMENT CODE
+    //SmartDashboard.putNumber("Angle", navX.getRawGyroX());
 
   }
   @Override
   // This method will be called once per scheduler run
+  
   public void periodic() {
-    if(isDrivePIDEnabled){
+    //UNCOMMENT FUNCTION
+    /* if(isDrivePIDEnabled){
       if(PIDCheck == 1){
         drive.setDriveAuton(forwardSpeed, TargetAngle, TargetDistance);
         if(checkDistance()){
@@ -256,9 +269,13 @@ public class Drive extends SubsystemBase {
           isDrivePIDEnabled = false;
         }
       }
-  }
+  } */
     
   //cameraAngle = (camera.calcAngle(camera.getCenterX()) +  navX.getAngle());
+  //Timer time = new Timer();
+    //time.start();
+    // This method will be called once per scheduler run
+    //SmartDashboard.putNumber("driveTimer",  time.get());
   }
 
   /**
@@ -277,15 +294,17 @@ public class Drive extends SubsystemBase {
    * gets the angle of the NavX
    * @return the angle of the NavX
    */
-  public double getAngle(){
+  //UNCOMMNET FUNCTION
+/*   public double getAngle(){
     return navX.getAngle();
-  }
+  } */
   /**
    * Resets the NavX
    */
-  public void navXReset(){
+  //UNCOMMENT FUNCTION
+  /* public void navXReset(){
     navX.reset();
-  }
+  } */
   /**
    * Sets the speed that the motors are going
    * @param left left motor speed

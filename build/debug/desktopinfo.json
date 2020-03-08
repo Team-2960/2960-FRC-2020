@@ -1,11 +1,11 @@
 [
   {
     "name": "2960-code-2020 (in project 2960-code-2020)",
-    "file": "D:\\james\\Documents\\GitHub\\2960-code-2020\\build\\libs\\2960-code-2020.jar",
+    "file": "C:\\Users\\bpsuser\\Documents\\GitHub\\2960-code-2020\\build\\libs\\2960-code-2020.jar",
     "extensions": [
-      "D:\\james\\Documents\\GitHub\\2960-code-2020\\build\\tmp\\expandedArchives\\halsim_gui-2020.3.2-windowsx86-64.zip_45369a593bb959ce657791ae7ab7334a\\windows\\x86-64\\shared\\halsim_gui.dll"
+      "C:\\Users\\bpsuser\\Documents\\GitHub\\2960-code-2020\\build\\tmp\\expandedArchives\\halsim_gui-2020.3.2-windowsx86-64.zip_45369a593bb959ce657791ae7ab7334a\\windows\\x86-64\\shared\\halsim_gui.dll"
     ],
-    "librarydir": "D:\\james\\Documents\\GitHub\\2960-code-2020\\build\\tmp\\jniExtractDir",
+    "librarydir": "C:\\Users\\bpsuser\\Documents\\GitHub\\2960-code-2020\\build\\tmp\\jniExtractDir",
     "mainclass": "frc.robot.Main"
   }
 ]
