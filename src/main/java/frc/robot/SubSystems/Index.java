@@ -18,13 +18,7 @@ public class Index extends SubsystemBase {
   private CANSparkMax mLeftIndex;
 
   private int isIndexEnabled = 0;
-
-  public int balls = 3; // not very important
-  private boolean inBalls = true;
-  private boolean outBalls = true;
   private boolean isAutoIndexEnabled = false;
-  public boolean lostBalls = false;
-  public boolean seeBalls = false;
 
   /** 
    * @return Index
@@ -51,36 +45,22 @@ public class Index extends SubsystemBase {
   private void startIndexIn(){
       if(photoeye.get()){
         setSpeed(0.9, 0.75);// 1, 0.85
-        inBalls = true;
       }
       else{
         setSpeed(0, 0);
-        if(inBalls){
-          
-          inBalls = false;
-        }
       }
   }
   private void startIndexOut(){
-    if(seeBalls){
-      if(!photoeye.get()){
-       
-       setSpeed(0,0);
-       outBalls = false;
-       seeBalls = false;
-       lostBalls = true;
-     }
-   }
     if(!photoeye.get()){
       setSpeed(-1, -1);
-      seeBalls = false;
-      outBalls = true;
-      lostBalls = false;
     }
     else{
-      seeBalls = true;
-      setSpeed(-1, -1);
-      lostBalls = false;
+      if(photoeye.get()){
+        setSpeed(-1, -1);
+      }
+      else{
+        setSpeed(0, 0);
+      }
     }
   
   
@@ -88,11 +68,10 @@ public class Index extends SubsystemBase {
   public boolean indexBeltsGoneDistance(double distance){
     return distance < getEncoderDistance();
   }
-public boolean getPhotoeyeIndex(){
-  return photoeye.get();
-}
+  public boolean getPhotoeyeIndex(){
+    return photoeye.get();
+  }
   public void SmartDashboard(){
-    SmartDashboard.putNumber("Balls in Robot", balls);
     SmartDashboard.putBoolean("indexPhoto", photoeye.get());
   }
   @Override

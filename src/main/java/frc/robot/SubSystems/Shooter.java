@@ -94,14 +94,7 @@ public class Shooter extends SubsystemBase{
       mRightShooter.set(ControlMode.PercentOutput, right);
       mLeftShooter.set(ControlMode.PercentOutput, left);
     }
-    /**
-     * Sets the PID shooter speed 
-     * @param speed the PID shooter speed
-     */
-    private void setPIDShooterSpeed(double speed){
-      mRightShooter.set(ControlMode.Velocity, speed);
-      mLeftShooter.set(ControlMode.Velocity, speed);
-    }
+    
     
     /** 
      * @param speed
@@ -117,20 +110,14 @@ public class Shooter extends SubsystemBase{
       targetRate = rate + speedOffset;
       setPIDShooterSpeed(targetRate);
     }
-    public boolean isAboveThreshold(){
-      if(Math.abs(targetRate) < Math.abs((Math.abs(mRightShooter.getSelectedSensorVelocity()) + Math.abs(mLeftShooter.getSelectedSensorVelocity()))) / 2){
-        return true;
-      }
-      else
-      return false;
-    }
+
     /** 
      * @return boolean
      */
     public boolean readyToShoot(){
       boolean readyToShoot = false;
-      double rError = Math.abs(Math.abs(mRightShooter.getSelectedSensorVelocity()) - Math.abs(targetRate));
-      double lError = Math.abs(Math.abs(mLeftShooter.getSelectedSensorVelocity()) - Math.abs(targetRate));
+      double rError = Math.abs(Math.abs(mRightShooter.getSelectedSensorVelocity()) - targetRate);
+      double lError = Math.abs(Math.abs(mLeftShooter.getSelectedSensorVelocity()) - targetRate);
       if(rError < 100 && lError < 100){
         readyToShoot = true;
       }
@@ -142,10 +129,6 @@ public class Shooter extends SubsystemBase{
       SmartDashboard.putNumber("Left shooter encoder ", mLeftShooter.getSelectedSensorVelocity());
       SmartDashboard.putNumber("Shooter LEft Speed", mLeftShooter.getMotorOutputPercent());
       SmartDashboard.putNumber("Shooter Right Speed", mRightShooter.getMotorOutputPercent());
-
- 
-
-
     }
     public void periodic() {
       //Timer time = new Timer();
@@ -155,4 +138,14 @@ public class Shooter extends SubsystemBase{
       //SmartDashboard.putNumber("shooterTimer",  time.get());
     }
 
+
+
+    /**
+     * Sets the PID shooter speed 
+     * @param speed the PID shooter speed
+     */
+    private void setPIDShooterSpeed(double speed){
+      mRightShooter.set(ControlMode.Velocity, speed);
+      mLeftShooter.set(ControlMode.Velocity, speed);
+    }
 }
