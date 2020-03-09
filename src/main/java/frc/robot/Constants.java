@@ -155,9 +155,15 @@ public class Constants{
                                                     {4.5, 40, 40, 4000},
                                                     {5, 20, 20, 4000}
                                                 }; */
-    public final static double longPreset [] ={-6500, 147, 150};
-    public final static double shortPreset [] ={-4000, 182, 150};
-    public final static double autonPreset [] ={-6500, 147, 100};
+
+
+    public Shooter_Setpoint longPreset = new Shooter_Setpoint(-6500, 147, 0, 0, 0, 0);//TODO: need to record values
+    public Shooter_Setpoint shortPreset = new Shooter_Setpoint(-4000, 182, 0, 0, 0, 0);//TODO: need to record values
+    public Shooter_Setpoint autonPreset = new Shooter_Setpoint(-6500, 147, 0, 0, 0, 0);//TODO: need to record values
+
+    /* public final static double longPreset [] ={-6500, 147, 150};
+    public final static double shortPreset [] ={-4000, 182, 150, -4050, -3950, -4050, -3950};
+    public final static double autonPreset [] ={-6500, 147, 100}; */
     public final static double feederPreset [] = {2000, 290, 100};
     public final static double wheelOfFortunePreset [] = { 1000, 150, 2960};
 
@@ -167,4 +173,42 @@ public class Constants{
     public final static double intakeShooterSpeed = -500;
     public final static double percentOnLowerBelt = 0.85;
     public final static double pivotOutOfReach = 260;
+
+
+    public class Shooter_Setpoint{
+        public double shooter_speed;
+        public double pivot_setpoint;
+        public double min_left_speed;
+        public double max_left_speed;
+        public double min_right_speed;
+        public double max_right_speed;
+
+        public Shooter_Setpoint(
+            double shooter_speed,
+            double pivot_setpoint,
+            double min_left_speed,
+            double max_left_speed,
+            double min_right_speed,
+            double max_right_speed
+        ){
+            this.shooter_speed = shooter_speed;
+            this.pivot_setpoint = pivot_setpoint;
+            this.min_left_speed = min_left_speed;
+            this.max_left_speed = max_left_speed;
+            this.min_right_speed = min_right_speed; 
+            this.max_right_speed = max_right_speed;
+        }
+        public Shooter_Setpoint(
+            double shooter_setpoint,
+            double pivot_setpoint
+            ){
+            this.shooter_speed = shooter_setpoint;
+            this.pivot_setpoint = pivot_setpoint;
+            this.min_left_speed = min_left_speed;
+            this.max_left_speed = max_left_speed;
+            this.min_right_speed = min_right_speed; 
+            this.max_right_speed = max_right_speed;
+
+        }
+    }
 }

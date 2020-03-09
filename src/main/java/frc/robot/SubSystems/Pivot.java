@@ -39,6 +39,8 @@ public class Pivot extends SubsystemBase{
     private Encoder pEncoder;
     private DutyCycleEncoder pabsEncoder;
     private double angleOffset;
+
+    private Constants.Shooter_Setpoint setpoint;
     /** 
      * @return Pivot
      */
@@ -126,7 +128,12 @@ public class Pivot extends SubsystemBase{
       double rate = trapezoid.trapezoidCalc(pabsEncoder.getDistance(), mLeftPivot.getEncoder().getVelocity());
       SetPivotPIDRate(rate);
     }
-    
+
+    public void set_Setpoint(Constants.Shooter_Setpoint setpoint){
+      this.setpoint = setpoint;
+      if(setpoint != null)
+        setPTargetAngle(setpoint.pivot_setpoint);
+    }
       
     
     /** 
