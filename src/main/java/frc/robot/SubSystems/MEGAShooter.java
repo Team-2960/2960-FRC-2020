@@ -1,10 +1,3 @@
-/*----------------------------------------------------------------------------*/
-/* Copyright (c) 2019 FIRST. All Rights Reserved.                             */
-/* Open Source Software - may be modified and shared by FRC teams. The code   */
-/* must be accompanied by the FIRST BSD license file in the root directory of */
-/* the project.                                                               */
-/*----------------------------------------------------------------------------*/
-
 package frc.robot.SubSystems;
 
 import edu.wpi.first.wpilibj.Timer;
@@ -48,25 +41,34 @@ public class MEGAShooter extends SubsystemBase {
   }
   
   /** 
-   * @param angle
-   * @param speed
+   * allows for the offset for shooter and the pivot to be used
+   * @param angle the value from the joystick that gets passed
+   * @param speed the value from the joystick that gets passed 
    */
   public void setOffset(double angle, double speed){
-    speed = (speed - 0.50) * 2;
-    angle = (angle - 0.50) * 2;
-    shooter.setSpeedOffset(speed);
-/*     pivot.pivotAngleOffset(angle);
+    speed = (speed - 0.50) * 2;// makes the value between -1 and 1
+    angle = (angle - 0.50) * 2;// makes the value between -1 and 1
+    shooter.setSpeedOffset(speed);//sets the shooter offset 
+/*     pivot.pivotAngleOffset(angle);//sets the pivto offset
  */  }
+
+
+
+
+ 
+ /**
+  * disables the manual control
+  */
   public void disableManual(){
-    shooter.setSpeedOffset(0);
-    /* pivot.pivotAngleOffset(0); */
+    shooter.setSpeedOffset(0);//sets the shooter speed to zero
+    /* pivot.pivotAngleOffset(0); *///resets the pivot offset
   }
-  public void outakeEnable(){
-    intake.setSpeed(-1);
-    index.enableIndex(-1);  
-    shootAlways(-6000);
-  }
-  //Driver Controls for the intake and shooter speeds
+
+
+
+  /**
+   * 
+   */
   public void intakeEnableDr(){
     //intake in
     index.enableIndex(1);
@@ -74,10 +76,6 @@ public class MEGAShooter extends SubsystemBase {
     shooter.gotoRate(4000);
   }
 
-  public void intakeFeederEnableDr(){
-    index.enableIndex(1);
-    shooter.gotoRate(Constants.feederPreset[0]);
-  }
 
   //new function to review
   public boolean pivotToBumper(){
@@ -99,52 +97,42 @@ public class MEGAShooter extends SubsystemBase {
   public void intakeOutEnableDr(){
     intake.setSpeed(-1);
   }
-  //Operator control on the position for the intake and pivot positions
+   /**
+   * uses the to bumper to tell the pivot when to move and when to not
+   */
   public void intakePosition(){
-    if(intake.isIntakeOut()){
+    if(intake.isIntakeOut()){//uses the intake out function to tell when it is out
       if(intake.getTime() > 0.5){   // TODO: Move Intake Delay to constants        
-        if(pivotToBumper()){ //new edit review
-          pivot.DisablePivotPID();
+        if(pivotToBumper()){ 
+          pivot.DisablePivotPID();// if the pivot is down at the bumper then it stops the pvot PID
         }
       }
     }else{
-      intake.setPosition(1);
+      intake.setPosition(1);//if the pivot is not at the bumper then it is putting the intake down
     }
   }
-  //sets to neutural position
+  
+  
+  /**
+   * if the intake is up then it will set it to neutural
+   */
   public void intakeUp(){
-    if(pivot.pivotTarget() > 260){
+    if(pivot.pivotTarget() > 260){//if the pivot is in the way then the pivot will go to the neutural position
       toNeuturalPosition();
     }
-    if(pivot.getPivotPos() < Constants.pivotOutOfReach){
+    if(pivot.getPivotPos() < Constants.pivotOutOfReach){//if the pivot is out of the way then the intake will coem up
       intake.setPosition(0);
     }
   }
-  public void pivotToPosition(double position){
-    if(Constants.pivotOutOfReach > position){
-    intake.setSpeed(0);
-    shooter.setShooterSpeed(0, 0);
-    if(Constants.pivotOutOfReach > pivot.getPivotPos()){
-      intake.setPosition(1);
-    }
-    pivot.setPTargetAngle(position);
-    index.disableIndex();
-  }
-  }
-  public void intakeDisable(){
-    intake.setSpeed(0);
-    //shooter.setShooterSpeed(0, 0);
-    if(Constants.pivotOutOfReach > pivot.getPivotPos()){
-      intake.setPosition(1);
-    }
-    pivot.setPTargetAngle(pivot.frontOrBack());
-    //index.disableIndex();
-  }
-  public void shoot(){
-    if(shooter.readyToShoot()){
-      index.enableIndex(-1);
-    }
-  }
+
+
+
+
+  //not correct
+  /**
+   * uses the ready to shoot function to tell when the shooter can shoot with acurracy
+   * @param rate th rate
+   */
   public void shootAlways(double rate){
     shooter.gotoRate(rate);
     if(shooter.readyToShoot()){
@@ -165,62 +153,51 @@ public class MEGAShooter extends SubsystemBase {
 
   }
 
-  public void fullSpeedOutake(){
-    shooter.gotoRate(9000);
-    if(shooter.isAboveThreshold()){
-      index.setSpeed(-1, -1);
-    }
-    else{
-      if(!index.getPhotoeyeIndex()){
-        index.setSpeed(-0.8, -0.8);
-      }
-      else{
-        index.setSpeed(0, 0);
-      }
-    }
-  } 
 
-  public void alwaysOnShoot(){
-    shooter.gotoRate(9000);
-    if(shooter.readyToShoot()){
-      index.setSpeed(-1, -1);
-    }
-  }
 
-  public void disableShoot(){
-    index.disableIndex();
-    shooter.gotoRate(0);
-  }
 
-  public void SmartDashBoard(){
-    speed = SmartDashboard.getNumber("Speed", speed);
-    SmartDashboard.putNumber("Speed", speed);
-    
-  }
-
+  /**
+   * sets the target position and the target rate that the pivot should be going to when shooting from the short shoot position
+   */
   public void ShortShoot(){
     pivot.setPTargetAngle(Constants.shortPreset[1]);
     shooter.gotoRate(Constants.shortPreset[0]);
-    if(!pivot.atPivotTarget() && !shooter.readyToShoot()){
-      index.setSpeed(0, 0);
-    }
   }
-  /* public void wheelOfFortunePreset(){
-    pivot.setPTargetAngle(Constants.wheelOfFortunePreset[1]);
-  } */
+
+
+
+  /**
+   * sets the target position and the target rate that the pivot should be going to when shooting from the long shoot position
+   */
   public void longShoot(){
     pivot.setPTargetAngle(Constants.autonPreset[1]);
     shooter.gotoRate(Constants.autonPreset[0]);
-    if(!pivot.atPivotTarget() && !shooter.readyToShoot()){
-      index.setSpeed(0, 0);
-    }
   }
+
+
+
+  /**
+   * sets the target position to the neurural position
+   */
   public void toNeuturalPosition(){
     pivot.setPTargetAngle(Constants.neuturalPosFront);
   }
+
+
+
+  /**
+   * shoots the balls at the short shoot
+   */
   public void dShortShoot(){
     shootAlways(Constants.shortPreset[0]);
   }
+
+
+
+
+  /**
+   * shoots the balls at the long shoot
+   */
   public void dLongShoot(){
     shootAlways(Constants.autonPreset[0]);
   }
