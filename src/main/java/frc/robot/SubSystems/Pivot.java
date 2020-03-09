@@ -123,10 +123,7 @@ public class Pivot extends SubsystemBase{
      * @param angle
      */
     private void gotoAngle(){
-   
       double rate = trapezoid.trapezoidCalc(pabsEncoder.getDistance(), mLeftPivot.getEncoder().getVelocity());
-      SmartDashboard.putNumber("Vout", rate);
-
       SetPivotPIDRate(rate);
     }
     
