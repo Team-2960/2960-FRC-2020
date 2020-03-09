@@ -11,6 +11,15 @@ import frc.robot.Camera.Camera;
 
 public class MEGAShooter extends SubsystemBase {
   private static MEGAShooter megaShooter;
+
+  public enum ShooterMode{short_mode, long_mode, camera_mode, intake_mode, idle_mode, manual_mode};
+  public enum IntakeStatus{intake_In, intake_Out, intake_Off};
+
+  private ShooterMode shooterMode = ShooterMode.idle_mode;
+  private IntakeStatus intakeStatus = IntakeStatus.intake_Off;
+
+
+
   private Intake intake;
   private Shooter shooter;
   private Pivot pivot;
@@ -33,13 +42,21 @@ public class MEGAShooter extends SubsystemBase {
  * MEGAShooter costructor
  */
   private MEGAShooter() {
-    //camera = Camera.get_Instance();
+    camera = Camera.get_Instance();
     intake = Intake.get_Instance();
     shooter = Shooter.get_Instance();
     pivot = Pivot.get_Instance();
     index = Index.get_Instance();
   }
   
+  /**
+   * Sets the mode for the shooter to be in
+   * @param shooterMode
+   */
+  public void setShooterMode(ShooterMode shooterMode){
+    this.shooterMode = shooterMode;
+  }
+
   /** 
    * allows for the offset for shooter and the pivot to be used
    * @param angle the value from the joystick that gets passed
@@ -191,7 +208,27 @@ public class MEGAShooter extends SubsystemBase {
   public void dShortShoot(){
     shootAlways(Constants.shortPreset[0]);
   }
+  /**
+   * searches through the setpoints for camera tracking
+   */
+  public ShooterSetpoint cameraSearch(){
+    double distance = camera.getTargetDistance();
+    int minErrIndex = 0;
+    double minErr = Double.MAX_VALUE;
+    if(camera.getTargetDistance() == null){
+      return Constants.idle_Mode;
+      break;
+    }
+    for(int i = 0; i < Constants.cameraTable.length(); i++){
+      double Err = Math.abs(distance - Constants.cameraTable[i].distance);
+      if(Err < minErr){
+        minErrIndex = i;
+      }
+    }
+    
+    return Constants.cameraTable[minErrIndex];
 
+  }
 
 
 
@@ -201,8 +238,86 @@ public class MEGAShooter extends SubsystemBase {
   public void dLongShoot(){
     shootAlways(Constants.autonPreset[0]);
   }
+  /************************/
+  /*        Modes         */
+  /************************/
+  /**
+   * sets the mode to idle mode
+   */
+  public void idle_Mode(){
+    shooter.set_Setpoint(Constants.idle_Setpoint);
+    pivot.set_Setpoint(Constants.idle_Setpoint);
+  }
+  /**
+   * sets the mode to short mode
+   */
+  public void short_Mode(){
+    shooter.set_Setpoint(Constants.short_Setpoint);
+    pivot.set_Setpoint(Constants.short_Setpoint);
+  }
+  /**
+   * sets the mode to long mode
+   */
+  private void long_Mode(){
+    shooter.set_Setpoint(Constants.long_Setpoint);
+    pivot.set_Setpoint(Constants.long_Setpoint);
+    
+  }
+  /**
+   * sets the mode to intake mode
+   */
+  private void intake_Mode(){
+    //clear setpoints
+    shooter.set_Setpoint(null);
+    pivot.set_Setpoint(null);// TODO: if the pivot is null disable the PID
+    
+    //get the intake to the bumper
+    intakePosition();
+    
+    //set intakae mode based on driver
+    if(intakeStatus == IntakeStatus.intake_In){
+      // TODO: intake in
+    }else if(intakeStatus == IntakeStatus.intake_Out){
+      // TODO: intake_out
+    }else{
+      // TODO: intake off
+    }
+  }
+  /**
+   * sets the mode to camera tracking mode
+   */
+  private void camera_Mode(){
+    shooter.set_Setpoint(cameraSearch());
+    pivot.set_Setpoint(cameraSearch());
+  }
+  /**
+   * Sets the mode to maual mode
+   */
+  private void manual_Mode(){
+    shooter.set_Setpoint(null);
+    pivot.set_Setpoint(null);
+  }
   @Override
   public void periodic() {
+    if(shooterMode == ShooterMode.idle_mode){
+      idle_Mode();
+    }
+    else if(shooterMode == ShooterMode.intake_mode){
+      intake_Mode();
+      if()// TODO: make the modes for intaking the balls
+    }
+    else if(shooterMode == ShooterMode.camera_mode){
+      camera_Mode();
+    }
+    else if(shooterMode == ShooterMode.short_mode){
+      short_Mode();
+    }
+    else if(shooterMode == ShooterMode.long_mode){
+      long_Mode();
+    }
+    else if(shooterMode == ShooterMode.manual_mode){
+      manual_Mode();
+    }
     //Timer time = new Timer();
     //time.start();
     // This method will be called once per scheduler run
