@@ -31,8 +31,6 @@ public class Drive extends SubsystemBase {
   //PID Controller
   private PIDController drivePidController;
 
-  //Gyro Sensor
-  private AnalogGyro gyro;
   //private AHRS navX;
   //Encoders
   private CANEncoder rightEncoder;
@@ -77,11 +75,8 @@ public class Drive extends SubsystemBase {
     mRightMfollow1.follow(mRightMaster);
     mRightMfollow2.follow(mRightMaster);
 
-    //init gyro
-    gyro = new AnalogGyro(0);
     //UNCOMMENT CODE
     //navX = new AHRS(SPI.Port.kMXP);
-    gyro.calibrate();
 
     //init encoder
     rightEncoder = mRightMaster.getAlternateEncoder(AlternateEncoderType.kQuadrature, Constants.pulsePerRev);
