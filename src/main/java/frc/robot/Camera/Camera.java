@@ -49,7 +49,7 @@ public class Camera{
 	}
 	/**
 	 * Constructor
-	 * @param cameraPort Pass in the camera port
+	 * @param cameraPort
 	 */
 	private Camera(int cameraPort){
 		//init camera
