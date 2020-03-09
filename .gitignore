@@ -8,3 +8,4 @@
 .gradle/buildOutputCleanup/buildOutputCleanup.lock
 /.gradle/
 /build/
+*.class
