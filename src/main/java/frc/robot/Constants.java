@@ -159,8 +159,8 @@ public class Constants{
                                                 }; */
     
 
-    public static Camera_Setpoint shooter_default = new Camera_Setpoint(1, 0, 0, 0, 0, 0, 0);
-    public static Camera_Setpoint cameraTable[] = {
+    public final static Camera_Setpoint camera_DefaultSetpoint = new Camera_Setpoint(1, 0, 0, 0, 0, 0, 0);//TODO: need to record values
+    public final static Camera_Setpoint cameraTable[] = {//TODO: need to record values
         new Camera_Setpoint(1, 0, 0, 0, 0, 0, 0),
         new Camera_Setpoint(1.5, 0, 0, 0, 0, 0, 0),
         new Camera_Setpoint(2, 0, 0, 0, 0, 0, 0),
@@ -168,9 +168,9 @@ public class Constants{
         new Camera_Setpoint(3, 0, 0, 0, 0, 0, 0)                                                    
     };
 
-    public static Shooter_Setpoint longPreset = new Shooter_Setpoint(-6500, 147, 0, 0, 0, 0);//TODO: need to record values
-    public static Shooter_Setpoint shortPreset = new Shooter_Setpoint(-4000, 182, 0, 0, 0, 0);//TODO: need to record values
-    public static Shooter_Setpoint autonPreset = new Shooter_Setpoint(-6500, 147, 0, 0, 0, 0);//TODO: need to record values
+    public final static Shooter_Setpoint longPreset = new Shooter_Setpoint(-6500, 147, 0, 0, 0, 0);//TODO: need to record values
+    public final static Shooter_Setpoint shortPreset = new Shooter_Setpoint(-4000, 182, 0, 0, 0, 0);//TODO: need to record values
+    public final static Shooter_Setpoint autonPreset = new Shooter_Setpoint(-6500, 147, 0, 0, 0, 0);//TODO: need to record values
 
     /* public final static double longPreset [] ={-6500, 147, 150};
     public final static double shortPreset [] ={-4000, 182, 150, -4050, -3950, -4050, -3950};

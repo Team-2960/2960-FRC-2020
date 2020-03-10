@@ -118,7 +118,7 @@ public class Shooter extends SubsystemBase{
     public void set_Setpoint(Shooter_Setpoint setpoint){
       this.setpoint = setpoint;
       if(setpoint == null){
-        
+        setShooterSpeed(0, 0);
       }else{
         gotoRate(setpoint.shooter_speed);
       }
