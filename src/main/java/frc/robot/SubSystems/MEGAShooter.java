@@ -18,6 +18,9 @@ public class MEGAShooter extends SubsystemBase {
   private ShooterMode shooterMode = ShooterMode.idle_mode;
   private IntakeStatus intakeStatus = IntakeStatus.intake_Off;
 
+  private boolean isShooting = false;
+  private boolean isIndexOut = false;
+
 
 
   private Intake intake;
@@ -56,6 +59,21 @@ public class MEGAShooter extends SubsystemBase {
   public void setShooterMode(ShooterMode shooterMode){
     this.shooterMode = shooterMode;
   }
+
+  /**
+   * sets the shooting mode
+   */
+  public void setShoot(boolean isShooting){
+    this.isShooting = isShooting;
+  }
+
+  /**
+   * sets the index mode
+   */
+  public void setIndex(boolean isIndexOut){
+    this.isIndexOut = isIndexOut;
+  }
+
 
   /** 
    * allows for the offset for shooter and the pivot to be used
@@ -118,12 +136,10 @@ public class MEGAShooter extends SubsystemBase {
    * uses the to bumper to tell the pivot when to move and when to not
    */
   public void intakePosition(){
-    if(intake.isIntakeOut()){//uses the intake out function to tell when it is out
-      if(intake.getTime() > 0.5){   // TODO: Move Intake Delay to constants        
+    if(intake.isIntakeOut()){//uses the intake out function to tell when it is out      
         if(pivotToBumper()){ 
           pivot.DisablePivotPID();// if the pivot is down at the bumper then it stops the pvot PID
         }
-      }
     }else{
       intake.setPosition(1);//if the pivot is not at the bumper then it is putting the intake down
     }
@@ -211,22 +227,21 @@ public class MEGAShooter extends SubsystemBase {
   /**
    * searches through the setpoints for camera tracking
    */
-  public ShooterSetpoint cameraSearch(){
+  public Shooter_Setpoint cameraSearch(){
     double distance = camera.getTargetDistance();
-    int minErrIndex = 0;
+    Shooter_Setpoint setpoint = Constants.camera_DefaultSetpoint;
     double minErr = Double.MAX_VALUE;
-    if(camera.getTargetDistance() == null){
-      return Constants.idle_Mode;
-      break;
-    }
-    for(int i = 0; i < Constants.cameraTable.length(); i++){
-      double Err = Math.abs(distance - Constants.cameraTable[i].distance);
-      if(Err < minErr){
-        minErrIndex = i;
+    
+    if(camera.isTargetFound()){
+      for(int i = 0; i < Constants.cameraTable.length(); i++){
+        double Err = Math.abs(distance - Constants.cameraTable[i].distance);
+        if(Err < minErr){
+          setpoint = Constants.cameraTable[i];
+        }
       }
     }
     
-    return Constants.cameraTable[minErrIndex];
+    return setpoint;
 
   }
 
@@ -276,9 +291,9 @@ public class MEGAShooter extends SubsystemBase {
     
     //set intakae mode based on driver
     if(intakeStatus == IntakeStatus.intake_In){
-      // TODO: intake in
+      // TODO: intake in update the appropriate indexing
     }else if(intakeStatus == IntakeStatus.intake_Out){
-      // TODO: intake_out
+      // TODO: intake ou update the appropriate indexing
     }else{
       // TODO: intake off
     }

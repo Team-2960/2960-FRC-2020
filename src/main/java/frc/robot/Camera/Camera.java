@@ -221,7 +221,7 @@ public class Camera{
 	 * return synchronized is target found or not
 	 * @return target found or not
 	 */
-	public Boolean isTargetFound() {
+	public boolean isTargetFound() {
 		synchronized(IMG_LOCK){
 			return targetFound;
 		}

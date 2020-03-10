@@ -62,16 +62,9 @@ public class Intake extends SubsystemBase {
     }     
   }
   public boolean isIntakeOut(){
-    if(DoubleSolenoid.Value.kForward == sIntake.get()){
-      return false;
-    }
-    else{
-      return true;
-    }
+    return DoubleSolenoid.Value.kReverse == sIntake.get() && IntakeTimer.get() > 0.5;
   }
-  public double getTime(){
-    return IntakeTimer.get();
-  }
+  
   @Override 
   public void periodic() {
     // This method will be called once per scheduler run
