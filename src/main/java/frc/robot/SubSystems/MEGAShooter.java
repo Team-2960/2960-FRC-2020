@@ -250,7 +250,7 @@ public class MEGAShooter extends SubsystemBase {
   /**
    * shoots the balls at the long shoot
    */
-  public void dLongShoot(){
+  private void dLongShoot(){
     shootAlways(Constants.autonPreset[0]);
   }
   /************************/
@@ -259,14 +259,14 @@ public class MEGAShooter extends SubsystemBase {
   /**
    * sets the mode to idle mode
    */
-  public void idle_Mode(){
+  private void idle_Mode(){
     shooter.set_Setpoint(Constants.idle_Setpoint);
     pivot.set_Setpoint(Constants.idle_Setpoint);
   }
   /**
    * sets the mode to short mode
    */
-  public void short_Mode(){
+  private void short_Mode(){
     shooter.set_Setpoint(Constants.short_Setpoint);
     pivot.set_Setpoint(Constants.short_Setpoint);
   }
@@ -314,6 +314,28 @@ public class MEGAShooter extends SubsystemBase {
   }
   @Override
   public void periodic() {
+    switch(shooterMode){
+      case idle_mode:
+        idle_Mode();
+        break;
+      case intake_mode:
+        intake_Mode();
+        break;
+      case camera_mode:
+        camera_Mode();
+        break;
+      case short_mode:
+        short_Mode();
+        break;
+      case long_mode:
+        long_Mode();
+        break;
+      case manual_mode:
+        manual_Mode();
+        break;
+      default:
+        break;
+    }
     if(shooterMode == ShooterMode.idle_mode){
       idle_Mode();
     }
