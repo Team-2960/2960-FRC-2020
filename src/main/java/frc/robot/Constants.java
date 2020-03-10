@@ -1,4 +1,6 @@
 package frc.robot;
+import java.util.Arrays;
+import java.util.ArrayList;
 public class Constants{
     /**
      * Joystick
@@ -155,11 +157,20 @@ public class Constants{
                                                     {4.5, 40, 40, 4000},
                                                     {5, 20, 20, 4000}
                                                 }; */
+    
 
+    public final static Camera_Setpoint camera_DefaultSetpoint = new Camera_Setpoint(1, 0, 0, 0, 0, 0, 0);//TODO: need to record values
+    public final static Camera_Setpoint cameraTable[] = {//TODO: need to record values
+        new Camera_Setpoint(1, 0, 0, 0, 0, 0, 0),
+        new Camera_Setpoint(1.5, 0, 0, 0, 0, 0, 0),
+        new Camera_Setpoint(2, 0, 0, 0, 0, 0, 0),
+        new Camera_Setpoint(2.5, 0, 0, 0, 0, 0, 0),
+        new Camera_Setpoint(3, 0, 0, 0, 0, 0, 0)                                                    
+    };
 
-    public Shooter_Setpoint longPreset = new Shooter_Setpoint(-6500, 147, 0, 0, 0, 0);//TODO: need to record values
-    public Shooter_Setpoint shortPreset = new Shooter_Setpoint(-4000, 182, 0, 0, 0, 0);//TODO: need to record values
-    public Shooter_Setpoint autonPreset = new Shooter_Setpoint(-6500, 147, 0, 0, 0, 0);//TODO: need to record values
+    public final static Shooter_Setpoint longPreset = new Shooter_Setpoint(-6500, 147, 0, 0, 0, 0);//TODO: need to record values
+    public final static Shooter_Setpoint shortPreset = new Shooter_Setpoint(-4000, 182, 0, 0, 0, 0);//TODO: need to record values
+    public final static Shooter_Setpoint autonPreset = new Shooter_Setpoint(-6500, 147, 0, 0, 0, 0);//TODO: need to record values
 
     /* public final static double longPreset [] ={-6500, 147, 150};
     public final static double shortPreset [] ={-4000, 182, 150, -4050, -3950, -4050, -3950};
@@ -173,42 +184,4 @@ public class Constants{
     public final static double intakeShooterSpeed = -500;
     public final static double percentOnLowerBelt = 0.85;
     public final static double pivotOutOfReach = 260;
-
-
-    public class Shooter_Setpoint{
-        public double shooter_speed;
-        public double pivot_setpoint;
-        public double min_left_speed;
-        public double max_left_speed;
-        public double min_right_speed;
-        public double max_right_speed;
-
-        public Shooter_Setpoint(
-            double shooter_speed,
-            double pivot_setpoint,
-            double min_left_speed,
-            double max_left_speed,
-            double min_right_speed,
-            double max_right_speed
-        ){
-            this.shooter_speed = shooter_speed;
-            this.pivot_setpoint = pivot_setpoint;
-            this.min_left_speed = min_left_speed;
-            this.max_left_speed = max_left_speed;
-            this.min_right_speed = min_right_speed; 
-            this.max_right_speed = max_right_speed;
-        }
-        public Shooter_Setpoint(
-            double shooter_setpoint,
-            double pivot_setpoint
-            ){
-            this.shooter_speed = shooter_setpoint;
-            this.pivot_setpoint = pivot_setpoint;
-            this.min_left_speed = min_left_speed;
-            this.max_left_speed = max_left_speed;
-            this.min_right_speed = min_right_speed; 
-            this.max_right_speed = max_right_speed;
-
-        }
-    }
 }

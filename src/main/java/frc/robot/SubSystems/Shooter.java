@@ -4,6 +4,8 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
+import frc.robot.Shooter_Setpoint;
+
 import com.ctre.phoenix.motorcontrol.can.*;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
@@ -19,7 +21,7 @@ public class Shooter extends SubsystemBase{
     private double targetRate = 0;
     private double speedOffset;
 
-    private Constants.Shooter_Setpoint setpoint;
+    private Shooter_Setpoint setpoint;
 
 
     //pid value will move to constants later.
@@ -113,10 +115,13 @@ public class Shooter extends SubsystemBase{
       setPIDShooterSpeed(targetRate);
     }
 
-    public void set_Setpoint(Constants.Shooter_Setpoint setpoint){
+    public void set_Setpoint(Shooter_Setpoint setpoint){
       this.setpoint = setpoint;
-      if(setpoint != null)
+      if(setpoint == null){
+        setShooterSpeed(0, 0);
+      }else{
         gotoRate(setpoint.shooter_speed);
+      }
     }
     /** 
      * @return boolean

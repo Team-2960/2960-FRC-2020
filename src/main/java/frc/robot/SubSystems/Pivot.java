@@ -16,6 +16,7 @@ import edu.wpi.first.wpiutil.math.MathUtil;
 import frc.robot.Constants;
 import frc.robot.Util.Trapezoid;
 import frc.robot.Camera.*;
+import frc.robot.Shooter_Setpoint;
 
 public class Pivot extends SubsystemBase{
     public static Pivot pivot;
@@ -40,7 +41,7 @@ public class Pivot extends SubsystemBase{
     private DutyCycleEncoder pabsEncoder;
     private double angleOffset;
 
-    private Constants.Shooter_Setpoint setpoint;
+    private Shooter_Setpoint setpoint;
     /** 
      * @return Pivot
      */
@@ -129,7 +130,7 @@ public class Pivot extends SubsystemBase{
       SetPivotPIDRate(rate);
     }
 
-    public void set_Setpoint(Constants.Shooter_Setpoint setpoint){
+    public void set_Setpoint(Shooter_Setpoint setpoint){
       this.setpoint = setpoint;
       if(setpoint != null)
         setPTargetAngle(setpoint.pivot_setpoint);
