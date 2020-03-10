@@ -61,7 +61,7 @@ public class OI extends SubsystemBase{
         }else{
             if(dTrenchHeight() || oIntakeOut()){// driver intake posistion and operator posistion
                 //sets intake down ready to intake
-                mShooter.intakePosition();  // this will move the intake down and pivot down
+                mShooter.setShooterMode(MEGAShooter.ShooterMode.intake_mode);  // this will move the intake down and pivot down
             }else if(oShortPreset()){ // short preset
                 mShooter.ShortShoot(); // go to target angle and rate
             }else if(oLongPreset()){ //long preset

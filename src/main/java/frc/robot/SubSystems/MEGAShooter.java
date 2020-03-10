@@ -53,7 +53,7 @@ public class MEGAShooter extends SubsystemBase {
   }
   
   /**
-   * Sets the mode for the shooter to be in
+   * Sets the mode for the shooter to be in for OI
    * @param shooterMode
    */
   public void setShooterMode(ShooterMode shooterMode){
@@ -61,14 +61,14 @@ public class MEGAShooter extends SubsystemBase {
   }
 
   /**
-   * sets the shooting mode
+   * sets the shooting mode for OI
    */
   public void setShoot(boolean isShooting){
     this.isShooting = isShooting;
   }
 
   /**
-   * sets the index mode
+   * sets the index mode for OI
    */
   public void setIndex(boolean isIndexOut){
     this.isIndexOut = isIndexOut;
@@ -231,7 +231,7 @@ public class MEGAShooter extends SubsystemBase {
     double distance = camera.getTargetDistance();
     Shooter_Setpoint setpoint = Constants.camera_DefaultSetpoint;
     double minErr = Double.MAX_VALUE;
-    
+
     if(camera.isTargetFound()){
       for(int i = 0; i < Constants.cameraTable.length(); i++){
         double Err = Math.abs(distance - Constants.cameraTable[i].distance);
