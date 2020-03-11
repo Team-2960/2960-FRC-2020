@@ -16,8 +16,9 @@ public class OI extends SubsystemBase{
     private Shooter shooter;
     public Pivot pivot;
     private Index index;
-    //private Camera camera;
+    private Camera camera;
     private MEGAShooter mShooter;
+    private LEDs leds;
     //Joysticks
     private Joystick driver_Control;
     private Joystick operator_Control;
@@ -32,6 +33,8 @@ public class OI extends SubsystemBase{
         pivot = Pivot.get_Instance();
         index = Index.get_Instance();
         mShooter = MEGAShooter.get_Instance();
+        //leds = new LEDs();
+        
         //joysticks
         driver_Control = new Joystick(Constants.driver_Control_Left);
         

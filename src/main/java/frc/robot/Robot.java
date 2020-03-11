@@ -50,7 +50,7 @@ public class Robot extends TimedRobot {
     //Timer time = new Timer();
     //time.start();
     //SmartDashboard.putNumber("robot Timer", time.get());
-    //camera.update();
+    camera.update();
     
   }
 
