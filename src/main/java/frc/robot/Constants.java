@@ -169,8 +169,9 @@ public class Constants{
     };
 
     public final static Shooter_Setpoint longPreset = new Shooter_Setpoint(-6500, 147, 0, 0, 0, 0);//TODO: need to record values
-    public final static Shooter_Setpoint shortPreset = new Shooter_Setpoint(-4000, 182, 0, 0, 0, 0);//TODO: need to record values
+    public final static Shooter_Setpoint shortPreset = new Shooter_Setpoint(-4000, 182, -3850, -4100, -3850, -4100);//TODO: need to record values
     public final static Shooter_Setpoint autonPreset = new Shooter_Setpoint(-6500, 147, 0, 0, 0, 0);//TODO: need to record values
+    public final static Shooter_Setpoint idlePreset = new Shooter_Setpoint(0, 230, 0, 0, 0, 0);//TODO: need to record values
 
     
     /* public final static double longPreset [] ={-6500, 147, 150};

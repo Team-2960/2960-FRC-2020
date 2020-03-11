@@ -131,12 +131,11 @@ public class Shooter extends SubsystemBase{
       //double rError = Math.abs(Math.abs(mRightShooter.getSelectedSensorVelocity()) - targetRate);
       //double lError = Math.abs(Math.abs(mLeftShooter.getSelectedSensorVelocity()) - targetRate);
       if(setpoint != null){
-        boolean LeftAtRange = (mLeftShooter.getSelectedSensorVelocity() > setpoint.min_left_speed) && 
-                              (mLeftShooter.getSelectedSensorVelocity() < setpoint.max_left_speed);
+        boolean LeftAtRange = (mLeftShooter.getSelectedSensorVelocity() < setpoint.min_left_speed) && 
+                              (mLeftShooter.getSelectedSensorVelocity() > setpoint.max_left_speed);
 
-        boolean RightAtRange = (mRightShooter.getSelectedSensorVelocity() > setpoint.min_right_speed) && 
-                               (mRightShooter.getSelectedSensorVelocity() < setpoint.max_right_speed);
-
+        boolean RightAtRange = (mRightShooter.getSelectedSensorVelocity() < setpoint.min_right_speed) && 
+                               (mRightShooter.getSelectedSensorVelocity() > setpoint.max_right_speed);
           readyToShoot = LeftAtRange && RightAtRange;
       }
       return readyToShoot;

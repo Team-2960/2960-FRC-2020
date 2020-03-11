@@ -57,8 +57,9 @@ public class Intake extends SubsystemBase {
       sIntake.set(Value.kForward);
     }
     else if(state == 1){
+      if(DoubleSolenoid.Value.kReverse != sIntake.get())
+        IntakeTimer.reset();
       sIntake.set(Value.kReverse);
-      IntakeTimer.reset();
     }     
   }
   public boolean isIntakeOut(){
@@ -67,6 +68,7 @@ public class Intake extends SubsystemBase {
   
   @Override 
   public void periodic() {
+    System.out.println(IntakeTimer.get());
     // This method will be called once per scheduler run
     //Timer time = new Timer();
     //time.start();

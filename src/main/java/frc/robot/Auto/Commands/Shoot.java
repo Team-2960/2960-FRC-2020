@@ -11,11 +11,9 @@ public class Shoot extends CommandBase{
     Index index = Index.get_Instance();
     Shooter shooter = Shooter.get_Instance();
     private boolean isFinish = false;
-    private double rate;
     private Timer time;
 
-    public Shoot(double rate){
-        this.rate = rate;
+    public Shoot(){
     }
 
     @Override
@@ -50,7 +48,7 @@ public class Shoot extends CommandBase{
     @Override
     public void execute() {
         isFinish = index.indexBeltsGoneDistance(57) || time.get() > 7;
-        mShooter.shootAlways(rate);
+        mShooter.shootAlways();
         if(time.get() > 5){
             index.setSpeed(-1, -1);
         }

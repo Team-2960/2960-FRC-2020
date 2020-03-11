@@ -12,7 +12,7 @@ import frc.robot.Camera.Camera;
 public class MEGAShooter extends SubsystemBase {
   private static MEGAShooter megaShooter;
 
-  public enum ShooterMode{short_mode, long_mode, camera_mode, intake_mode, idle_mode, manual_mode};
+  public enum ShooterMode{short_mode, long_mode, camera_mode, intake_mode, idle_mode, manual_mode, auton_Mode};
   public enum IntakeStatus{intake_In, intake_Out, intake_Off};
 
   private ShooterMode shooterMode = ShooterMode.idle_mode;
@@ -59,7 +59,12 @@ public class MEGAShooter extends SubsystemBase {
   public void setShooterMode(ShooterMode shooterMode){
     this.shooterMode = shooterMode;
   }
-
+  /**
+   * sets the mdoe for the intake
+   */
+  public void setintakeStatus(IntakeStatus intakeStatus){
+    this.intakeStatus = intakeStatus;
+  }
   /**
    * sets the shooting mode for OI
    */
@@ -111,6 +116,13 @@ public class MEGAShooter extends SubsystemBase {
     shooter.gotoRate(4000);
   }
 
+  public void disableIntakeDr(){
+    //intake in
+    index.enableIndex(1);
+    intake.setSpeed(0);
+    shooter.gotoRate(0);
+  }
+
 
   //new function to review
   public boolean pivotToBumper(){
@@ -136,12 +148,11 @@ public class MEGAShooter extends SubsystemBase {
    * uses the to bumper to tell the pivot when to move and when to not
    */
   public void intakePosition(){
+    intake.setPosition(1);//if the pivot is not at the bumper then it is putting the intake down
     if(intake.isIntakeOut()){//uses the intake out function to tell when it is out      
-        if(pivotToBumper()){ 
-          pivot.DisablePivotPID();// if the pivot is down at the bumper then it stops the pvot PID
-        }
-    }else{
-      intake.setPosition(1);//if the pivot is not at the bumper then it is putting the intake down
+      if(pivotToBumper()){ 
+        pivot.DisablePivotPID();// if the pivot is down at the bumper then it stops the pvot PID
+      }
     }
   }
   
@@ -166,20 +177,10 @@ public class MEGAShooter extends SubsystemBase {
    * uses the ready to shoot function to tell when the shooter can shoot with acurracy
    * @param rate th rate
    */
-  public void shootAlways(double rate){
-    shooter.gotoRate(rate);
+  public void shootAlways(){
     if(shooter.readyToShoot()){
-      shoot = true;
-    }
-    else{
-      shoot = false;
-    }
-    if(shoot){
       index.enableIndex(-1);
-    /*    if(index.lostBalls){
-        shoot = false;*/
-      } 
-    
+    }
     else{
       index.disableIndex();
     }
@@ -189,23 +190,7 @@ public class MEGAShooter extends SubsystemBase {
 
 
 
-  /**
-   * sets the target position and the target rate that the pivot should be going to when shooting from the short shoot position
-   */
-  public void ShortShoot(){
-    pivot.setPTargetAngle(Constants.shortPreset[1]);
-    shooter.gotoRate(Constants.shortPreset[0]);
-  }
 
-
-
-  /**
-   * sets the target position and the target rate that the pivot should be going to when shooting from the long shoot position
-   */
-  public void longShoot(){
-    pivot.setPTargetAngle(Constants.autonPreset[1]);
-    shooter.gotoRate(Constants.autonPreset[0]);
-  }
 
 
 
@@ -218,16 +203,11 @@ public class MEGAShooter extends SubsystemBase {
 
 
 
-  /**
-   * shoots the balls at the short shoot
-   */
-  public void dShortShoot(){
-    shootAlways(Constants.shortPreset[0]);
-  }
+
   /**
    * searches through the setpoints for camera tracking
    */
-  public Shooter_Setpoint cameraSearch(){
+/*   public Shooter_Setpoint cameraSearch(){
     double distance = camera.getTargetDistance();
     Shooter_Setpoint setpoint = Constants.camera_DefaultSetpoint;
     double minErr = Double.MAX_VALUE;
@@ -243,16 +223,7 @@ public class MEGAShooter extends SubsystemBase {
     
     return setpoint;
 
-  }
-
-
-
-  /**
-   * shoots the balls at the long shoot
-   */
-  private void dLongShoot(){
-    shootAlways(Constants.autonPreset[0]);
-  }
+  } 
   /************************/
   /*        Modes         */
   /************************/
@@ -260,24 +231,33 @@ public class MEGAShooter extends SubsystemBase {
    * sets the mode to idle mode
    */
   private void idle_Mode(){
-    shooter.set_Setpoint(Constants.idle_Setpoint);
-    pivot.set_Setpoint(Constants.idle_Setpoint);
+    shooter.set_Setpoint(Constants.idlePreset);
+    pivot.set_Setpoint(Constants.idlePreset);
   }
   /**
    * sets the mode to short mode
    */
   private void short_Mode(){
-    shooter.set_Setpoint(Constants.short_Setpoint);
-    pivot.set_Setpoint(Constants.short_Setpoint);
+    shooter.set_Setpoint(Constants.shortPreset);
+    pivot.set_Setpoint(Constants.shortPreset);
   }
   /**
    * sets the mode to long mode
    */
   private void long_Mode(){
-    shooter.set_Setpoint(Constants.long_Setpoint);
-    pivot.set_Setpoint(Constants.long_Setpoint);
+    shooter.set_Setpoint(Constants.longPreset);
+    pivot.set_Setpoint(Constants.longPreset);
     
   }
+  /**
+   * sets the shooter to auton mode
+   */
+  private void auton_Mode(){
+    shooter.set_Setpoint(Constants.autonPreset);
+    pivot.set_Setpoint(Constants.autonPreset);
+    
+  }
+
   /**
    * sets the mode to intake mode
    */
@@ -291,20 +271,20 @@ public class MEGAShooter extends SubsystemBase {
     
     //set intakae mode based on driver
     if(intakeStatus == IntakeStatus.intake_In){
-      // TODO: intake in update the appropriate indexing
+      intakeEnableDr();
     }else if(intakeStatus == IntakeStatus.intake_Out){
-      // TODO: intake ou update the appropriate indexing
+      intakeOutEnableDr();
     }else{
-      // TODO: intake off
+      disableIntakeDr();
     }
   }
   /**
    * sets the mode to camera tracking mode
    */
-  private void camera_Mode(){
+/*   private void camera_Mode(){
     shooter.set_Setpoint(cameraSearch());
     pivot.set_Setpoint(cameraSearch());
-  }
+  } */
   /**
    * Sets the mode to maual mode
    */
@@ -315,14 +295,14 @@ public class MEGAShooter extends SubsystemBase {
   @Override
   public void periodic() {
     switch(shooterMode){
-      case idle_mode:
-        idle_Mode();
+      case auton_Mode:
+        auton_Mode();
         break;
       case intake_mode:
         intake_Mode();
         break;
       case camera_mode:
-        camera_Mode();
+        //camera_Mode();
         break;
       case short_mode:
         short_Mode();
@@ -334,26 +314,8 @@ public class MEGAShooter extends SubsystemBase {
         manual_Mode();
         break;
       default:
+        idle_Mode();
         break;
-    }
-    if(shooterMode == ShooterMode.idle_mode){
-      idle_Mode();
-    }
-    else if(shooterMode == ShooterMode.intake_mode){
-      intake_Mode();
-      if()// TODO: make the modes for intaking the balls
-    }
-    else if(shooterMode == ShooterMode.camera_mode){
-      camera_Mode();
-    }
-    else if(shooterMode == ShooterMode.short_mode){
-      short_Mode();
-    }
-    else if(shooterMode == ShooterMode.long_mode){
-      long_Mode();
-    }
-    else if(shooterMode == ShooterMode.manual_mode){
-      manual_Mode();
     }
     //Timer time = new Timer();
     //time.start();

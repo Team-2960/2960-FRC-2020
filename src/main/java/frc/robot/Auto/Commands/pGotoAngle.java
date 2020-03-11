@@ -1,24 +1,28 @@
 package frc.robot.Auto.Commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.SubSystems.Drive;
+import frc.robot.SubSystems.MEGAShooter;
 import frc.robot.SubSystems.Pivot;
+import frc.robot.SubSystems.Shooter;
 
 public class pGotoAngle extends CommandBase{
     //this will adjust the shooting angle
 
-    Pivot pivot = Pivot.get_Instance();
-    private boolean isFinish = false;
-    private double angle;
+    private MEGAShooter megashooter = MEGAShooter.get_Instance();
+    private Shooter shooter = Shooter.get_Instance();
+    private Pivot pivot = Pivot.get_Instance();
 
-    public pGotoAngle(double angle){
-        this.angle = angle;
+    private boolean isFinish = false;
+    private MEGAShooter.ShooterMode mode;
+
+    public pGotoAngle(MEGAShooter.ShooterMode mode){
+        this.mode = mode;
     }
 
     @Override
     public void initialize() {
         super.initialize();
-        pivot.setPTargetAngle(angle);
+        megashooter.setShooterMode(mode);
     }
     
     /**
@@ -44,7 +48,7 @@ public class pGotoAngle extends CommandBase{
 
     @Override
     public void execute() {
-        isFinish = pivot.atPivotTarget();
+        isFinish = pivot.atPivotTarget() && shooter.readyToShoot();
     }
 
     

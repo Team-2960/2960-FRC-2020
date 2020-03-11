@@ -63,14 +63,11 @@ public class OI extends SubsystemBase{
                 //sets intake down ready to intake
                 mShooter.setShooterMode(MEGAShooter.ShooterMode.intake_mode);  // this will move the intake down and pivot down
             }else if(oShortPreset()){ // short preset
-                mShooter.ShortShoot(); // go to target angle and rate
+                mShooter.setShooterMode(MEGAShooter.ShooterMode.short_mode); // go to target angle and rate
             }else if(oLongPreset()){ //long preset
-                mShooter.longShoot(); // go to target angle and rate   
-             }/*else if(oCameraTracking()){
-                mShooter.wheelOfFortunePreset(); //go to target angle for wof
-            } */else{ 
-                mShooter.toNeuturalPosition(); // go to netural position
-                shooter.setShooterSpeed(0, 0); // stop shooter
+                mShooter.setShooterMode(MEGAShooter.ShooterMode.long_mode); // go to target angle and rate   
+             }else{ 
+                mShooter.setShooterMode(MEGAShooter.ShooterMode.idle_mode);
             }
 
             if(oIntakeIn()) {  
@@ -82,19 +79,17 @@ public class OI extends SubsystemBase{
         drive.setSpeed(driver_Control.getRawAxis(5), driver_Control.getRawAxis(1)); //drive
 
         if(dintakeIn()){ //start intake
-            mShooter.intakeEnableDr();
+            mShooter.setintakeStatus(MEGAShooter.IntakeStatus.intake_In);
         }else if(oIndexOut()){ //index out take
             index.setSpeed(-1, -1);
         }else if(dintakeOut()){ //intake and shooter out take
-            intake.setSpeed(-1); //out
+            mShooter.setintakeStatus(MEGAShooter.IntakeStatus.intake_Out);
             shooter.setShooterSpeed(-0.4, -0.4); 
-        }else if(oShortPreset() && dShootOut()){ //auto shoot ball
-            mShooter.dShortShoot();
-        }else if(oLongPreset() && dShootOut()){ // auto shoot ball
-            mShooter.dLongShoot();
+        }else if(oShoot()){
+            mShooter.shootAlways();
         }else if(backUp_Control.getRawButton(4)){
-            shooter.gotoRate(Constants.shortPreset[0]);
-        }/* else if(oCameraTracking()&& dShootOut()){
+             //shooter.gotoRate(Constants.shortPreset[0]);
+         }/* else if(oCameraTracking()&& dShootOut()){
             shooter.setShooterSpeed(0.1, -0.1); //run the shooter wof
         } */
         
@@ -107,7 +102,8 @@ public class OI extends SubsystemBase{
         
         
         else{//stop intake and index
-            intake.setSpeed(0);
+            mShooter.setintakeStatus(null);
+
             index.disableIndex();
         }
 

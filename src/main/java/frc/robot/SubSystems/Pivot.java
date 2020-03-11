@@ -32,7 +32,7 @@ public class Pivot extends SubsystemBase{
     private boolean isPivotEnabled = false;
     private boolean cameraTrackingEnabled =false;
     private Trapezoid trapezoid;  
-    private double pivotTarget;
+    private double pivotTarget = 200;
     private boolean isPivotFront;
     public int lookUpPos;
     public int pivotTablePos = 0;
@@ -134,6 +134,10 @@ public class Pivot extends SubsystemBase{
       this.setpoint = setpoint;
       if(setpoint != null)
         setPTargetAngle(setpoint.pivot_setpoint);
+        else{
+          //DisablePivotPID();
+        }
+
     }
       
     
