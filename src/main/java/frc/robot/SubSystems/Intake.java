@@ -67,8 +67,7 @@ public class Intake extends SubsystemBase {
   }
   
   @Override 
-  public void periodic() {
-    System.out.println(IntakeTimer.get());
+  public void periodic(){
     // This method will be called once per scheduler run
     //Timer time = new Timer();
     //time.start();

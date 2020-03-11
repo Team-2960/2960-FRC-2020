@@ -48,6 +48,7 @@ public class pGotoAngle extends CommandBase{
 
     @Override
     public void execute() {
+
         isFinish = pivot.atPivotTarget() && shooter.readyToShoot();
     }
 

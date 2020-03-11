@@ -27,11 +27,11 @@ public class Shooter extends SubsystemBase{
     //pid value will move to constants later.
     //right
     public double kp1 = 0.003,
-                  ki1 = 0.0000/*46*/,
+                  ki1 = 0.0000037/*46*/,
                   kd1 = 0.0; 
     //left
     public double kp2 = 0.01, /*0.05 0.525 very close to 0*/
-                  ki2 = 0.0000/*46*/,              
+                  ki2 = 0.0000035/*46*/,              
                   kd2 = 0.0;              
     /** 
      * @return Shooter

@@ -7,7 +7,6 @@ import frc.robot.SubSystems.MEGAShooter.ShooterMode;
 public class ShootAndMove extends SequentialCommandGroup{
     public ShootAndMove(){
         addCommands(
-            new Delay(3),
             new pGotoAngle(ShooterMode.auton_Mode),
             new Shoot(),
             new DriveWithTime(0.25,0.25, 0.5)

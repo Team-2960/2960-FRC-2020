@@ -47,7 +47,7 @@ public class Shoot extends CommandBase{
 
     @Override
     public void execute() {
-        isFinish = index.indexBeltsGoneDistance(57) || time.get() > 7;
+        isFinish = index.indexBeltsGoneDistance(53) || time.get() > 7;
         mShooter.shootAlways();
         if(time.get() > 5){
             index.setSpeed(-1, -1);
