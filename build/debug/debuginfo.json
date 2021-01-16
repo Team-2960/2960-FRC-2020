@@ -5,5 +5,12 @@
     "debugfile": "frcJava_roborio.debugconfig",
     "project": "2960-code-2020",
     "language": "java"
+  },
+  {
+    "artifact": "frcJava (in project 2960-FRC-2020)",
+    "target": "roborio",
+    "debugfile": "frcJava_roborio.debugconfig",
+    "project": "2960-FRC-2020",
+    "language": "java"
   }
 ]

@@ -54,11 +54,16 @@ public class Trapezoid{
         double PTotal = PEnd - PStart;              // Total travel distance
         double PCur = PRaw - PStart;                // Distance from start position
         double PErr = PTotal - PCur;                // Distance to target
-        double VLead = ALead * PCur;       // Leadin speed
+        double VLead = ALead * PCur;                // Leadin speed
         double VTail = ATail * PErr;                // Tail speed
 
         // Find the speed that is closest to 0
         if(Math.abs(VLead) < Math.abs(VTail)){
+            if(PErr > 0) {
+                VLead = Math.max(VLead, minGoingRatePos);
+            } else{
+                VLead = Math.min(VLead, minGoingRateNeg);
+            }
             VOut = VLead;
         }
         else{
@@ -68,7 +73,6 @@ public class Trapezoid{
             VOut = (PRaw > PEnd) ? (minGoingRateNeg) : (minGoingRatePos);
         }
         // Ensure speed is within limits
-        
         if(Math.abs(PRate)< 15){
             VOut = (PRaw > PEnd) ? (VStartMinNeg) : (VStartMinPos);
         }
