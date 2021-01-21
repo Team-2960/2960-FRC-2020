@@ -142,7 +142,16 @@ public class MEGAShooter extends SubsystemBase {
       shoot = false;
     }
     if(shoot){
-      index.enableIndex(-1);
+      if(!Index.photoeye.get()){
+        index.enableIndex(-1);
+      }
+      else{
+        index.enableIndex(-1);
+        if(!Index.photoeye.get()){
+          index.enableIndex(0);
+        }
+      }
+      
     /*    if(index.lostBalls){
         shoot = false;*/
       } 

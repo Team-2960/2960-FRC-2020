@@ -79,7 +79,7 @@ public class OI extends SubsystemBase{
         }
         //Driver Control
         //TODO: May be need a deadband
-        drive.setSpeed(driver_Control.getRawAxis(5), driver_Control.getRawAxis(1)); //drive
+        drive.setSpeed(driver_Control.getRawAxis(1)* -1, driver_Control.getRawAxis(5)* -1); //drive
 
         if(dintakeIn()){ //start intake
             mShooter.intakeEnableDr();

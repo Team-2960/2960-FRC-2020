@@ -50,9 +50,9 @@ public class Constants{
     /**
      * Pivot PID control
      */
-    public final static double pKp = 0.00026;
+    public final static double pKp = 0.00024;
     public final static double pKi = 0.0000;
-    public final static double pKd = 0.000;
+    public final static double pKd = 0.0000000000000;
     /**
      * The feedforward PID
      */

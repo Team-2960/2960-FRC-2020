@@ -107,7 +107,7 @@ public class Shooter extends SubsystemBase{
      * @param rate
      */
     public void gotoRate(double rate){
-      targetRate = rate + speedOffset;
+      targetRate = rate /* + speedOffset*/;
       setPIDShooterSpeed(targetRate);
     }
 
@@ -116,9 +116,9 @@ public class Shooter extends SubsystemBase{
      */
     public boolean readyToShoot(){
       boolean readyToShoot = false;
-      double rError = Math.abs(Math.abs(mRightShooter.getSelectedSensorVelocity()) - targetRate);
-      double lError = Math.abs(Math.abs(mLeftShooter.getSelectedSensorVelocity()) - targetRate);
-      if(rError < 100 && lError < 100){
+      double rError = Math.abs(Math.abs(mRightShooter.getSelectedSensorVelocity()) - Math.abs(targetRate));
+      double lError = Math.abs(Math.abs(mLeftShooter.getSelectedSensorVelocity()) - Math.abs(targetRate));
+      if(rError < 100 || lError < 100){
         readyToShoot = true;
       }
       return readyToShoot;

@@ -12,7 +12,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class Index extends SubsystemBase {
   private static Index index;
-  private CANDigitalInput photoeye;
+  public static CANDigitalInput photoeye;
   
   private CANSparkMax mRightIndex;
   private CANSparkMax mLeftIndex;
