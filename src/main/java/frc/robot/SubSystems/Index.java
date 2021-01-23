@@ -14,31 +14,34 @@ public class Index extends SubsystemBase {
   private static Index index;
   public static CANDigitalInput photoeye;
   
-  private CANSparkMax mRightIndex;
-  private CANSparkMax mLeftIndex;
+  private static CANSparkMax mRightIndex;
+  private static CANSparkMax mLeftIndex;
 
   private int isIndexEnabled = 0;
   private boolean isAutoIndexEnabled = false;
 
-  /** 
+  /**
    * @return Index
    */
-  public static Index get_Instance(){
-    if(index == null){
+  public static Index get_Instance() {
+    if (index == null) {
       index = new Index();
-    } 
+    }
     return index;
   }
+
   private Index() {
     mLeftIndex = new CANSparkMax(Constants.mIndex1, MotorType.kBrushless);
     mRightIndex = new CANSparkMax(Constants.mIndex2, MotorType.kBrushless);
-    photoeye = new CANDigitalInput(mLeftIndex,  CANDigitalInput.LimitSwitch.kForward,  CANDigitalInput.LimitSwitchPolarity.kNormallyOpen);
+    photoeye = new CANDigitalInput(mLeftIndex, CANDigitalInput.LimitSwitch.kForward,
+        CANDigitalInput.LimitSwitchPolarity.kNormallyOpen);
     mRightIndex.getEncoder().setPosition(0);
   }
+
   /**
    * Gets the photo eye and prints it
    */
-  public void setSpeed(double right, double left){
+  public static void setSpeed(double right, double left) {
     mLeftIndex.set(left);
     mRightIndex.set(-right);
   }
@@ -80,7 +83,7 @@ public class Index extends SubsystemBase {
     //time.start();
     // This method will be called once per scheduler run
     // This method will be called once per scheduler run 
-    //SmartDashboard();
+    SmartDashboard();
     if(isAutoIndexEnabled){
       if(isIndexEnabled == 1){
         startIndexIn();

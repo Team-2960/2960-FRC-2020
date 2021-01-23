@@ -19,6 +19,7 @@ public class MEGAShooter extends SubsystemBase {
   private boolean shoot = false;
   public double speed = -6000;
   public boolean setMotorToIntake = false;
+  public Timer shootTimer;
   /** 
    * @return megaShooter
    */
@@ -38,6 +39,7 @@ public class MEGAShooter extends SubsystemBase {
     shooter = Shooter.get_Instance();
     pivot = Pivot.get_Instance();
     index = Index.get_Instance();
+    shootTimer = new Timer();
   }
   
   /** 
@@ -136,33 +138,22 @@ public class MEGAShooter extends SubsystemBase {
   public void shootAlways(double rate){
     shooter.gotoRate(rate);
     if(!shoot){
-      if(shooter.readyToShoot()){
-        shoot = true;
-      }
-      else{
+    if(shooter.readyToShoot()){
+      shoot = true;
+      shootTimer.start();
+    }
+    else{
+      shoot = false;
+    }
+    }
+    if(shoot){
+      Index.setSpeed(-1,-1);
+      if(shootTimer.get() > 0.25){
+        Index.setSpeed(0,0);
+        shootTimer.stop();
         shoot = false;
       }
     }
-    if(shoot){
-      if(!Index.photoeye.get()){
-        index.enableIndex(-1);
-      }
-      else{
-        index.enableIndex(-1);
-        if(!Index.photoeye.get()){
-          index.enableIndex(0);
-          shoot = false;
-        }
-      }
-      
-    /*    if(index.lostBalls){
-        shoot = false;*/
-      } 
-    
-    else{
-      index.disableIndex();
-    }
-
   }
 
 
