@@ -71,7 +71,7 @@ public class Index extends SubsystemBase {
   public boolean indexBeltsGoneDistance(double distance){
     return distance < getEncoderDistance();
   }
-  public boolean getPhotoeyeIndex(){
+  public static boolean getPhotoeyeIndex(){
     return photoeye.get();
   }
   public void SmartDashboard(){

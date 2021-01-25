@@ -118,7 +118,7 @@ public class Shooter extends SubsystemBase{
       boolean readyToShoot = false;
       double rError = Math.abs(Math.abs(mRightShooter.getSelectedSensorVelocity()) - Math.abs(targetRate));
       double lError = Math.abs(Math.abs(mLeftShooter.getSelectedSensorVelocity()) - Math.abs(targetRate));
-      if(rError < 100 || lError < 100){
+      if(rError < 500 || lError < 500){
         readyToShoot = true;
       }
       return readyToShoot;
@@ -129,6 +129,9 @@ public class Shooter extends SubsystemBase{
       SmartDashboard.putNumber("Left shooter encoder ", mLeftShooter.getSelectedSensorVelocity());
       SmartDashboard.putNumber("Shooter LEft Speed", mLeftShooter.getMotorOutputPercent());
       SmartDashboard.putNumber("Shooter Right Speed", mRightShooter.getMotorOutputPercent());
+      SmartDashboard.putNumber("Target Rate", targetRate);
+      SmartDashboard.putBoolean("ReadyToShoot", readyToShoot());
+
     }
     public void periodic() {
       //Timer time = new Timer();

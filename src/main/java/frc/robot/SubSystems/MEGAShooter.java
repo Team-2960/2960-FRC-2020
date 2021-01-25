@@ -136,24 +136,25 @@ public class MEGAShooter extends SubsystemBase {
    * @param rate th rate
    */
   public void shootAlways(double rate){
+    shoot = false;
     shooter.gotoRate(rate);
     if(!shoot){
     if(shooter.readyToShoot()){
       shoot = true;
-      shootTimer.start();
+      
     }
     else{
       shoot = false;
     }
+    }if(shoot){
+      Index.setSpeed(-1, -1);
+    }else{
+      Index.setSpeed(0, 0);
     }
-    if(shoot){
-      Index.setSpeed(-1,-1);
-      if(shootTimer.get() > 0.25){
-        Index.setSpeed(0,0);
-        shootTimer.stop();
-        shoot = false;
-      }
+    if(Index.getPhotoeyeIndex()){
+      Index.setSpeed(0, 0);
     }
+
   }
 
 
