@@ -147,7 +147,7 @@ public class MEGAShooter extends SubsystemBase {
       shoot = false;
     }
     }if(shoot){
-      Index.setSpeed(-1, -1);
+      Index.setSpeed(-0.75, -0.75);
     }else{
       Index.setSpeed(0, 0);
     }
@@ -175,8 +175,8 @@ public class MEGAShooter extends SubsystemBase {
    * sets the target position and the target rate that the pivot should be going to when shooting from the long shoot position
    */
   public void longShoot(){
-    pivot.setPTargetAngle(Constants.autonPreset[1]);
-    shooter.gotoRate(Constants.autonPreset[0]);
+    pivot.setPTargetAngle(Constants.longPreset[1]);
+    shooter.gotoRate(Constants.longPreset[0]);
   }
 
 
