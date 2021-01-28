@@ -136,7 +136,7 @@ public class MEGAShooter extends SubsystemBase {
    * @param rate th rate
    */
   public void shootAlways(double rate){
-    shoot = false;
+    
     shooter.gotoRate(rate);
     if(!shoot){
     if(shooter.readyToShoot()){
@@ -153,6 +153,7 @@ public class MEGAShooter extends SubsystemBase {
     }
     if(Index.getPhotoeyeIndex()){
       Index.setSpeed(0, 0);
+      shoot = false;
     }
 
   }

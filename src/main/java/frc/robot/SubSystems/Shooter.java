@@ -26,11 +26,13 @@ public class Shooter extends SubsystemBase{
                   ki1 = 0.0000/*46*/,
                   kd1 = 0.0; 
     //left
-    public double kp2 = 0.01, /*0.05 0.525 very close to 0*/
+    public double kp2 = 0.013, /*0.05 0.525 very close to 0*/
                   ki2 = 0.0000/*46*/,              
                   kd2 = 0.0;              
     /** 
-     * @return Shooter
+     * @return Shooter\][
+     * 
+     * ]
      */
     public static Shooter get_Instance(){
       if(shooter == null){
@@ -118,13 +120,16 @@ public class Shooter extends SubsystemBase{
       boolean readyToShoot = false;
       double rError = Math.abs(Math.abs(mRightShooter.getSelectedSensorVelocity()) - Math.abs(targetRate));
       double lError = Math.abs(Math.abs(mLeftShooter.getSelectedSensorVelocity()) - Math.abs(targetRate));
-      if(rError < 500 || lError < 500){
+      if(rError < 300 || lError < 300){
         readyToShoot = true;
       }
       return readyToShoot;
     }
 
     public void SmartDashBoard(){
+      System.out.println("left " + mLeftShooter.getSelectedSensorVelocity());
+      System.out.println("right " + mRightShooter.getSelectedSensorVelocity());
+
       SmartDashboard.putNumber("Right shooter encoder", mRightShooter.getSelectedSensorVelocity());
       SmartDashboard.putNumber("Left shooter encoder ", mLeftShooter.getSelectedSensorVelocity());
       SmartDashboard.putNumber("Shooter LEft Speed", mLeftShooter.getMotorOutputPercent());
