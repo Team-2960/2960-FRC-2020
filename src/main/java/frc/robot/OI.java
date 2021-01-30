@@ -16,7 +16,7 @@ public class OI extends SubsystemBase{
     private Shooter shooter;
     public Pivot pivot;
     private Index index;
-    //private Camera camera;
+    private Camera camera;
     private MEGAShooter mShooter;
     //Joysticks
     private Joystick driver_Control;
@@ -24,7 +24,7 @@ public class OI extends SubsystemBase{
     private Joystick backUp_Control;
     public OI(){
         //Init Classes
-        //camera = Camera.get_Instance();
+        camera = Camera.get_Instance();
         drive = Drive.get_Instance();
         climb = Climb.get_Instance();
         intake = Intake.get_Instance();
@@ -79,8 +79,12 @@ public class OI extends SubsystemBase{
         }
         //Driver Control
         //TODO: May be need a deadband
-        drive.setSpeed(driver_Control.getRawAxis(1)* -0.75, driver_Control.getRawAxis(5)* -0.75); //drive
-
+        if(dAlignDrive()){
+            drive.targetLineUp();;
+        }
+        else{
+            drive.setSpeed(driver_Control.getRawAxis(1)* -0.75, driver_Control.getRawAxis(5)* -0.75); //drive
+        }
         if(dintakeIn()){ //start intake
             mShooter.intakeEnableDr();
         }else if(oIndexOut()){ //index out take
@@ -126,6 +130,7 @@ public class OI extends SubsystemBase{
         else if(oClimbRetracted()){
             climb.setPosition(1);
         }
+
     }
     
     /**

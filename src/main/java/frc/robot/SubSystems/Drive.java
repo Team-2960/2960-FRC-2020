@@ -5,7 +5,7 @@ import edu.wpi.first.wpilibj.controller.PIDController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 //UMCOMMENT CODE
-//import com.kauailabs.navx.frc.AHRS;
+import com.kauailabs.navx.frc.AHRS;
 import com.revrobotics.AlternateEncoderType;
 import com.revrobotics.CANEncoder;
 import com.revrobotics.CANSparkMax;
@@ -31,7 +31,7 @@ public class Drive extends SubsystemBase {
   //PID Controller
   private PIDController drivePidController;
 
-  //private AHRS navX;
+  private AHRS navX;
   //Encoders
   private CANEncoder rightEncoder;
   private CANEncoder leftEncoder;
@@ -42,7 +42,7 @@ public class Drive extends SubsystemBase {
   public double forwardSpeed;
   public int PIDCheck = 0;
   public boolean isDrivePIDEnabled = false;
-  //private static Camera camera;
+  private static Camera camera;
   public double cameraAngle = 0;
   
   
@@ -59,7 +59,7 @@ public class Drive extends SubsystemBase {
 
   private Drive() {
     //init code
-    //camera = Camera.get_Instance();
+    camera = Camera.get_Instance();
     //init all the motors
     mLeftMaster = new CANSparkMax(Constants.mLeftMaster1, MotorType.kBrushless);
     mLeftFollow1 = new CANSparkMax(Constants.mLeftFollow2, MotorType.kBrushless);
@@ -76,7 +76,7 @@ public class Drive extends SubsystemBase {
     mRightMfollow2.follow(mRightMaster);
 
     //UNCOMMENT CODE
-    //navX = new AHRS(SPI.Port.kMXP);
+    navX = new AHRS(SPI.Port.kMXP);
 
     //init encoder
     rightEncoder = mRightMaster.getAlternateEncoder(AlternateEncoderType.kQuadrature, Constants.pulsePerRev);
@@ -123,10 +123,11 @@ public class Drive extends SubsystemBase {
     }
     return isAtAngle;
   }
+  */
   public void targetLineUp(){
     setDriveToAngle(camera.calcAngle(camera.getCenterX()) +  navX.getAngle(), 0);
   }
- */
+ 
   /**
    * Use the PID to set the rate we are going
    * @param rate is the target angle rate we want to be going
@@ -189,7 +190,7 @@ public class Drive extends SubsystemBase {
    * @param forwardspeed Sets the forward speed we are going
    */
   //UNCOMMENT FUNCTION
- /*  public void setDriveToAngle(double angle, double forwardspeed){
+  public void setDriveToAngle(double angle, double forwardspeed){
     double error =  angle - navX.getAngle();
     double absError = Math.abs(error);
     int negative;
@@ -217,17 +218,17 @@ public class Drive extends SubsystemBase {
       double rate = 70;
       setArcDriveRate(negative * rate, forwardspeed);
     }
-  } */
+  }
   /**
    * Sets the rate of the arc aswell as the speeds
    * @param rate taret rate we should be going
    * @param forwardSpeed sets the forward speed we should be going
    */
   //UNCOMMENT FUNCTION
-/*   public void setArcDriveRate(double rate, double forwardSpeed){
+   public void setArcDriveRate(double rate, double forwardSpeed){
     double speed = drivePidController.calculate(navX.getRawGyroX(), rate); //calc the speed
     setSpeed(-speed + forwardSpeed, speed + forwardSpeed);
-  } */
+  } 
   public void adjustToTarget(){
     startGoToAngleDistance(0, cameraAngle, 0, 2);
   }

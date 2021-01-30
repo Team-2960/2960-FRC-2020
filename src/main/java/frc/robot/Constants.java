@@ -76,9 +76,9 @@ public class Constants{
     /**
      * values for grippipelines
      */
-    public static double[] hsvThresholdHue = {40, 98};
-    public static double[] hsvThresholdSaturation = {99, 220};
-    public static double[] hsvThresholdValue = {140, 255};
+    public static double[] hsvThresholdHue = {50, 90};
+    public static double[] hsvThresholdSaturation = {80, 240};
+    public static double[] hsvThresholdValue = {130, 265};
     /**
      * view angles
      */

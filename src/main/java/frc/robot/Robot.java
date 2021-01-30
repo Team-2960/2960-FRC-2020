@@ -16,13 +16,13 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
 
 public class Robot extends TimedRobot {
   private OI oi;
-  //private LEDs leds;
+  private LEDs leds;
   private Camera camera = Camera.get_Instance();
   private Command autonCommand = null;
   @Override
   public void robotInit() {
     oi = new OI();
-    //leds = new LEDs();
+    leds = new LEDs();
   }
 
   @Override
